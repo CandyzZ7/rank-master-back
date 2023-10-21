@@ -1,0 +1,21 @@
+syntax = "v1"
+
+info(
+	title: "type title here"
+	desc: "type desc here"
+	author: "type author here"
+	email: "type email here"
+	version: "type version here"
+)
+
+type resp {
+	Msg string `json:"msg"`
+}
+
+@server (
+	group: test
+)
+service app {
+	@handler ping
+	get /ping returns (resp)
+}
