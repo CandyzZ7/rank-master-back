@@ -1,0 +1,35 @@
+syntax = "v1"
+
+info(
+    title: "type title here"
+    desc: "type desc here"
+    author: "type author here"
+    email: "type email here"
+    version: "type version here"
+)
+type Token {
+    AccessToken  string `json:"access_token"`
+    AccessExpire int64  `json:"access_expire"`
+}
+
+type (
+    RegisterReq {
+        Name             string `json:"name" validate:"required"`
+        Mobile           string `json:"mobile" validate:"required"`
+        Password         string `json:"password" validate:"required"`
+    }
+    RegisterRes {
+        UserId string `json:"user_id"`
+        Token  Token `json:"token"`
+    }
+)
+
+@server (
+    group: user
+    prefix : /v1/user
+)
+service app {
+    @doc "注册"
+    @handler RegisterHandler
+    post /register (RegisterReq) returns (RegisterRes)
+}

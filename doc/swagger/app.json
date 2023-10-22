@@ -18,21 +18,119 @@
   "paths": {
     "/ping": {
       "get": {
-        "operationId": "ping",
+        "summary": "ping",
+        "operationId": "Ping",
         "responses": {
           "200": {
             "description": "A successful response.",
-            "schema": {}
+            "schema": {
+              "$ref": "#/definitions/res"
+            }
           }
         },
         "requestBody": {},
         "tags": [
-          "app"
+          "test"
+        ]
+      }
+    },
+    "/v1/user/register": {
+      "post": {
+        "summary": "注册",
+        "operationId": "RegisterHandler",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/RegisterRes"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/RegisterReq"
+            }
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "user"
         ]
       }
     }
   },
-  "definitions": {},
+  "definitions": {
+    "RegisterReq": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "mobile": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      },
+      "title": "RegisterReq",
+      "required": [
+        "name",
+        "mobile",
+        "password"
+      ]
+    },
+    "RegisterRes": {
+      "type": "object",
+      "properties": {
+        "user_id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "token": {
+          "$ref": "#/definitions/Token"
+        }
+      },
+      "title": "RegisterRes",
+      "required": [
+        "user_id",
+        "token"
+      ]
+    },
+    "Token": {
+      "type": "object",
+      "properties": {
+        "access_token": {
+          "type": "string"
+        },
+        "access_expire": {
+          "type": "integer",
+          "format": "int64"
+        }
+      },
+      "title": "Token",
+      "required": [
+        "access_token",
+        "access_expire"
+      ]
+    },
+    "res": {
+      "type": "object",
+      "properties": {
+        "msg": {
+          "type": "string"
+        }
+      },
+      "title": "res",
+      "required": [
+        "msg"
+      ]
+    }
+  },
   "securityDefinitions": {
     "apiKey": {
       "type": "apiKey",

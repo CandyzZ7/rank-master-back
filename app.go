@@ -42,6 +42,7 @@ func Notfound() http.HandlerFunc {
 		http.NotFound(w, r)
 	}
 }
+
 func main() {
 	flag.Parse()
 

@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	test "rank-master-back/internal/handler/test"
+	user "rank-master-back/internal/handler/user"
 	"rank-master-back/internal/svc"
 
 	"github.com/zeromicro/go-zero/rest"
@@ -19,5 +20,16 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Handler: test.PingHandler(serverCtx),
 			},
 		},
+	)
+
+	server.AddRoutes(
+		[]rest.Route{
+			{
+				Method:  http.MethodPost,
+				Path:    "/register",
+				Handler: user.RegisterHandler(serverCtx),
+			},
+		},
+		rest.WithPrefix("/v1/user"),
 	)
 }
