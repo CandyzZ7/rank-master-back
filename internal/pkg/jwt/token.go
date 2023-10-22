@@ -34,7 +34,9 @@ func BuildTokens(opt TokenOptions) (Token, error) {
 
 func genToken(iat int64, secretKey string, payloads map[string]interface{}, seconds int64) (string, error) {
 	claims := make(jwt.MapClaims)
+	// 令牌过期时间
 	claims["exp"] = iat + seconds
+	// 令牌颁发时间
 	claims["iat"] = iat
 	for k, v := range payloads {
 		claims[k] = v

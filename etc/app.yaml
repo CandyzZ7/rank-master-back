@@ -3,8 +3,8 @@ Host: 0.0.0.0
 Port: 8888
 Auth:
   AccessSecret: candy
-  AccessExpire: 1028
+  AccessExpire: 604800
   RefreshSecret: candy
-  RefreshExpire: 1205
-  RefreshAfter: 1028
+  RefreshExpire: 2592000
+  RefreshAfter: 604800
 DataSource: root:123456@tcp(127.0.0.1:3306)/rank_master?charset=utf8mb4&parseTime=True&loc=Local
