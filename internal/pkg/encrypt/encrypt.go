@@ -17,11 +17,7 @@ func RandomString(len int) (string, error) {
 	return hex.EncodeToString(bytes), nil
 }
 
-func EncPassword(password string) string {
-	cryptSalt, err := RandomString(RandomNumberLen)
-	if err != nil {
-		return ""
-	}
+func EncPassword(password, cryptSalt string) string {
 	return Md5Sum([]byte(strings.TrimSpace(password + cryptSalt)))
 }
 

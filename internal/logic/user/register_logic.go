@@ -37,7 +37,13 @@ func (l *RegisterLogic) Register(req *types.RegisterReq) (resp *types.RegisterRe
 	req.Mobile = strings.TrimSpace(req.Mobile)
 	req.Password = strings.TrimSpace(req.Password)
 	// 密码加密
-	req.Password = encrypt.EncPassword(req.Password)
+	// 生成随机盐
+	cryptSalt, err := encrypt.RandomString(encrypt.RandomNumberLen)
+	if err != nil {
+		return nil, err
+	}
+	// 加密密码
+	req.Password = encrypt.EncPassword(req.Password, cryptSalt)
 	userDB := dal.Use(l.svcCtx.DB).User
 	// 检查手机号是否已经注册
 	isExist, err := userDB.FindWithMobile(req.Mobile)
@@ -48,10 +54,11 @@ func (l *RegisterLogic) Register(req *types.RegisterReq) (resp *types.RegisterRe
 		return nil, errors.New(e.ErrRegisterMobileExist.String())
 	}
 	userEntity := &model.User{
-		Id:       snowflake.GetSnowflakeID(),
-		Name:     req.Name,
-		Mobile:   req.Mobile,
-		Password: req.Password,
+		Id:        snowflake.GetSnowflakeID(),
+		Name:      req.Name,
+		Mobile:    req.Mobile,
+		Password:  req.Password,
+		CryptSalt: cryptSalt,
 	}
 	err = userDB.Create(userEntity)
 	if err != nil {
