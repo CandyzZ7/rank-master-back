@@ -21,6 +21,15 @@ func EncPassword(password, cryptSalt string) string {
 	return Md5Sum([]byte(strings.TrimSpace(password + cryptSalt)))
 }
 
+// EqualsPassword 对比密码是否正确
+func EqualsPassword(password, encryptPassword string) bool {
+	md5Password := Md5Sum([]byte(strings.TrimSpace(password)))
+	if md5Password == encryptPassword {
+		return true
+	}
+	return false
+}
+
 func Md5Sum(data []byte) string {
 	return hex.EncodeToString(byte16ToBytes(md5.Sum(data)))
 }

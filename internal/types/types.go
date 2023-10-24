@@ -12,11 +12,19 @@ type Token struct {
 
 type RegisterReq struct {
 	Name     string `json:"name" validate:"required"`
-	Mobile   string `json:"mobile" validate:"required"`
+	Mobile   string `json:"mobile" validate:"required,len=11,numeric"`
 	Password string `json:"password" validate:"required"`
 }
 
 type RegisterRes struct {
-	UserId string `json:"user_id"`
-	Token  Token  `json:"token"`
+	Token Token `json:"token"`
+}
+
+type LoginReq struct {
+	Mobile   string `json:"mobile" validate:"required,len=11,numeric"`
+	Password string `json:"password" validate:"required"`
+}
+
+type LoginRes struct {
+	Token Token `json:"token"`
 }

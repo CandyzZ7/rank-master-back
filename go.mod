@@ -10,6 +10,7 @@ require (
 	github.com/pkg/errors v0.9.1
 	github.com/swaggest/swgui v1.7.4
 	github.com/zeromicro/go-zero v1.5.6
+	golang.org/x/crypto v0.13.0
 	gorm.io/driver/mysql v1.5.2
 	gorm.io/gen v0.3.23
 	gorm.io/gorm v1.25.5

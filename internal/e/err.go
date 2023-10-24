@@ -13,3 +13,11 @@ const (
 const (
 	ErrRegisterMobileExist ErrCode = 2000 + iota // 手机号已存在
 )
+
+const (
+	ErrLoginPasswd ErrCode = 1000 + iota // 密码错误
+)
+
+const (
+	ErrLoginMobileNotExist ErrCode = 4000 + iota // 手机号不存在
+)

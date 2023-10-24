@@ -44,9 +44,8 @@ func (l *RegisterLogic) Register(req *types.RegisterReq) (resp *types.RegisterRe
 	}
 	// 加密密码
 	req.Password = encrypt.EncPassword(req.Password, cryptSalt)
-	userDB := dal.Use(l.svcCtx.DB).User
 	// 检查手机号是否已经注册
-	isExist, err := userDB.FindWithMobile(req.Mobile)
+	isExist, err := dal.Use(l.svcCtx.DB).User.FindWithMobile(req.Mobile)
 	if err != nil {
 		return nil, errors.Wrap(err, "注册失败")
 	}
@@ -60,7 +59,7 @@ func (l *RegisterLogic) Register(req *types.RegisterReq) (resp *types.RegisterRe
 		Password:  req.Password,
 		CryptSalt: cryptSalt,
 	}
-	err = userDB.Create(userEntity)
+	err = dal.Use(l.svcCtx.DB).User.Create(userEntity)
 	if err != nil {
 		return nil, errors.Wrap(err, "注册失败")
 	}
@@ -77,7 +76,6 @@ func (l *RegisterLogic) Register(req *types.RegisterReq) (resp *types.RegisterRe
 	}
 
 	return &types.RegisterRes{
-		UserId: userEntity.Id,
 		Token: types.Token{
 			AccessToken:  token.AccessToken,
 			AccessExpire: token.AccessExpire,

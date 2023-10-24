@@ -12,24 +12,32 @@ func _() {
 	_ = x[ErrRegisterPasswdEmpty-3001]
 	_ = x[ErrRegisterNameEmpty-3002]
 	_ = x[ErrRegisterMobileExist-2000]
+	_ = x[ErrLoginPasswd-1000]
+	_ = x[ErrLoginMobileNotExist-4000]
 }
 
 const (
-	_ErrCode_name_0 = "手机号已存在"
-	_ErrCode_name_1 = "手机号不能为空密码不能为空用户名不能为空"
+	_ErrCode_name_0 = "密码错误"
+	_ErrCode_name_1 = "手机号已存在"
+	_ErrCode_name_2 = "手机号不能为空密码不能为空用户名不能为空"
+	_ErrCode_name_3 = "手机号不存在"
 )
 
 var (
-	_ErrCode_index_1 = [...]uint8{0, 21, 39, 60}
+	_ErrCode_index_2 = [...]uint8{0, 21, 39, 60}
 )
 
 func (i ErrCode) String() string {
 	switch {
-	case i == 2000:
+	case i == 1000:
 		return _ErrCode_name_0
+	case i == 2000:
+		return _ErrCode_name_1
 	case 3000 <= i && i <= 3002:
 		i -= 3000
-		return _ErrCode_name_1[_ErrCode_index_1[i]:_ErrCode_index_1[i+1]]
+		return _ErrCode_name_2[_ErrCode_index_2[i]:_ErrCode_index_2[i+1]]
+	case i == 4000:
+		return _ErrCode_name_3
 	default:
 		return "ErrCode(" + strconv.FormatInt(int64(i), 10) + ")"
 	}

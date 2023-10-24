@@ -15,14 +15,24 @@ type Token {
 type (
     RegisterReq {
         Name             string `json:"name" validate:"required"`
-        Mobile           string `json:"mobile" validate:"required"`
+        Mobile           string `json:"mobile" validate:"required,len=11,numeric"`
         Password         string `json:"password" validate:"required"`
     }
     RegisterRes {
-        UserId string `json:"user_id"`
         Token  Token `json:"token"`
     }
 )
+
+type (
+    LoginReq {
+        Mobile           string `json:"mobile" validate:"required,len=11,numeric"`
+        Password         string `json:"password" validate:"required"`
+    }
+    LoginRes {
+        Token  Token `json:"token"`
+    }
+)
+
 
 @server (
     group: user
@@ -32,4 +42,8 @@ service app {
     @doc "注册"
     @handler RegisterHandler
     post /register (RegisterReq) returns (RegisterRes)
+
+    @doc "登录"
+    @handler LoginHandler
+    post /login (LoginReq) returns (LoginRes)
 }
