@@ -19,18 +19,46 @@
     "/ping": {
       "get": {
         "summary": "ping",
-        "operationId": "Ping",
+        "operationId": "PingHandler",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/res"
+              "$ref": "#/definitions/PingRes"
             }
           }
         },
         "requestBody": {},
         "tags": [
           "test"
+        ]
+      }
+    },
+    "/v1/user/login": {
+      "post": {
+        "summary": "登录",
+        "operationId": "LoginHandler",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/LoginRes"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/LoginReq"
+            }
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "user"
         ]
       }
     },
@@ -64,6 +92,47 @@
     }
   },
   "definitions": {
+    "LoginReq": {
+      "type": "object",
+      "properties": {
+        "mobile": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      },
+      "title": "LoginReq",
+      "required": [
+        "mobile",
+        "required",
+        "password"
+      ]
+    },
+    "LoginRes": {
+      "type": "object",
+      "properties": {
+        "token": {
+          "$ref": "#/definitions/Token"
+        }
+      },
+      "title": "LoginRes",
+      "required": [
+        "token"
+      ]
+    },
+    "PingRes": {
+      "type": "object",
+      "properties": {
+        "msg": {
+          "type": "string"
+        }
+      },
+      "title": "PingRes",
+      "required": [
+        "msg"
+      ]
+    },
     "RegisterReq": {
       "type": "object",
       "properties": {
@@ -81,23 +150,19 @@
       "required": [
         "name",
         "mobile",
+        "required",
         "password"
       ]
     },
     "RegisterRes": {
       "type": "object",
       "properties": {
-        "user_id": {
-          "type": "integer",
-          "format": "int64"
-        },
         "token": {
           "$ref": "#/definitions/Token"
         }
       },
       "title": "RegisterRes",
       "required": [
-        "user_id",
         "token"
       ]
     },
@@ -116,18 +181,6 @@
       "required": [
         "access_token",
         "access_expire"
-      ]
-    },
-    "res": {
-      "type": "object",
-      "properties": {
-        "msg": {
-          "type": "string"
-        }
-      },
-      "title": "res",
-      "required": [
-        "msg"
       ]
     }
   },
