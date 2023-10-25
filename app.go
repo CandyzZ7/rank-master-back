@@ -49,7 +49,7 @@ func main() {
 	var c config.Config
 	conf.MustLoad(*configFile, &c)
 
-	server := rest.MustNewServer(c.RestConf, rest.WithNotFoundHandler(Notfound()))
+	server := rest.MustNewServer(c.RestConf, rest.WithCors(), rest.WithNotFoundHandler(Notfound()))
 	defer server.Stop()
 	// swagger  json file
 	server.AddRoute(rest.Route{
