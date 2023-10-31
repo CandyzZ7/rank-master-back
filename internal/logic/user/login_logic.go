@@ -11,7 +11,6 @@ import (
 	"rank-master-back/internal/svc"
 	"rank-master-back/internal/types"
 
-	"github.com/pkg/errors"
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
@@ -39,7 +38,7 @@ func (l *LoginLogic) Login(req *types.LoginReq) (resp *types.LoginRes, err error
 		return nil, err
 	}
 	if isExist == 0 {
-		return nil, errors.New(e.ErrLoginMobileNotExist.String())
+		return nil, e.ErrLoginMobileNotExist
 	}
 	// 检查密码是否正确
 	userEntity, err := userDB.Where(userDB.Mobile.Eq(req.Mobile)).First()
@@ -49,7 +48,7 @@ func (l *LoginLogic) Login(req *types.LoginReq) (resp *types.LoginRes, err error
 	password := req.Password + userEntity.CryptSalt
 	isSame := encrypt.EqualsPassword(password, userEntity.Password)
 	if !isSame {
-		return nil, errors.New(e.ErrLoginPasswd.String())
+		return nil, e.ErrLoginPasswd
 	}
 	token, err := jwt.BuildTokens(jwt.TokenOptions{
 		AccessSecret: l.svcCtx.Config.Auth.AccessSecret,

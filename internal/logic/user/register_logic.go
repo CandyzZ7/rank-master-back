@@ -50,7 +50,7 @@ func (l *RegisterLogic) Register(req *types.RegisterReq) (resp *types.RegisterRe
 		return nil, errors.Wrap(err, "注册失败")
 	}
 	if isExist == 1 {
-		return nil, errors.New(e.ErrRegisterMobileExist.String())
+		return nil, e.ErrRegisterMobileExist
 	}
 	userEntity := &model.User{
 		Id:        snowflake.GetSnowflakeID(),
