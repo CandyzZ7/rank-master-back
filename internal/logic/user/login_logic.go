@@ -11,6 +11,7 @@ import (
 	"rank-master-back/internal/svc"
 	"rank-master-back/internal/types"
 
+	"github.com/pkg/errors"
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
@@ -35,15 +36,15 @@ func (l *LoginLogic) Login(req *types.LoginReq) (resp *types.LoginRes, err error
 	// 检查手机号是否已经注册
 	isExist, err := userDB.FindWithMobile(req.Mobile)
 	if err != nil {
-		return nil, err
+		return nil, errors.WithMessage(err, "查找手机号是否已经注册")
 	}
 	if isExist == 0 {
-		return nil, e.ErrLoginMobileNotExist
+		return nil, errors.Wrapf(e.ErrLoginMobileNotExist, "手机号: %s", req.Mobile)
 	}
 	// 检查密码是否正确
 	userEntity, err := userDB.Where(userDB.Mobile.Eq(req.Mobile)).First()
 	if err != nil {
-		return nil, err
+		return nil, errors.WithMessage(err, "查找用户信息")
 	}
 	password := req.Password + userEntity.CryptSalt
 	isSame := encrypt.EqualsPassword(password, userEntity.Password)
@@ -59,7 +60,7 @@ func (l *LoginLogic) Login(req *types.LoginReq) (resp *types.LoginRes, err error
 	})
 	if err != nil {
 		logx.Errorf("BuildTokens error: %v", err)
-		return nil, err
+		return nil, errors.Wrap(err, "生成token")
 	}
 	return &types.LoginRes{
 		Token: types.Token{

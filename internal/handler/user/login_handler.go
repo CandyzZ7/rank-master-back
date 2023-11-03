@@ -7,7 +7,9 @@ import (
 	"rank-master-back/internal/svc"
 	"rank-master-back/internal/types"
 
-	"github.com/go-playground/validator"
+	"github.com/go-playground/validator/v10"
+	"github.com/pkg/errors"
+	"github.com/zeromicro/go-zero/core/logc"
 	"github.com/zeromicro/go-zero/rest/httpx"
 )
 
@@ -28,6 +30,7 @@ func LoginHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 		l := user.NewLoginLogic(r.Context(), svcCtx)
 		resp, err := l.Login(&req)
 		if err != nil {
+			logc.Error(r.Context(), errors.Cause(err))
 			httpx.ErrorCtx(r.Context(), w, err)
 		} else {
 			httpx.OkJsonCtx(r.Context(), w, resp)

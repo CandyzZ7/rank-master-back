@@ -40,17 +40,17 @@ func (l *RegisterLogic) Register(req *types.RegisterReq) (resp *types.RegisterRe
 	// 生成随机盐
 	cryptSalt, err := encrypt.RandomString(encrypt.RandomNumberLen)
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "生成随机盐")
 	}
 	// 加密密码
 	req.Password = encrypt.EncPassword(req.Password, cryptSalt)
 	// 检查手机号是否已经注册
 	isExist, err := dal.Use(l.svcCtx.DB).User.FindWithMobile(req.Mobile)
 	if err != nil {
-		return nil, errors.Wrap(err, "注册失败")
+		return nil, errors.WithMessage(err, "查找手机号是否已经注册")
 	}
 	if isExist == 1 {
-		return nil, e.ErrRegisterMobileExist
+		return nil, errors.Wrapf(e.ErrRegisterMobileExist, "手机号: %s", req.Mobile)
 	}
 	userEntity := &model.User{
 		Id:        snowflake.GetSnowflakeID(),
@@ -61,7 +61,7 @@ func (l *RegisterLogic) Register(req *types.RegisterReq) (resp *types.RegisterRe
 	}
 	err = dal.Use(l.svcCtx.DB).User.Create(userEntity)
 	if err != nil {
-		return nil, errors.Wrap(err, "注册失败")
+		return nil, errors.Wrap(err, "创建用户")
 	}
 	token, err := jwt.BuildTokens(jwt.TokenOptions{
 		AccessSecret: l.svcCtx.Config.Auth.AccessSecret,
@@ -71,8 +71,7 @@ func (l *RegisterLogic) Register(req *types.RegisterReq) (resp *types.RegisterRe
 		},
 	})
 	if err != nil {
-		logx.Errorf("BuildTokens error: %v", err)
-		return nil, err
+		return nil, errors.Wrapf(err, "生成token")
 	}
 
 	return &types.RegisterRes{
