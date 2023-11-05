@@ -13,11 +13,14 @@ type Token struct {
 type RegisterReq struct {
 	Name     string `json:"name" validate:"required"`
 	Mobile   string `json:"mobile" validate:"required,len=11,numeric"`
+	Email    string `json:"email" validate:"required,email"`
+	Code     string `json:"code" validate:"required"`
 	Password string `json:"password" validate:"required"`
 }
 
 type RegisterRes struct {
-	Token Token `json:"token"`
+	UserId string `json:"user_id"`
+	Token  Token  `json:"token"`
 }
 
 type LoginReq struct {
@@ -26,5 +29,13 @@ type LoginReq struct {
 }
 
 type LoginRes struct {
-	Token Token `json:"token"`
+	UserId string `json:"user_id"`
+	Token  Token  `json:"token"`
+}
+
+type GetEmailCodeReq struct {
+	Email string `json:"email" validate:"required,email"`
+}
+
+type GetEmailCodeRes struct {
 }

@@ -13,5 +13,9 @@ const (
 )
 
 const (
+	ErrEmailCodeFailCode ErrCode = 3000 + iota // 邮箱验证码错误
+)
+
+const (
 	ErrLoginMobileNotExistCode ErrCode = 4000 + iota // 手机号不存在
 )

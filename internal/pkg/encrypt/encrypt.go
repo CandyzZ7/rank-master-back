@@ -17,14 +17,14 @@ func RandomString(len int) (string, error) {
 	return hex.EncodeToString(bytes), nil
 }
 
-func EncPassword(password, cryptSalt string) string {
-	return Md5Sum([]byte(strings.TrimSpace(password + cryptSalt)))
+func Encryption(target, cryptSalt string) string {
+	return Md5Sum([]byte(strings.TrimSpace(target + cryptSalt)))
 }
 
-// EqualsPassword 对比密码是否正确
-func EqualsPassword(password, encryptPassword string) bool {
-	md5Password := Md5Sum([]byte(strings.TrimSpace(password)))
-	if md5Password == encryptPassword {
+// EqualsEncryption 对比密码是否正确
+func EqualsEncryption(target, encryptTarget string) bool {
+	md5Target := Md5Sum([]byte(strings.TrimSpace(target)))
+	if md5Target == encryptTarget {
 		return true
 	}
 	return false

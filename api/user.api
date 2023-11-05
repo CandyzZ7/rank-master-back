@@ -16,9 +16,12 @@ type (
     RegisterReq {
         Name             string `json:"name" validate:"required"`
         Mobile           string `json:"mobile" validate:"required,len=11,numeric"`
+        Email            string `json:"email" validate:"required,email"`
+        Code             string `json:"code" validate:"required"`
         Password         string `json:"password" validate:"required"`
     }
     RegisterRes {
+        UserId string `json:"user_id"`
         Token  Token `json:"token"`
     }
 )
@@ -29,7 +32,16 @@ type (
         Password         string `json:"password" validate:"required"`
     }
     LoginRes {
+        UserId string `json:"user_id"`
         Token  Token `json:"token"`
+    }
+)
+
+type (
+    GetEmailCodeReq {
+        Email string `json:"email" validate:"required,email"`
+    }
+    GetEmailCodeRes {
     }
 )
 
@@ -46,4 +58,8 @@ service app {
     @doc "登录"
     @handler LoginHandler
     post /login (LoginReq) returns (LoginRes)
+
+    @doc "获取邮箱验证码"
+    @handler GetEmailHandler
+    post /email/code (GetEmailCodeReq) returns (GetEmailCodeRes)
 }

@@ -34,6 +34,34 @@
         ]
       }
     },
+    "/v1/user/email/code": {
+      "post": {
+        "summary": "获取邮箱验证码",
+        "operationId": "GetEmailHandler",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GetEmailCodeRes"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/GetEmailCodeReq"
+            }
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "user"
+        ]
+      }
+    },
     "/v1/user/login": {
       "post": {
         "summary": "登录",
@@ -92,6 +120,23 @@
     }
   },
   "definitions": {
+    "GetEmailCodeReq": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string"
+        }
+      },
+      "title": "GetEmailCodeReq",
+      "required": [
+        "email",
+        "required"
+      ]
+    },
+    "GetEmailCodeRes": {
+      "type": "object",
+      "title": "GetEmailCodeRes"
+    },
     "LoginReq": {
       "type": "object",
       "properties": {
@@ -112,12 +157,17 @@
     "LoginRes": {
       "type": "object",
       "properties": {
+        "user_id": {
+          "type": "integer",
+          "format": "int64"
+        },
         "token": {
           "$ref": "#/definitions/Token"
         }
       },
       "title": "LoginRes",
       "required": [
+        "user_id",
         "token"
       ]
     },
@@ -142,6 +192,12 @@
         "mobile": {
           "type": "string"
         },
+        "email": {
+          "type": "string"
+        },
+        "code": {
+          "type": "string"
+        },
         "password": {
           "type": "string"
         }
@@ -151,18 +207,25 @@
         "name",
         "mobile",
         "required",
+        "email",
+        "code",
         "password"
       ]
     },
     "RegisterRes": {
       "type": "object",
       "properties": {
+        "user_id": {
+          "type": "integer",
+          "format": "int64"
+        },
         "token": {
           "$ref": "#/definitions/Token"
         }
       },
       "title": "RegisterRes",
       "required": [
+        "user_id",
         "token"
       ]
     },
