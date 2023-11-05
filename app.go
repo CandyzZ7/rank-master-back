@@ -13,7 +13,6 @@ import (
 
 	"github.com/swaggest/swgui/v5emb"
 	"github.com/zeromicro/go-zero/core/conf"
-	"github.com/zeromicro/go-zero/core/logc"
 	"github.com/zeromicro/go-zero/rest"
 )
 
@@ -49,7 +48,7 @@ func main() {
 
 	var c config.Config
 	conf.MustLoad(*configFile, &c)
-	logc.MustSetup(c.LogConf)
+
 	server := rest.MustNewServer(c.RestConf, rest.WithCors(), rest.WithNotFoundHandler(Notfound()))
 	defer server.Stop()
 	// swagger  json file
@@ -62,6 +61,7 @@ func main() {
 	})
 	ctx := svc.NewServiceContext(c)
 	handler.RegisterHandlers(server, ctx)
+
 	fmt.Printf("Starting server at %s:%d...\n", c.Host, c.Port)
 	fmt.Println("doc: http://localhost:8888/api/doc")
 
