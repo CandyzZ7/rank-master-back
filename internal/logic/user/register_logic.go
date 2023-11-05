@@ -32,6 +32,13 @@ func NewRegisterLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Register
 }
 
 func (l *RegisterLogic) Register(req *types.RegisterReq) (resp *types.RegisterRes, err error) {
+	code, err := l.svcCtx.RDB.Get(l.ctx, req.Email).Result()
+	if err != nil {
+		return nil, errors.WithMessage(err, "redis get error")
+	}
+	if code != req.Code {
+		return nil, errors.Wrapf(e.ErrEmailCodeFail, "邮箱: %s", req.Email)
+	}
 	// 去除前后空格
 	req.Name = strings.TrimSpace(req.Name)
 	req.Mobile = strings.TrimSpace(req.Mobile)
@@ -43,7 +50,7 @@ func (l *RegisterLogic) Register(req *types.RegisterReq) (resp *types.RegisterRe
 		return nil, err
 	}
 	// 加密密码
-	req.Password = encrypt.EncPassword(req.Password, cryptSalt)
+	encPassword := encrypt.Encryption(req.Password, cryptSalt)
 	// 检查手机号是否已经注册
 	isExist, err := dal.Use(l.svcCtx.DB).User.FindWithMobile(req.Mobile)
 	if err != nil {
@@ -52,14 +59,14 @@ func (l *RegisterLogic) Register(req *types.RegisterReq) (resp *types.RegisterRe
 	if isExist == 1 {
 		return nil, e.ErrRegisterMobileExist
 	}
-	userEntity := &model.User{
+	userModel := &model.User{
 		Id:        snowflake.GetSnowflakeID(),
 		Name:      req.Name,
 		Mobile:    req.Mobile,
-		Password:  req.Password,
+		Password:  encPassword,
 		CryptSalt: cryptSalt,
 	}
-	err = dal.Use(l.svcCtx.DB).User.Create(userEntity)
+	err = dal.Use(l.svcCtx.DB).User.Create(userModel)
 	if err != nil {
 		return nil, errors.Wrap(err, "注册失败")
 	}
@@ -67,7 +74,7 @@ func (l *RegisterLogic) Register(req *types.RegisterReq) (resp *types.RegisterRe
 		AccessSecret: l.svcCtx.Config.Auth.AccessSecret,
 		AccessExpire: l.svcCtx.Config.Auth.AccessExpire,
 		Fields: map[string]interface{}{
-			"userId": userEntity.Id,
+			"userId": userModel.Id,
 		},
 	})
 	if err != nil {
@@ -76,6 +83,7 @@ func (l *RegisterLogic) Register(req *types.RegisterReq) (resp *types.RegisterRe
 	}
 
 	return &types.RegisterRes{
+		UserId: userModel.Id,
 		Token: types.Token{
 			AccessToken:  token.AccessToken,
 			AccessExpire: token.AccessExpire,

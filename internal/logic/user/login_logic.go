@@ -46,7 +46,7 @@ func (l *LoginLogic) Login(req *types.LoginReq) (resp *types.LoginRes, err error
 		return nil, err
 	}
 	password := req.Password + userEntity.CryptSalt
-	isSame := encrypt.EqualsPassword(password, userEntity.Password)
+	isSame := encrypt.EqualsEncryption(password, userEntity.Password)
 	if !isSame {
 		return nil, e.ErrLoginPasswd
 	}
@@ -62,6 +62,7 @@ func (l *LoginLogic) Login(req *types.LoginReq) (resp *types.LoginRes, err error
 		return nil, err
 	}
 	return &types.LoginRes{
+		UserId: userEntity.Id,
 		Token: types.Token{
 			AccessToken:  token.AccessToken,
 			AccessExpire: token.AccessExpire,

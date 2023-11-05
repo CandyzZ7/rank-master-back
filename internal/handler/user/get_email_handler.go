@@ -13,9 +13,9 @@ import (
 	"github.com/zeromicro/go-zero/rest/httpx"
 )
 
-func LoginHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
+func GetEmailHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		var req types.LoginReq
+		var req types.GetEmailCodeReq
 		if err := httpx.Parse(r, &req); err != nil {
 			httpx.ErrorCtx(r.Context(), w, err)
 			return
@@ -27,8 +27,8 @@ func LoginHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 			return
 		}
 
-		l := user.NewLoginLogic(r.Context(), svcCtx)
-		resp, err := l.Login(&req)
+		l := user.NewGetEmailLogic(r.Context(), svcCtx)
+		resp, err := l.GetEmail(&req)
 		if err != nil {
 			logc.Error(r.Context(), errors.Cause(err))
 			httpx.ErrorCtx(r.Context(), w, err)
