@@ -158,8 +158,7 @@
       "type": "object",
       "properties": {
         "user_id": {
-          "type": "integer",
-          "format": "int64"
+          "type": "string"
         },
         "token": {
           "$ref": "#/definitions/Token"
@@ -192,6 +191,9 @@
         "mobile": {
           "type": "string"
         },
+        "avatar": {
+          "type": "string"
+        },
         "email": {
           "type": "string"
         },
@@ -207,6 +209,7 @@
         "name",
         "mobile",
         "required",
+        "avatar",
         "email",
         "code",
         "password"
@@ -216,8 +219,7 @@
       "type": "object",
       "properties": {
         "user_id": {
-          "type": "integer",
-          "format": "int64"
+          "type": "string"
         },
         "token": {
           "$ref": "#/definitions/Token"

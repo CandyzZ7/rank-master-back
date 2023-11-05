@@ -8,10 +8,10 @@ import (
 	"rank-master-back/internal/pkg/encrypt"
 	"rank-master-back/internal/pkg/jwt"
 	"rank-master-back/internal/pkg/snowflake"
-	"strings"
-
+	"rank-master-back/internal/pkg/upload_file/local"
 	"rank-master-back/internal/svc"
 	"rank-master-back/internal/types"
+	"strings"
 
 	"github.com/pkg/errors"
 	"github.com/zeromicro/go-zero/core/logx"
@@ -43,6 +43,12 @@ func (l *RegisterLogic) Register(req *types.RegisterReq) (resp *types.RegisterRe
 	req.Name = strings.TrimSpace(req.Name)
 	req.Mobile = strings.TrimSpace(req.Mobile)
 	req.Password = strings.TrimSpace(req.Password)
+	req.Avatar = strings.TrimSpace(req.Avatar)
+	// 上传头像
+	key, err := local.Upload(l.svcCtx.Config, req.Avatar)
+	if err != nil {
+		return nil, errors.Wrapf(err, "上传头像失败: %s", req.Avatar)
+	}
 	// 密码加密
 	// 生成随机盐
 	cryptSalt, err := encrypt.RandomString(encrypt.RandomNumberLen)
@@ -62,6 +68,7 @@ func (l *RegisterLogic) Register(req *types.RegisterReq) (resp *types.RegisterRe
 	userModel := &model.User{
 		Id:        snowflake.GetSnowflakeID(),
 		Name:      req.Name,
+		Avatar:    key,
 		Mobile:    req.Mobile,
 		Password:  encPassword,
 		CryptSalt: cryptSalt,

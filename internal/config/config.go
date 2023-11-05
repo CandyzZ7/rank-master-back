@@ -12,6 +12,7 @@ type Config struct {
 	LogConf    logx.LogConf
 	Email      Email
 	Redis      Redis
+	UploadFile UploadFile
 }
 
 type Auth struct {
@@ -30,4 +31,16 @@ type Redis struct {
 	Address  string
 	Password string
 	DB       int
+}
+type UploadFile struct {
+	AliYunOss AliYunOss
+	Path      string
+}
+type AliYunOss struct {
+	Endpoint         string
+	AccessKeyId      string
+	AccessKeySecret  string
+	BucketName       string
+	ConnectTimeout   int64 `json:",optional"`
+	ReadWriteTimeout int64 `json:",optional"`
 }
