@@ -32,6 +32,14 @@ func NewRegisterLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Register
 }
 
 func (l *RegisterLogic) Register(req *types.RegisterReq) (resp *types.RegisterRes, err error) {
+	// 检查账号是否重复
+	isExist, err := dal.Use(l.svcCtx.DB).User.FindLockWithRankMasterAccount(req.RankMasterAccount)
+	if err != nil {
+		return nil, errors.Wrap(err, "查询失败")
+	}
+	if isExist == 1 {
+		return nil, errors.Wrapf(e.ErrRegisterAccountExist, "账号: %s", req.RankMasterAccount)
+	}
 	code, err := l.svcCtx.RDB.Get(l.ctx, req.Email).Result()
 	if err != nil {
 		return nil, errors.WithMessage(err, "redis get error")
@@ -57,21 +65,16 @@ func (l *RegisterLogic) Register(req *types.RegisterReq) (resp *types.RegisterRe
 	}
 	// 加密密码
 	encPassword := encrypt.Encryption(req.Password, cryptSalt)
-	// 检查手机号是否已经注册
-	isExist, err := dal.Use(l.svcCtx.DB).User.FindWithMobile(req.Mobile)
-	if err != nil {
-		return nil, errors.Wrap(err, "注册失败")
-	}
-	if isExist == 1 {
-		return nil, e.ErrRegisterMobileExist
-	}
+	// 加密手机号
+	mobile := encrypt.Encryption(req.Mobile, cryptSalt)
 	userModel := &model.User{
-		Id:        snowflake.GetSnowflakeID(),
-		Name:      req.Name,
-		Avatar:    key,
-		Mobile:    req.Mobile,
-		Password:  encPassword,
-		CryptSalt: cryptSalt,
+		Id:                snowflake.GetSnowflakeID(),
+		RankMasterAccount: req.RankMasterAccount,
+		Name:              req.Name,
+		Avatar:            key,
+		Mobile:            mobile,
+		Password:          encPassword,
+		CryptSalt:         cryptSalt,
 	}
 	err = dal.Use(l.svcCtx.DB).User.Create(userModel)
 	if err != nil {

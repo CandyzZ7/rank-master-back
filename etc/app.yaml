@@ -31,4 +31,4 @@ UploadFile:
     AccessKeyId: xxxxxxxxxxxxxxxxxxxx
     AccessKeySecret: xxxxxxxxxxxxxxxxxxxx
     BucketName: beyond-article
-  Path: "./upload"
+  Path: "./upload_file/"

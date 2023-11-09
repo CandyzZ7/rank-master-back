@@ -25,15 +25,21 @@ func Upload(config config.Config, path string) (string, error) {
 	if err != nil {
 		return "", errors.WithMessage(err, "创建文件失败")
 	}
-	defer func(file *os.File) {
-		err := file.Close()
+	defer func(out *os.File) {
+		err := out.Close()
 		if err != nil {
 			return
 		}
 	}(out)
 	_, err = io.Copy(out, file)
 	if err != nil {
-		return "", errors.WithMessage(err, "上传头像失败")
+		return "", err
 	}
+	defer func(file *os.File) {
+		err := file.Close()
+		if err != nil {
+			return
+		}
+	}(file)
 	return key, nil
 }

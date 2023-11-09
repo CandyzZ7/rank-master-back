@@ -29,11 +29,11 @@ func NewLoginLogic(ctx context.Context, svcCtx *svc.ServiceContext) *LoginLogic 
 }
 
 func (l *LoginLogic) Login(req *types.LoginReq) (resp *types.LoginRes, err error) {
-	req.Mobile = strings.TrimSpace(req.Mobile)
-	req.Password = strings.TrimSpace(req.Password)
+	rankMasterAccount := strings.TrimSpace(req.RankMasterAccount)
+	password := strings.TrimSpace(req.Password)
 	userDB := dal.Use(l.svcCtx.DB).User
-	// 检查手机号是否已经注册
-	isExist, err := userDB.FindWithMobile(req.Mobile)
+	// 检查账号是否已经注册
+	isExist, err := userDB.FindLockWithRankMasterAccount(rankMasterAccount)
 	if err != nil {
 		return nil, err
 	}
@@ -41,15 +41,19 @@ func (l *LoginLogic) Login(req *types.LoginReq) (resp *types.LoginRes, err error
 		return nil, e.ErrLoginMobileNotExist
 	}
 	// 检查密码是否正确
-	userEntity, err := userDB.Where(userDB.Mobile.Eq(req.Mobile)).First()
+	// 从数据库中获取用户信息
+	userEntity, err := userDB.Where(userDB.RankMasterAccount.Eq(rankMasterAccount)).First()
 	if err != nil {
 		return nil, err
 	}
-	password := req.Password + userEntity.CryptSalt
-	isSame := encrypt.EqualsEncryption(password, userEntity.Password)
+	// 密码加盐加密
+	passwordWithSalt := password + userEntity.CryptSalt
+	// 比较密码是否相同
+	isSame := encrypt.EqualsEncryption(passwordWithSalt, userEntity.Password)
 	if !isSame {
 		return nil, e.ErrLoginPasswd
 	}
+	// 生成token
 	token, err := jwt.BuildTokens(jwt.TokenOptions{
 		AccessSecret: l.svcCtx.Config.Auth.AccessSecret,
 		AccessExpire: l.svcCtx.Config.Auth.AccessExpire,

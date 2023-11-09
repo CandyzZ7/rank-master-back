@@ -15,6 +15,7 @@ type Token {
 type (
     RegisterReq {
         Name             string `json:"name" validate:"required"`
+        RankMasterAccount string `json:"rank_master_account" validate:"required"`
         Mobile           string `json:"mobile" validate:"required,len=11,numeric"`
         Avatar           string `json:"avatar" validate:"required"`
         Email            string `json:"email" validate:"required,email"`
@@ -29,7 +30,7 @@ type (
 
 type (
     LoginReq {
-        Mobile           string `json:"mobile" validate:"required,len=11,numeric"`
+        RankMasterAccount string `json:"rank_master_account" validate:"required"`
         Password         string `json:"password" validate:"required"`
     }
     LoginRes {

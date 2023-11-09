@@ -5,7 +5,8 @@ package e
 type ErrCode int64
 
 const (
-	ErrRegisterMobileExistCode ErrCode = 2000 + iota // 手机号已存在
+	ErrRegisterMobileExistCode  ErrCode = 2000 + iota // 手机号已存在
+	ErrRegisterAccountExistCode                       // 账号已存在
 )
 
 const (

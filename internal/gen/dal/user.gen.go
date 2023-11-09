@@ -185,16 +185,16 @@ type IUserDo interface {
 	UnderlyingDB() *gorm.DB
 	schema.Tabler
 
-	FindWithMobile(mobile string) (result int64, err error)
+	FindLockWithRankMasterAccount(rankMasterAccount string) (result int64, err error)
 }
 
-// FindWithMobile SELECT EXISTS(SELECT * FROM @@table WHERE mobile = @mobile)
-func (u userDo) FindWithMobile(mobile string) (result int64, err error) {
+// FindLockWithRankMasterAccount SELECT EXISTS(SELECT * FROM @@table WHERE rank_master_account = @rankMasterAccount FOR UPDATE)
+func (u userDo) FindLockWithRankMasterAccount(rankMasterAccount string) (result int64, err error) {
 	var params []interface{}
 
 	var generateSQL strings.Builder
-	params = append(params, mobile)
-	generateSQL.WriteString("SELECT EXISTS(SELECT * FROM user WHERE mobile = ?) ")
+	params = append(params, rankMasterAccount)
+	generateSQL.WriteString("SELECT EXISTS(SELECT * FROM user WHERE rank_master_account = ? FOR UPDATE) ")
 
 	var executeSQL *gorm.DB
 	executeSQL = u.UnderlyingDB().Raw(generateSQL.String(), params...).Take(&result) // ignore_security_alert

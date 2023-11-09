@@ -140,7 +140,7 @@
     "LoginReq": {
       "type": "object",
       "properties": {
-        "mobile": {
+        "rank_master_account": {
           "type": "string"
         },
         "password": {
@@ -149,8 +149,7 @@
       },
       "title": "LoginReq",
       "required": [
-        "mobile",
-        "required",
+        "rank_master_account",
         "password"
       ]
     },
@@ -188,6 +187,9 @@
         "name": {
           "type": "string"
         },
+        "rank_master_account": {
+          "type": "string"
+        },
         "mobile": {
           "type": "string"
         },
@@ -207,6 +209,7 @@
       "title": "RegisterReq",
       "required": [
         "name",
+        "rank_master_account",
         "mobile",
         "required",
         "avatar",

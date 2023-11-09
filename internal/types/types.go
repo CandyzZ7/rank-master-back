@@ -11,12 +11,13 @@ type Token struct {
 }
 
 type RegisterReq struct {
-	Name     string `json:"name" validate:"required"`
-	Mobile   string `json:"mobile" validate:"required,len=11,numeric"`
-	Avatar   string `json:"avatar" validate:"required"`
-	Email    string `json:"email" validate:"required,email"`
-	Code     string `json:"code" validate:"required"`
-	Password string `json:"password" validate:"required"`
+	Name              string `json:"name" validate:"required"`
+	RankMasterAccount string `json:"rank_master_account" validate:"required"`
+	Mobile            string `json:"mobile" validate:"required,len=11,numeric"`
+	Avatar            string `json:"avatar" validate:"required"`
+	Email             string `json:"email" validate:"required,email"`
+	Code              string `json:"code" validate:"required"`
+	Password          string `json:"password" validate:"required"`
 }
 
 type RegisterRes struct {
@@ -25,8 +26,8 @@ type RegisterRes struct {
 }
 
 type LoginReq struct {
-	Mobile   string `json:"mobile" validate:"required,len=11,numeric"`
-	Password string `json:"password" validate:"required"`
+	RankMasterAccount string `json:"rank_master_account" validate:"required"`
+	Password          string `json:"password" validate:"required"`
 }
 
 type LoginRes struct {

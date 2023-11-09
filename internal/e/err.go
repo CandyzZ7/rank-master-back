@@ -3,8 +3,9 @@ package e
 import "github.com/pkg/errors"
 
 var (
-	ErrLoginMobileNotExist = errors.New(ErrLoginMobileNotExistCode.String())
-	ErrLoginPasswd         = errors.New(ErrLoginPasswdCode.String())
-	ErrRegisterMobileExist = errors.New(ErrRegisterMobileExistCode.String())
-	ErrEmailCodeFail       = errors.New(ErrEmailCodeFailCode.String())
+	ErrLoginMobileNotExist  = errors.New(ErrLoginMobileNotExistCode.String())
+	ErrLoginPasswd          = errors.New(ErrLoginPasswdCode.String())
+	ErrRegisterMobileExist  = errors.New(ErrRegisterMobileExistCode.String())
+	ErrEmailCodeFail        = errors.New(ErrEmailCodeFailCode.String())
+	ErrRegisterAccountExist = errors.New(ErrRegisterAccountExistCode.String())
 )
