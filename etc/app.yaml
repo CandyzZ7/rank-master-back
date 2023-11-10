@@ -27,8 +27,8 @@ Redis:
 
 UploadFile:
   AliYunOss:
-    Endpoint: upload_file-cn-shanghai.aliyuncs.com
-    AccessKeyId: xxxxxxxxxxxxxxxxxxxx
-    AccessKeySecret: xxxxxxxxxxxxxxxxxxxx
-    BucketName: beyond-article
+    Endpoint: candy
+    AccessKeyId: candy
+    AccessKeySecret: candy
+    BucketName: candy
   Path: "./upload_file/"
