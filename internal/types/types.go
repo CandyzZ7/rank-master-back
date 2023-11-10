@@ -11,32 +11,32 @@ type Token struct {
 }
 
 type RegisterReq struct {
-	Name              string `json:"name" validate:"required"`
-	RankMasterAccount string `json:"rank_master_account" validate:"required"`
-	Mobile            string `json:"mobile" validate:"required,len=11,numeric"`
-	Avatar            string `json:"avatar" validate:"required"`
-	Email             string `json:"email" validate:"required,email"`
-	Code              string `json:"code" validate:"required"`
-	Password          string `json:"password" validate:"required"`
+	Name              string `json:"name" validate:"required"`                  // 昵称
+	RankMasterAccount string `json:"rank_master_account" validate:"required"`   // RankMaster账号
+	Mobile            string `json:"mobile" validate:"required,len=11,numeric"` // 手机号
+	Avatar            string `json:"avatar" validate:"required"`                // 头像
+	Email             string `json:"email" validate:"required,email"`           // 邮箱
+	Code              string `json:"code" validate:"required"`                  // 邮箱验证码
+	Password          string `json:"password" validate:"required"`              // 密码
 }
 
 type RegisterRes struct {
-	UserId string `json:"user_id"`
-	Token  Token  `json:"token"`
+	UserId string `json:"user_id"` // 用户ID
+	Token  Token  `json:"token"`   // token
 }
 
 type LoginReq struct {
-	RankMasterAccount string `json:"rank_master_account" validate:"required"`
-	Password          string `json:"password" validate:"required"`
+	RankMasterAccount string `json:"rank_master_account" validate:"required"` // RankMaster账号
+	Password          string `json:"password" validate:"required"`            // 密码
 }
 
 type LoginRes struct {
-	UserId string `json:"user_id"`
-	Token  Token  `json:"token"`
+	UserId string `json:"user_id"` // 用户ID
+	Token  Token  `json:"token"`   // token
 }
 
 type GetEmailCodeReq struct {
-	Email string `json:"email" validate:"required,email"`
+	Email string `json:"email" validate:"required,email"` // 邮箱
 }
 
 type GetEmailCodeRes struct {

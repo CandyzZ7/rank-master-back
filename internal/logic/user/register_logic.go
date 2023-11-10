@@ -2,8 +2,8 @@ package user
 
 import (
 	"context"
+	"rank-master-back/internal/dao/gen/dal"
 	"rank-master-back/internal/e"
-	"rank-master-back/internal/gen/dal"
 	"rank-master-back/internal/model"
 	"rank-master-back/internal/pkg/encrypt"
 	"rank-master-back/internal/pkg/jwt"

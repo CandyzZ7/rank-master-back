@@ -7,7 +7,9 @@ import (
 	"gorm.io/gen"
 )
 
-func TestInit(t *testing.T) {
+//go:generate go test .
+
+func TestDBInit(t *testing.T) {
 	g := gen.NewGenerator(gen.Config{
 		OutPath:       "./dal", // output directory, default value is ./query
 		Mode:          gen.WithoutContext | gen.WithDefaultQuery | gen.WithQueryInterface,
