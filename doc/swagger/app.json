@@ -124,7 +124,8 @@
       "type": "object",
       "properties": {
         "email": {
-          "type": "string"
+          "type": "string",
+          "description": " 邮箱"
         }
       },
       "title": "GetEmailCodeReq",
@@ -141,10 +142,12 @@
       "type": "object",
       "properties": {
         "rank_master_account": {
-          "type": "string"
+          "type": "string",
+          "description": " RankMaster账号"
         },
         "password": {
-          "type": "string"
+          "type": "string",
+          "description": " 密码"
         }
       },
       "title": "LoginReq",
@@ -157,10 +160,12 @@
       "type": "object",
       "properties": {
         "user_id": {
-          "type": "string"
+          "type": "string",
+          "description": " 用户ID"
         },
         "token": {
-          "$ref": "#/definitions/Token"
+          "$ref": "#/definitions/Token",
+          "description": " token"
         }
       },
       "title": "LoginRes",
@@ -185,25 +190,32 @@
       "type": "object",
       "properties": {
         "name": {
-          "type": "string"
+          "type": "string",
+          "description": " 昵称"
         },
         "rank_master_account": {
-          "type": "string"
+          "type": "string",
+          "description": " RankMaster账号"
         },
         "mobile": {
-          "type": "string"
+          "type": "string",
+          "description": " 手机号"
         },
         "avatar": {
-          "type": "string"
+          "type": "string",
+          "description": " 头像"
         },
         "email": {
-          "type": "string"
+          "type": "string",
+          "description": " 邮箱"
         },
         "code": {
-          "type": "string"
+          "type": "string",
+          "description": " 邮箱验证码"
         },
         "password": {
-          "type": "string"
+          "type": "string",
+          "description": " 密码"
         }
       },
       "title": "RegisterReq",
@@ -222,10 +234,12 @@
       "type": "object",
       "properties": {
         "user_id": {
-          "type": "string"
+          "type": "string",
+          "description": " 用户ID"
         },
         "token": {
-          "$ref": "#/definitions/Token"
+          "$ref": "#/definitions/Token",
+          "description": " token"
         }
       },
       "title": "RegisterRes",
