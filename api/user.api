@@ -47,6 +47,13 @@ type (
     }
 )
 
+type (
+    GetRankMasterAccountReq{
+        RankMasterAccount string `json:"rank_master_account" validate:"required"` // RankMaster账号
+    }
+    GetRankMasterAccountRes{}
+)
+
 
 @server (
     group: user
@@ -64,4 +71,8 @@ service app {
     @doc "获取邮箱验证码"
     @handler GetEmailCodeHandler
     post /email/code (GetEmailCodeReq) returns (GetEmailCodeRes)
+
+    @doc "验证用户账号是否存在"
+    @handler GetRankMasterAccountHandler
+    get /:rank_master_account (GetRankMasterAccountReq) returns (GetRankMasterAccountRes)
 }

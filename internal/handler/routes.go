@@ -39,6 +39,11 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Path:    "/email/code",
 				Handler: user.GetEmailCodeHandler(serverCtx),
 			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/:rank_master_account",
+				Handler: user.GetRankMasterAccountHandler(serverCtx),
+			},
 		},
 		rest.WithPrefix("/v1/user"),
 	)
