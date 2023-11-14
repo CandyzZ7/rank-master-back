@@ -62,6 +62,6 @@ service app {
     post /login (LoginReq) returns (LoginRes)
 
     @doc "获取邮箱验证码"
-    @handler GetEmailHandler
+    @handler GetEmailCodeHandler
     post /email/code (GetEmailCodeReq) returns (GetEmailCodeRes)
 }

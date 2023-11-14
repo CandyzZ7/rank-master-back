@@ -12,21 +12,21 @@ import (
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
-type GetEmailLogic struct {
+type GetEmailCodeLogic struct {
 	logx.Logger
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
 }
 
-func NewGetEmailLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetEmailLogic {
-	return &GetEmailLogic{
+func NewGetEmailCodeLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetEmailCodeLogic {
+	return &GetEmailCodeLogic{
 		Logger: logx.WithContext(ctx),
 		ctx:    ctx,
 		svcCtx: svcCtx,
 	}
 }
 
-func (l *GetEmailLogic) GetEmail(req *types.GetEmailCodeReq) (resp *types.GetEmailCodeRes, err error) {
+func (l *GetEmailCodeLogic) GetEmailCode(req *types.GetEmailCodeReq) (resp *types.GetEmailCodeRes, err error) {
 	code := verification_code.GetRand(verification_code.Six)
 	err = l.svcCtx.RDB.Set(l.ctx, req.Email, code, time.Minute*verification_code.CodeValidityTime).Err()
 	if err != nil {
