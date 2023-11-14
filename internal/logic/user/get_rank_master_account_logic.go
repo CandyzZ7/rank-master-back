@@ -33,8 +33,8 @@ func (l *GetRankMasterAccountLogic) GetRankMasterAccount(req *types.GetRankMaste
 	if err != nil {
 		return nil, err
 	}
-	if isExist == 0 {
-		return nil, e.ErrLoginMobileNotExist
+	if isExist == 1 {
+		return nil, e.ErrRegisterAccountExist
 	}
 	return
 }

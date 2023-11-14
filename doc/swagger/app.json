@@ -37,7 +37,7 @@
     "/v1/user/email/code": {
       "post": {
         "summary": "获取邮箱验证码",
-        "operationId": "GetEmailHandler",
+        "operationId": "GetEmailCodeHandler",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -117,6 +117,32 @@
           "user"
         ]
       }
+    },
+    "/v1/user/{rank_master_account}": {
+      "get": {
+        "summary": "验证用户账号是否存在",
+        "operationId": "GetRankMasterAccountHandler",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GetRankMasterAccountRes"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "rank_master_account",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "user"
+        ]
+      }
     }
   },
   "definitions": {
@@ -137,6 +163,23 @@
     "GetEmailCodeRes": {
       "type": "object",
       "title": "GetEmailCodeRes"
+    },
+    "GetRankMasterAccountReq": {
+      "type": "object",
+      "properties": {
+        "rank_master_account": {
+          "type": "string",
+          "description": " RankMaster账号"
+        }
+      },
+      "title": "GetRankMasterAccountReq",
+      "required": [
+        "rank_master_account"
+      ]
+    },
+    "GetRankMasterAccountRes": {
+      "type": "object",
+      "title": "GetRankMasterAccountRes"
     },
     "LoginReq": {
       "type": "object",

@@ -43,7 +43,7 @@ type GetEmailCodeRes struct {
 }
 
 type GetRankMasterAccountReq struct {
-	RankMasterAccount string `json:"rank_master_account" validate:"required"` // RankMaster账号
+	RankMasterAccount string `path:"rank_master_account" validate:"required"` // RankMaster账号
 }
 
 type GetRankMasterAccountRes struct {
