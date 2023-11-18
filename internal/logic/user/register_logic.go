@@ -4,7 +4,7 @@ import (
 	"context"
 	"rank-master-back/internal/dao/gen/dal"
 	"rank-master-back/internal/e"
-	"rank-master-back/internal/model"
+	"rank-master-back/internal/model/entity"
 	"rank-master-back/internal/pkg/encrypt"
 	"rank-master-back/internal/pkg/jwt"
 	"rank-master-back/internal/pkg/snowflake"
@@ -67,8 +67,10 @@ func (l *RegisterLogic) Register(req *types.RegisterReq) (resp *types.RegisterRe
 	encPassword := encrypt.Encryption(req.Password, cryptSalt)
 	// 加密手机号
 	mobile := encrypt.Encryption(req.Mobile, cryptSalt)
-	userModel := &model.User{
-		Id:                snowflake.GetSnowflakeID(),
+	userEntity := &entity.User{
+		BaseEntity: entity.BaseEntity{
+			Id: snowflake.GetSnowflakeID(),
+		},
 		RankMasterAccount: req.RankMasterAccount,
 		Name:              req.Name,
 		Avatar:            key,
@@ -76,7 +78,7 @@ func (l *RegisterLogic) Register(req *types.RegisterReq) (resp *types.RegisterRe
 		Password:          encPassword,
 		CryptSalt:         cryptSalt,
 	}
-	err = dal.Use(l.svcCtx.DB).User.Create(userModel)
+	err = dal.Use(l.svcCtx.DB).User.Create(userEntity)
 	if err != nil {
 		return nil, errors.Wrap(err, "注册失败")
 	}
@@ -84,7 +86,7 @@ func (l *RegisterLogic) Register(req *types.RegisterReq) (resp *types.RegisterRe
 		AccessSecret: l.svcCtx.Config.Auth.AccessSecret,
 		AccessExpire: l.svcCtx.Config.Auth.AccessExpire,
 		Fields: map[string]interface{}{
-			"userId": userModel.Id,
+			"userId": userEntity.Id,
 		},
 	})
 	if err != nil {
@@ -93,7 +95,7 @@ func (l *RegisterLogic) Register(req *types.RegisterReq) (resp *types.RegisterRe
 	}
 
 	return &types.RegisterRes{
-		UserId: userModel.Id,
+		UserId: userEntity.Id,
 		Token: types.Token{
 			AccessToken:  token.AccessToken,
 			AccessExpire: token.AccessExpire,
