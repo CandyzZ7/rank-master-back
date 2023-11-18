@@ -4,6 +4,7 @@ package handler
 import (
 	"net/http"
 
+	template "rank-master-back/internal/handler/template"
 	test "rank-master-back/internal/handler/test"
 	user "rank-master-back/internal/handler/user"
 	"rank-master-back/internal/svc"
@@ -46,5 +47,16 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 			},
 		},
 		rest.WithPrefix("/v1/user"),
+	)
+
+	server.AddRoutes(
+		[]rest.Route{
+			{
+				Method:  http.MethodPost,
+				Path:    "/",
+				Handler: template.AddTemplateHandler(serverCtx),
+			},
+		},
+		rest.WithPrefix("/v1/template"),
 	)
 }

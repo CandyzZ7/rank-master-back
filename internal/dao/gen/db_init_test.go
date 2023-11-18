@@ -1,7 +1,7 @@
 package gen
 
 import (
-	"rank-master-back/internal/model"
+	"rank-master-back/internal/model/entity"
 	"testing"
 
 	"gorm.io/gen"
@@ -15,7 +15,7 @@ func TestDBInit(t *testing.T) {
 		Mode:          gen.WithoutContext | gen.WithDefaultQuery | gen.WithQueryInterface,
 		FieldNullable: true,
 	})
-	g.ApplyBasic(model.User{})
-	g.ApplyInterface(func(IUser) {}, model.User{})
+	g.ApplyBasic(entity.User{})
+	g.ApplyInterface(func(IUser) {}, entity.User{}, entity.Template{})
 	g.Execute()
 }

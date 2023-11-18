@@ -34,6 +34,34 @@
         ]
       }
     },
+    "/v1/template/": {
+      "post": {
+        "summary": "增加模板",
+        "operationId": "AddTemplateHandler",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/AddTemplateRes"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/AddTemplateReq"
+            }
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "template"
+        ]
+      }
+    },
     "/v1/user/email/code": {
       "post": {
         "summary": "获取邮箱验证码",
@@ -146,6 +174,46 @@
     }
   },
   "definitions": {
+    "AddTemplateReq": {
+      "type": "object",
+      "properties": {
+        "function": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "topic": {
+          "type": "string"
+        },
+        "content": {
+          "type": "string"
+        },
+        "remark": {
+          "type": "string"
+        }
+      },
+      "title": "AddTemplateReq",
+      "required": [
+        "function",
+        "type",
+        "topic",
+        "content",
+        "remark"
+      ]
+    },
+    "AddTemplateRes": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        }
+      },
+      "title": "AddTemplateRes",
+      "required": [
+        "id"
+      ]
+    },
     "GetEmailCodeReq": {
       "type": "object",
       "properties": {

@@ -1,0 +1,32 @@
+syntax = "v1"
+
+info(
+    title: "type title here"
+    desc: "type desc here"
+    author: "type author here"
+    email: "type email here"
+    version: "type version here"
+)
+
+type (
+    AddTemplateReq{
+        Function string `json:"function" validate:"required"`
+        Type     string `json:"type" validate:"required"`
+        Topic    string `json:"topic" validate:"required"`
+        Content  string `json:"content" validate:"required"`
+        Remark   string `json:"remark" validate:"required"`
+    }
+    AddTemplateRes{
+        Id string `json:"id"`
+    }
+)
+
+@server (
+    group: template
+    prefix : /v1/template
+)
+service app {
+    @doc "增加模板"
+    @handler AddTemplateHandler
+    post / (AddTemplateReq) returns (AddTemplateRes)
+}

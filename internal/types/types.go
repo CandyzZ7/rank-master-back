@@ -48,3 +48,15 @@ type GetRankMasterAccountReq struct {
 
 type GetRankMasterAccountRes struct {
 }
+
+type AddTemplateReq struct {
+	Function string `json:"function" validate:"required"`
+	Type     string `json:"type" validate:"required"`
+	Topic    string `json:"topic" validate:"required"`
+	Content  string `json:"content" validate:"required"`
+	Remark   string `json:"remark" validate:"required"`
+}
+
+type AddTemplateRes struct {
+	Id string `json:"id"`
+}
