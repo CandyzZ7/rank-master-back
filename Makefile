@@ -3,6 +3,7 @@ api:
 swagger:
 	goctl api plugin -plugin goctl-swagger="swagger -filename doc/swagger/app.json" -api api/app.api -dir .
 gen:
+	go mod tidy
 	goctl api go -api ./api/app.api -dir . -style go_zero -home=./tpl
 	goctl api plugin -plugin goctl-swagger="swagger -filename doc/swagger/app.json" -api api/app.api -dir .
 	go generate ./...

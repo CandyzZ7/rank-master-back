@@ -57,7 +57,7 @@ type (
 
 @server (
     group: user
-    prefix : /v1/user
+    prefix: /v1/user
 )
 service app {
     @doc "注册"

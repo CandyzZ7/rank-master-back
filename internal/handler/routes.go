@@ -16,6 +16,17 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 	server.AddRoutes(
 		[]rest.Route{
 			{
+				Method:  http.MethodPost,
+				Path:    "/",
+				Handler: template.AddTemplateHandler(serverCtx),
+			},
+		},
+		rest.WithPrefix("/v1/template"),
+	)
+
+	server.AddRoutes(
+		[]rest.Route{
+			{
 				Method:  http.MethodGet,
 				Path:    "/ping",
 				Handler: test.PingHandler(serverCtx),
@@ -26,9 +37,14 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 	server.AddRoutes(
 		[]rest.Route{
 			{
+				Method:  http.MethodGet,
+				Path:    "/:rank_master_account",
+				Handler: user.GetRankMasterAccountHandler(serverCtx),
+			},
+			{
 				Method:  http.MethodPost,
-				Path:    "/register",
-				Handler: user.RegisterHandler(serverCtx),
+				Path:    "/email/code",
+				Handler: user.GetEmailCodeHandler(serverCtx),
 			},
 			{
 				Method:  http.MethodPost,
@@ -37,26 +53,10 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 			},
 			{
 				Method:  http.MethodPost,
-				Path:    "/email/code",
-				Handler: user.GetEmailCodeHandler(serverCtx),
-			},
-			{
-				Method:  http.MethodGet,
-				Path:    "/:rank_master_account",
-				Handler: user.GetRankMasterAccountHandler(serverCtx),
+				Path:    "/register",
+				Handler: user.RegisterHandler(serverCtx),
 			},
 		},
 		rest.WithPrefix("/v1/user"),
-	)
-
-	server.AddRoutes(
-		[]rest.Route{
-			{
-				Method:  http.MethodPost,
-				Path:    "/",
-				Handler: template.AddTemplateHandler(serverCtx),
-			},
-		},
-		rest.WithPrefix("/v1/template"),
 	)
 }

@@ -23,7 +23,7 @@ type (
 
 @server (
     group: template
-    prefix : /v1/template
+    prefix: /v1/template
 )
 service app {
     @doc "增加模板"

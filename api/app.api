@@ -3,11 +3,11 @@ syntax = "v1"
 import "user.api"
 import "template.api"
 
-info(
-	title: "type title here"
-	desc: "type desc here"
-	author: "type author here"
-	email: "type email here"
+info (
+	title:   "type title here"
+	desc:    "type desc here"
+	author:  "type author here"
+	email:   "type email here"
 	version: "type version here"
 )
 
@@ -23,3 +23,4 @@ service app {
 	@handler PingHandler
 	get /ping returns (PingRes)
 }
+
