@@ -12,10 +12,10 @@ const (
 )
 
 func GetRand(codeLen int) string {
-	rand.Seed(time.Now().UnixNano())
+	r := rand.New(rand.NewSource(time.Now().UnixNano()))
 	var s string
 	for i := 0; i < codeLen; i++ {
-		s += strconv.Itoa(rand.Intn(10))
+		s += strconv.Itoa(r.Intn(10))
 	}
 	return s
 }
