@@ -3,12 +3,12 @@ package test
 import (
 	"net/http"
 
+	"rank-master-back/infrastructure/response"
 	"rank-master-back/internal/logic/test"
 	"rank-master-back/internal/svc"
 
 	"github.com/pkg/errors"
 	"github.com/zeromicro/go-zero/core/logc"
-	"github.com/zeromicro/go-zero/rest/httpx"
 )
 
 func PingHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
@@ -17,9 +17,9 @@ func PingHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 		resp, err := l.Ping()
 		if err != nil {
 			logc.Error(r.Context(), errors.Cause(err))
-			httpx.ErrorCtx(r.Context(), w, err)
+			response.Handler(w, nil, err)
 		} else {
-			httpx.OkJsonCtx(r.Context(), w, resp)
+			response.Handler(w, resp, err)
 		}
 	}
 }

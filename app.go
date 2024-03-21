@@ -1,11 +1,14 @@
 package main
 
 import (
+	"context"
 	_ "embed"
 	"flag"
 	"fmt"
 	"net/http"
 	"strings"
+
+	"github.com/zeromicro/go-zero/core/logc"
 
 	"rank-master-back/internal/config"
 	"rank-master-back/internal/handler"
@@ -43,6 +46,13 @@ func Notfound() http.HandlerFunc {
 	}
 }
 
+func logMiddleware(next http.HandlerFunc) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		logc.Info(context.Background(), "Method: %s, Path: %s", r.Method, r.URL.Path)
+		next.ServeHTTP(w, r)
+	}
+}
+
 func main() {
 	flag.Parse()
 
@@ -51,6 +61,7 @@ func main() {
 
 	server := rest.MustNewServer(c.RestConf, rest.WithCors(), rest.WithNotFoundHandler(Notfound()))
 	defer server.Stop()
+	server.Use(logMiddleware)
 	// swagger  json file
 	server.AddRoute(rest.Route{
 		Method: http.MethodGet,

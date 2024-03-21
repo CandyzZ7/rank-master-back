@@ -3,6 +3,7 @@ package user
 import (
 	"net/http"
 
+	"rank-master-back/infrastructure/response"
 	"rank-master-back/internal/logic/user"
 	"rank-master-back/internal/svc"
 	"rank-master-back/internal/types"
@@ -17,13 +18,13 @@ func LoginHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var req types.LoginReq
 		if err := httpx.Parse(r, &req); err != nil {
-			httpx.ErrorCtx(r.Context(), w, err)
+			response.Handler(w, nil, err)
 			return
 		}
 
 		err := validator.New().StructCtx(r.Context(), req)
 		if err != nil {
-			httpx.ErrorCtx(r.Context(), w, err)
+			response.Handler(w, nil, err)
 			return
 		}
 
@@ -31,9 +32,9 @@ func LoginHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 		resp, err := l.Login(&req)
 		if err != nil {
 			logc.Error(r.Context(), errors.Cause(err))
-			httpx.ErrorCtx(r.Context(), w, err)
+			response.Handler(w, nil, err)
 		} else {
-			httpx.OkJsonCtx(r.Context(), w, resp)
+			response.Handler(w, resp, err)
 		}
 	}
 }
