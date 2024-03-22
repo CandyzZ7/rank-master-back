@@ -2,16 +2,16 @@ package user
 
 import (
 	"context"
-	"rank-master-back/internal/dao/gen/dal"
-	"rank-master-back/internal/e"
-	"rank-master-back/internal/pkg/encrypt"
-	"rank-master-back/internal/pkg/jwt"
 	"strings"
 
+	"github.com/zeromicro/go-zero/core/logx"
+
+	"rank-master-back/infrastructure/e"
+	"rank-master-back/internal/dao/gen/dal"
+	"rank-master-back/internal/pkg/encrypt"
+	"rank-master-back/internal/pkg/jwt"
 	"rank-master-back/internal/svc"
 	"rank-master-back/internal/types"
-
-	"github.com/zeromicro/go-zero/core/logx"
 )
 
 type LoginLogic struct {

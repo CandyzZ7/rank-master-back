@@ -2,10 +2,10 @@ package user
 
 import (
 	"context"
-	"rank-master-back/internal/dao/gen/dal"
-	"rank-master-back/internal/e"
 	"strings"
 
+	"rank-master-back/infrastructure/e"
+	"rank-master-back/internal/dao/gen/dal"
 	"rank-master-back/internal/svc"
 	"rank-master-back/internal/types"
 
@@ -34,7 +34,7 @@ func (l *GetRankMasterAccountLogic) GetRankMasterAccount(req *types.GetRankMaste
 		return nil, err
 	}
 	if isExist == 1 {
-		return nil, e.ErrRegisterAccountExist
+		return nil, e.ErrRegisterMobileExist
 	}
 	return
 }

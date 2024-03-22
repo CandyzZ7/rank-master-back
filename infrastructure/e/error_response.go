@@ -1,9 +1,11 @@
-package response
+package e
 
-import "errors"
+import (
+	"errors"
+)
 
 type CodeError struct {
-	Code    int    `json:"code"`
+	Code    Code   `json:"code"`
 	Message string `json:"message"`
 }
 
@@ -12,35 +14,35 @@ func (e *CodeError) Error() string {
 	return e.Message
 }
 
+func (e *CodeError) GetCode() Code {
+	return e.Code
+}
+
+func (e *CodeError) GetMessage() string {
+	return e.Message
+}
+
 // ErrorResponse 返回给前端的数据
-func (e *CodeError) ErrorResponse() CodeError {
-	return CodeError{
+func (e *CodeError) ErrorResponse() *CodeError {
+	return &CodeError{
 		Code:    e.Code,
 		Message: e.Message,
 	}
 }
 
-// NewCodeError 用来自定义抛出的异常，支持调用传递
-func NewCodeError(code int, msg string) error {
-	return &CodeError{
-		Code:    code,
-		Message: msg,
-	}
-}
-
 // New 提供new方法，任意地方传递参数返回CodeError类型的数据
-func New(code int, msg string) CodeError {
-	return CodeError{
+func New(code Code, msg string) *CodeError {
+	return &CodeError{
 		Code:    code,
 		Message: msg,
 	}
 }
 
 // DefaultErrHandler 默认异常状态码函数，只需传递错误信息即可，默认返回code-10001
-func DefaultErrHandler(message string) error {
+func DefaultErrHandler(msg string) error {
 	return &CodeError{
 		Code:    ServerError.Code,
-		Message: message,
+		Message: msg,
 	}
 }
 
@@ -53,6 +55,6 @@ func ErrHandler(err error) interface{} {
 		return err
 	default:
 		// 系统错误，500 错误提示
-		return CodeError{Code: ServerError.Code, Message: err.Error()}
+		return DefaultErrHandler(err.Error())
 	}
 }

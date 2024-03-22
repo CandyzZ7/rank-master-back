@@ -2,8 +2,10 @@ package user
 
 import (
 	"context"
+	"strings"
+
+	"rank-master-back/infrastructure/e"
 	"rank-master-back/internal/dao/gen/dal"
-	"rank-master-back/internal/e"
 	"rank-master-back/internal/model/entity"
 	"rank-master-back/internal/pkg/encrypt"
 	"rank-master-back/internal/pkg/jwt"
@@ -11,7 +13,6 @@ import (
 	"rank-master-back/internal/pkg/upload_file/local"
 	"rank-master-back/internal/svc"
 	"rank-master-back/internal/types"
-	"strings"
 
 	"github.com/pkg/errors"
 	"github.com/zeromicro/go-zero/core/logx"
