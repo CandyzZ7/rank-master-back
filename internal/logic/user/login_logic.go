@@ -7,9 +7,9 @@ import (
 	"github.com/zeromicro/go-zero/core/logx"
 
 	"rank-master-back/infrastructure/e"
+	"rank-master-back/infrastructure/pkg/encrypt"
+	"rank-master-back/infrastructure/pkg/jwt"
 	"rank-master-back/internal/dao/gen/dal"
-	"rank-master-back/internal/pkg/encrypt"
-	"rank-master-back/internal/pkg/jwt"
 	"rank-master-back/internal/svc"
 	"rank-master-back/internal/types"
 )

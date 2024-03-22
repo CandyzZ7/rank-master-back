@@ -4,8 +4,9 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+
+	"rank-master-back/infrastructure/pkg/upload_file"
 	"rank-master-back/internal/config"
-	"rank-master-back/internal/pkg/upload_file"
 
 	"github.com/pkg/errors"
 )

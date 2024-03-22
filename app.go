@@ -1,20 +1,16 @@
 package main
 
 import (
-	"context"
 	_ "embed"
 	"flag"
 	"fmt"
 	"net/http"
-	"strings"
 
-	"github.com/zeromicro/go-zero/core/logc"
-
+	"rank-master-back/infrastructure/middleware"
 	"rank-master-back/internal/config"
 	"rank-master-back/internal/handler"
 	"rank-master-back/internal/svc"
 
-	"github.com/swaggest/swgui/v5emb"
 	"github.com/zeromicro/go-zero/core/conf"
 	"github.com/zeromicro/go-zero/rest"
 )
@@ -24,48 +20,20 @@ var spec []byte
 
 var configFile = flag.String("f", "etc/app.yaml", "the config file")
 
-const (
-	swaggerAPI     = "/api/doc"
-	SwaggerJsonAPI = "/api/doc/app.json"
-	Title          = "title"
-)
-
-var swaggerHandle = v5emb.New(
-	Title,
-	SwaggerJsonAPI,
-	swaggerAPI,
-)
-
-func Notfound() http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		if strings.HasPrefix(r.URL.Path, swaggerAPI) {
-			swaggerHandle.ServeHTTP(w, r)
-			return
-		}
-		http.NotFound(w, r)
-	}
-}
-
-func logMiddleware(next http.HandlerFunc) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		logc.Info(context.Background(), "Method: %s, Path: %s", r.Method, r.URL.Path)
-		next.ServeHTTP(w, r)
-	}
-}
-
 func main() {
 	flag.Parse()
 
 	var c config.Config
 	conf.MustLoad(*configFile, &c)
 
-	server := rest.MustNewServer(c.RestConf, rest.WithCors(), rest.WithNotFoundHandler(Notfound()))
+	server := rest.MustNewServer(c.RestConf, rest.WithCors(), rest.WithNotFoundHandler(middleware.Notfound()))
 	defer server.Stop()
-	server.Use(logMiddleware)
+	// server.Use(logMiddleware)
 	// swagger  json file
+	// 新增swagger json接口
 	server.AddRoute(rest.Route{
 		Method: http.MethodGet,
-		Path:   SwaggerJsonAPI,
+		Path:   middleware.SwaggerJsonAPI,
 		Handler: func(w http.ResponseWriter, r *http.Request) {
 			_, _ = w.Write(spec)
 		},

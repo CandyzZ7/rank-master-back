@@ -1,10 +1,11 @@
 package rdb
 
 import (
-	"rank-master-back/internal/config"
 	"sync"
 
 	"github.com/go-redis/redis/v8"
+
+	"rank-master-back/internal/config"
 )
 
 var (

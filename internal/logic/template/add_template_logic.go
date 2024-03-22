@@ -2,14 +2,15 @@ package template
 
 import (
 	"context"
-	"rank-master-back/internal/dao/gen/dal"
-	"rank-master-back/internal/model/entity"
-	"rank-master-back/internal/pkg/snowflake"
-	"rank-master-back/internal/svc"
-	"rank-master-back/internal/types"
 
 	"github.com/pkg/errors"
 	"github.com/zeromicro/go-zero/core/logx"
+
+	"rank-master-back/infrastructure/pkg/snowflake"
+	"rank-master-back/internal/dao/gen/dal"
+	"rank-master-back/internal/model/entity"
+	"rank-master-back/internal/svc"
+	"rank-master-back/internal/types"
 )
 
 type AddTemplateLogic struct {

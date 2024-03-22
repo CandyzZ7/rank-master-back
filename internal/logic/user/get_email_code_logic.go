@@ -2,9 +2,9 @@ package user
 
 import (
 	"context"
-	"rank-master-back/internal/pkg/verification_code"
 	"time"
 
+	"rank-master-back/infrastructure/pkg/verification_code"
 	"rank-master-back/internal/svc"
 	"rank-master-back/internal/types"
 

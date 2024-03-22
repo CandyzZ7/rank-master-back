@@ -1,9 +1,9 @@
 package svc
 
 import (
+	"rank-master-back/infrastructure/pkg/orm_engine"
+	"rank-master-back/infrastructure/pkg/rdb"
 	"rank-master-back/internal/config"
-	"rank-master-back/internal/pkg/orm_engine"
-	"rank-master-back/internal/pkg/rdb"
 
 	"github.com/aliyun/aliyun-oss-go-sdk/oss"
 
