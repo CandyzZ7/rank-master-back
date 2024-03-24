@@ -5,8 +5,8 @@ package e
 type Code int64
 
 const (
-	OKCode          Code = 200
-	ServerErrorCode Code = 500
+	OKCode          Code = 200 // OK
+	ServerErrorCode Code = 500 // Server Error
 )
 
 const (

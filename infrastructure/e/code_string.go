@@ -18,8 +18,8 @@ func _() {
 }
 
 const (
-	_Code_name_0 = "OKCode"
-	_Code_name_1 = "ServerErrorCode"
+	_Code_name_0 = "OK"
+	_Code_name_1 = "Server Error"
 	_Code_name_2 = "password error"
 	_Code_name_3 = "mobile already existsaccount already exists"
 	_Code_name_4 = "email code error"
