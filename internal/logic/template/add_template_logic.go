@@ -31,7 +31,7 @@ func (l *AddTemplateLogic) AddTemplate(req *types.AddTemplateReq) (resp *types.A
 	templateDB := dal.Use(l.svcCtx.DB).Template
 	templateEntity := &entity.Template{
 		BaseEntity: entity.BaseEntity{
-			Id: snowflake.GetSnowflakeID(),
+			Id: snowflake.GenerateDefaultSnowflakeID(),
 		},
 		Function: req.Function,
 		Type:     req.Type,

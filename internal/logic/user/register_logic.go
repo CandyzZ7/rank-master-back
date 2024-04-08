@@ -70,7 +70,7 @@ func (l *RegisterLogic) Register(req *types.RegisterReq) (resp *types.RegisterRe
 	mobile := encrypt.Encryption(req.Mobile, cryptSalt)
 	userEntity := &entity.User{
 		BaseEntity: entity.BaseEntity{
-			Id: snowflake.GetSnowflakeID(),
+			Id: snowflake.GenerateDefaultSnowflakeID(),
 		},
 		RankMasterAccount: req.RankMasterAccount,
 		Name:              req.Name,
