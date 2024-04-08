@@ -4,12 +4,12 @@ import (
 	"context"
 	"time"
 
+	"github.com/pkg/errors"
+	"github.com/zeromicro/go-zero/core/logx"
+
 	"rank-master-back/infrastructure/pkg/verification_code"
 	"rank-master-back/internal/svc"
 	"rank-master-back/internal/types"
-
-	"github.com/pkg/errors"
-	"github.com/zeromicro/go-zero/core/logx"
 )
 
 type GetEmailCodeLogic struct {

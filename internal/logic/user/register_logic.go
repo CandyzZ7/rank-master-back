@@ -4,6 +4,9 @@ import (
 	"context"
 	"strings"
 
+	"github.com/pkg/errors"
+	"github.com/zeromicro/go-zero/core/logx"
+
 	"rank-master-back/infrastructure/e"
 	"rank-master-back/infrastructure/pkg/encrypt"
 	"rank-master-back/infrastructure/pkg/jwt"
@@ -13,9 +16,6 @@ import (
 	"rank-master-back/internal/model/entity"
 	"rank-master-back/internal/svc"
 	"rank-master-back/internal/types"
-
-	"github.com/pkg/errors"
-	"github.com/zeromicro/go-zero/core/logx"
 )
 
 type RegisterLogic struct {

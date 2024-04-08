@@ -3,10 +3,10 @@ package test
 import (
 	"context"
 
+	"github.com/zeromicro/go-zero/core/logx"
+
 	"rank-master-back/internal/svc"
 	"rank-master-back/internal/types"
-
-	"github.com/zeromicro/go-zero/core/logx"
 )
 
 type PingLogic struct {

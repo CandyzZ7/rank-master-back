@@ -1,18 +1,21 @@
 package main
 
 import (
+	"context"
 	_ "embed"
 	"flag"
 	"fmt"
 	"net/http"
 
+	"github.com/pkg/errors"
+	"github.com/zeromicro/go-zero/core/conf"
+	"github.com/zeromicro/go-zero/core/logc"
+	"github.com/zeromicro/go-zero/rest"
+
 	"rank-master-back/infrastructure/middleware"
+	"rank-master-back/infrastructure/pkg/snowflake"
 	"rank-master-back/internal/config"
 	"rank-master-back/internal/handler"
-	"rank-master-back/internal/svc"
-
-	"github.com/zeromicro/go-zero/core/conf"
-	"github.com/zeromicro/go-zero/rest"
 )
 
 //go:embed doc/swagger/app.json
@@ -38,7 +41,12 @@ func main() {
 			_, _ = w.Write(spec)
 		},
 	})
-	ctx := svc.NewServiceContext(c)
+	// 初始化
+	snowflake.InitNode(c)
+	ctx, err := InitializeServiceContext(c)
+	if err != nil {
+		logc.Error(context.Background(), errors.Cause(err))
+	}
 	handler.RegisterHandlers(server, ctx)
 
 	fmt.Printf("Starting server at %s:%d...\n", c.Host, c.Port)

@@ -6,6 +6,8 @@ import (
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
+
+	"rank-master-back/internal/config"
 )
 
 var (
@@ -13,11 +15,15 @@ var (
 	once       sync.Once
 )
 
-func NewGormEngine(dataSource string) *gorm.DB {
+func NewGormEngine(c config.Config) (*gorm.DB, error) {
+	var err error
 	once.Do(func() {
-		gormEngine, _ = gorm.Open(mysql.Open(dataSource), &gorm.Config{
-			Logger: logger.Default.LogMode(logger.Info), // 配置日志级别，打印出所有的sql
+		gormEngine, err = gorm.Open(mysql.Open(c.DataSource), &gorm.Config{
+			Logger: logger.Default.LogMode(logger.Info), // 调整日志级别，根据需要修改
 		})
+		if err != nil {
+			return
+		}
 	})
-	return gormEngine
+	return gormEngine, err
 }

@@ -13,12 +13,12 @@ var (
 	once      sync.Once
 )
 
-func NewRdbClient(rdb config.Redis) *redis.Client {
+func NewRdbClient(c config.Config) *redis.Client {
 	once.Do(func() {
 		rdbClient = redis.NewClient(&redis.Options{
-			Addr:     rdb.Address,
-			Password: rdb.Password, // no password set
-			DB:       0,            // use default DB
+			Addr:     c.Redis.Address,
+			Password: c.Redis.Password, // no password set
+			DB:       0,                // use default DB
 		})
 	})
 	return rdbClient

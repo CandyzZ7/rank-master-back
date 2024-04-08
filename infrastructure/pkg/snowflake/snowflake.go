@@ -4,12 +4,21 @@ import (
 	"sync"
 
 	"github.com/bwmarrin/snowflake"
+
+	"rank-master-back/internal/config"
 )
 
-var mutex sync.Mutex
+var (
+	mutex sync.Mutex
+	node  int64
+)
 
-// 写死node【注：优化】
-var node int64 = 1
+func InitNode(c config.Config) {
+	if c.WorkerId == 0 {
+		node = 1
+	}
+	node = c.WorkerId
+}
 
 func newNode() (*snowflake.Node, error) {
 	node, err := snowflake.NewNode(node)

@@ -13,6 +13,7 @@ type Config struct {
 	Email      Email
 	Redis      Redis
 	UploadFile UploadFile
+	WorkerId   int64
 }
 
 type Auth struct {
@@ -36,6 +37,7 @@ type UploadFile struct {
 	AliYunOss AliYunOss
 	Path      string
 }
+
 type AliYunOss struct {
 	Endpoint         string
 	AccessKeyId      string

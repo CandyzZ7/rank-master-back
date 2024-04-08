@@ -3,15 +3,15 @@ package user
 import (
 	"net/http"
 
-	"rank-master-back/infrastructure/response"
-	"rank-master-back/internal/logic/user"
-	"rank-master-back/internal/svc"
-	"rank-master-back/internal/types"
-
 	"github.com/go-playground/validator/v10"
 	"github.com/pkg/errors"
 	"github.com/zeromicro/go-zero/core/logc"
 	"github.com/zeromicro/go-zero/rest/httpx"
+
+	"rank-master-back/infrastructure/response"
+	"rank-master-back/internal/logic/user"
+	"rank-master-back/internal/svc"
+	"rank-master-back/internal/types"
 )
 
 func GetRankMasterAccountHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
