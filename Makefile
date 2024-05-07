@@ -24,4 +24,4 @@ exe:
 run:
 	make gen
 	go mod tidy
-	go run app.go
+	go run app.go wire_gen.go
