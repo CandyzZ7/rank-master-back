@@ -51,6 +51,6 @@ func main() {
 
 	fmt.Printf("Starting server at %s:%d...\n", c.Host, c.Port)
 	fmt.Println("doc: http://localhost:8888/api/doc")
-
+	logc.Error(context.Background(), "test")
 	server.Start()
 }

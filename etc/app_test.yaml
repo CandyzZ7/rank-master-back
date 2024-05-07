@@ -14,8 +14,8 @@ DataSource: root:123456@tcp(127.0.0.1:3306)/rank_master?charset=utf8mb4&parseTim
 
 Log:
   ServiceName: "rank-master"
-  Mode: "file"
-  Encoding: "json"
+  Mode: "console"
+  Encoding: "plain"
   Path: "logs"
   Level: "debug"
 
