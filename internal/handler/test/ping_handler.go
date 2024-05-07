@@ -7,7 +7,6 @@ import (
 	"rank-master-back/internal/logic/test"
 	"rank-master-back/internal/svc"
 
-	"github.com/pkg/errors"
 	"github.com/zeromicro/go-zero/core/logc"
 )
 
@@ -16,7 +15,7 @@ func PingHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 		l := test.NewPingLogic(r.Context(), svcCtx)
 		resp, err := l.Ping()
 		if err != nil {
-			logc.Error(r.Context(), errors.Cause(err))
+			logc.Error(r.Context(), err)
 			response.Handler(w, nil, err)
 		} else {
 			response.Handler(w, resp, err)

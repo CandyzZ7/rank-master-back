@@ -7,7 +7,6 @@ import (
 	{{.ImportPackages}}
 
 	{{if .HasRequest}}"github.com/go-playground/validator/v10"{{end}}
-    "github.com/pkg/errors"
    	"github.com/zeromicro/go-zero/core/logc"
     {{if .HasRequest}}"github.com/zeromicro/go-zero/rest/httpx"{{end}}
 )
@@ -29,7 +28,7 @@ func {{.HandlerName}}(svcCtx *svc.ServiceContext) http.HandlerFunc {
 		{{end}}l := {{.LogicName}}.New{{.LogicType}}(r.Context(), svcCtx)
 		{{if .HasResp}}resp, {{end}}err := l.{{.Call}}({{if .HasRequest}}&req{{end}})
 		if err != nil {
-			logc.Error(r.Context(), errors.Cause(err))
+			logc.Error(r.Context(), err)
 			response.Handler(w, nil, err)
 		} else {
 			response.Handler(w, resp, err)

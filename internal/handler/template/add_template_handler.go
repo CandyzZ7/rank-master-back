@@ -3,15 +3,14 @@ package template
 import (
 	"net/http"
 
-	"github.com/go-playground/validator/v10"
-	"github.com/pkg/errors"
-	"github.com/zeromicro/go-zero/core/logc"
-	"github.com/zeromicro/go-zero/rest/httpx"
-
 	"rank-master-back/infrastructure/response"
 	"rank-master-back/internal/logic/template"
 	"rank-master-back/internal/svc"
 	"rank-master-back/internal/types"
+
+	"github.com/go-playground/validator/v10"
+	"github.com/zeromicro/go-zero/core/logc"
+	"github.com/zeromicro/go-zero/rest/httpx"
 )
 
 func AddTemplateHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
@@ -31,7 +30,7 @@ func AddTemplateHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 		l := template.NewAddTemplateLogic(r.Context(), svcCtx)
 		resp, err := l.AddTemplate(&req)
 		if err != nil {
-			logc.Error(r.Context(), errors.Cause(err))
+			logc.Error(r.Context(), err)
 			response.Handler(w, nil, err)
 		} else {
 			response.Handler(w, resp, err)
