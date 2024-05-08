@@ -1,3 +1,4 @@
 .idea
 ./upload_file
 ./tmp
+./logs
