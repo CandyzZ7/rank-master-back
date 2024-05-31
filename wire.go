@@ -7,10 +7,10 @@ package main
 import (
 	"github.com/google/wire"
 
-	"rank-master-back/infrastructure/pkg/upload_file/oss"
+	"rank-master-back/infrastructure/pkg/uploadfile/oss"
 	"rank-master-back/internal/config"
 
-	"rank-master-back/infrastructure/pkg/orm_engine"
+	"rank-master-back/infrastructure/pkg/ormengine"
 	"rank-master-back/infrastructure/pkg/rdb"
 	"rank-master-back/internal/svc"
 )
@@ -18,7 +18,7 @@ import (
 func InitializeServiceContext(c config.Config) (*svc.ServiceContext, error) {
 	panic(wire.Build(
 		wire.Struct(new(svc.ServiceContext), "*"),
-		orm_engine.NewGormEngine,
+		ormengine.NewGormEngine,
 		rdb.NewRdbClient,
 		oss.NewOssClient,
 	))

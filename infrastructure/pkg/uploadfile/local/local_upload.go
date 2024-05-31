@@ -5,7 +5,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"rank-master-back/infrastructure/pkg/upload_file"
+	"rank-master-back/infrastructure/pkg/uploadfile"
 	"rank-master-back/internal/config"
 
 	"github.com/pkg/errors"
@@ -13,7 +13,7 @@ import (
 
 func Upload(config config.Config, path string) (string, error) {
 	// 获取头像文件和上传地址
-	file, key, err := upload_file.GetFileAndKey(config, path)
+	file, key, err := uploadfile.GetFileAndKey(config, path)
 	if err != nil {
 		return "", errors.WithMessage(err, "获取头像文件和上传地址失败")
 	}

@@ -11,7 +11,7 @@ import (
 	"rank-master-back/infrastructure/pkg/encrypt"
 	"rank-master-back/infrastructure/pkg/jwt"
 	"rank-master-back/infrastructure/pkg/snowflake"
-	"rank-master-back/infrastructure/pkg/upload_file/local"
+	"rank-master-back/infrastructure/pkg/uploadfile/local"
 	"rank-master-back/internal/dao/gen/dal"
 	"rank-master-back/internal/model/entity"
 	"rank-master-back/internal/svc"

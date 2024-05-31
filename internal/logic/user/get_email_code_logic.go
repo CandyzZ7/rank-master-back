@@ -7,7 +7,7 @@ import (
 	"github.com/pkg/errors"
 	"github.com/zeromicro/go-zero/core/logx"
 
-	"rank-master-back/infrastructure/pkg/verification_code"
+	"rank-master-back/infrastructure/pkg/verificationcode"
 	"rank-master-back/internal/svc"
 	"rank-master-back/internal/types"
 )
@@ -27,12 +27,12 @@ func NewGetEmailCodeLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetE
 }
 
 func (l *GetEmailCodeLogic) GetEmailCode(req *types.GetEmailCodeReq) (resp *types.GetEmailCodeRes, err error) {
-	code := verification_code.GetRand(verification_code.Six)
-	err = l.svcCtx.RDB.Set(l.ctx, req.Email, code, time.Minute*verification_code.CodeValidityTime).Err()
+	code := verificationcode.GetRand(verificationcode.Six)
+	err = l.svcCtx.RDB.Set(l.ctx, req.Email, code, time.Minute*verificationcode.CodeValidityTime).Err()
 	if err != nil {
 		return nil, errors.WithMessage(err, "redis set error")
 	}
-	err = verification_code.SendEmailCode(l.svcCtx.Config, req.Email, code)
+	err = verificationcode.SendEmailCode(l.svcCtx.Config, req.Email, code)
 	if err != nil {
 		return nil, errors.Wrapf(err, "邮箱: %s", req.Email)
 	}

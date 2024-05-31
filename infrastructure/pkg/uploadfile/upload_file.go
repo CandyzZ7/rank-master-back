@@ -1,10 +1,11 @@
-package upload_file
+package uploadfile
 
 import (
 	"os"
 	"path/filepath"
-	"rank-master-back/internal/config"
 	"time"
+
+	"rank-master-back/internal/config"
 
 	"github.com/pkg/errors"
 )

@@ -7,9 +7,9 @@
 package main
 
 import (
-	"rank-master-back/infrastructure/pkg/orm_engine"
+	"rank-master-back/infrastructure/pkg/ormengine"
 	"rank-master-back/infrastructure/pkg/rdb"
-	"rank-master-back/infrastructure/pkg/upload_file/oss"
+	"rank-master-back/infrastructure/pkg/uploadfile/oss"
 	"rank-master-back/internal/config"
 	"rank-master-back/internal/svc"
 )
@@ -21,7 +21,7 @@ import (
 // Injectors from wire.go:
 
 func InitializeServiceContext(c config.Config) (*svc.ServiceContext, error) {
-	db, err := orm_engine.NewGormEngine(c)
+	db, err := ormengine.NewGormEngine(c)
 	if err != nil {
 		return nil, err
 	}

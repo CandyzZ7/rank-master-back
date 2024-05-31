@@ -1,10 +1,11 @@
-package verification_code
+package verificationcode
 
 import (
 	"crypto/tls"
 	"net/smtp"
-	"rank-master-back/internal/config"
 	"strconv"
+
+	"rank-master-back/internal/config"
 
 	"github.com/jordan-wright/email"
 )

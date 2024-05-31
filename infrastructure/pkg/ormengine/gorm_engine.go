@@ -1,4 +1,4 @@
-package orm_engine
+package ormengine
 
 import (
 	"sync"
