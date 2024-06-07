@@ -2,3 +2,4 @@
 ./upload_file
 ./tmp
 ./logs
+./internal/handler

@@ -3,37 +3,27 @@ package user
 import (
 	"net/http"
 
-	"rank-master-back/infrastructure/response"
+	"github.com/zeromicro/go-zero/rest/httpx"
 	"rank-master-back/internal/logic/user"
 	"rank-master-back/internal/svc"
 	"rank-master-back/internal/types"
-
-	"github.com/go-playground/validator/v10"
-	"github.com/zeromicro/go-zero/core/logc"
-	"github.com/zeromicro/go-zero/rest/httpx"
 )
 
+// 验证用户账号是否存在
 func GetRankMasterAccountHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var req types.GetRankMasterAccountReq
 		if err := httpx.Parse(r, &req); err != nil {
-			response.Handler(w, nil, err)
-			return
-		}
-
-		err := validator.New().StructCtx(r.Context(), req)
-		if err != nil {
-			response.Handler(w, nil, err)
+			httpx.ErrorCtx(r.Context(), w, err)
 			return
 		}
 
 		l := user.NewGetRankMasterAccountLogic(r.Context(), svcCtx)
 		resp, err := l.GetRankMasterAccount(&req)
 		if err != nil {
-			logc.Error(r.Context(), err)
-			response.Handler(w, nil, err)
+			httpx.ErrorCtx(r.Context(), w, err)
 		} else {
-			response.Handler(w, resp, err)
+			httpx.OkJsonCtx(r.Context(), w, resp)
 		}
 	}
 }

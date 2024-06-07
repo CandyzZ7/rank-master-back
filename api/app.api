@@ -20,7 +20,7 @@ type PingRes {
 )
 service app {
 	@doc "ping"
-	@handler PingHandler
+	@handler Ping
 	get /ping returns (PingRes)
 }
 

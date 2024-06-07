@@ -27,6 +27,6 @@ type (
 )
 service app {
     @doc "增加模板"
-    @handler AddTemplateHandler
+    @handler AddTemplate
     post / (AddTemplateReq) returns (AddTemplateRes)
 }

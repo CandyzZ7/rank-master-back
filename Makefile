@@ -9,8 +9,8 @@ swagger:
 .PHONY: gen
 # Generate a swagger file
 gen:
-	goctl api go -api ./api/app.api -dir . -style go_zero -home=./tpl
-	goctl api plugin -plugin goctl-swagger="swagger -filename doc/swagger/app.json" -api api/app.api -dir .
+	make api
+	make swagger
 	go generate ./...
 	wire
 	go mod tidy

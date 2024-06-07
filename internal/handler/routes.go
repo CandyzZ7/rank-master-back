@@ -16,6 +16,7 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 	server.AddRoutes(
 		[]rest.Route{
 			{
+				// 增加模板
 				Method:  http.MethodPost,
 				Path:    "/",
 				Handler: template.AddTemplateHandler(serverCtx),
@@ -27,6 +28,7 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 	server.AddRoutes(
 		[]rest.Route{
 			{
+				// ping
 				Method:  http.MethodGet,
 				Path:    "/ping",
 				Handler: test.PingHandler(serverCtx),
@@ -37,21 +39,25 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 	server.AddRoutes(
 		[]rest.Route{
 			{
+				// 验证用户账号是否存在
 				Method:  http.MethodGet,
 				Path:    "/:rank_master_account",
 				Handler: user.GetRankMasterAccountHandler(serverCtx),
 			},
 			{
+				// 获取邮箱验证码
 				Method:  http.MethodPost,
 				Path:    "/email/code",
 				Handler: user.GetEmailCodeHandler(serverCtx),
 			},
 			{
+				// 登录
 				Method:  http.MethodPost,
 				Path:    "/login",
 				Handler: user.LoginHandler(serverCtx),
 			},
 			{
+				// 注册
 				Method:  http.MethodPost,
 				Path:    "/register",
 				Handler: user.RegisterHandler(serverCtx),

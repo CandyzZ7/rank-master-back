@@ -61,18 +61,18 @@ type (
 )
 service app {
     @doc "注册"
-    @handler RegisterHandler
+    @handler Register
     post /register (RegisterReq) returns (RegisterRes)
 
     @doc "登录"
-    @handler LoginHandler
+    @handler Login
     post /login (LoginReq) returns (LoginRes)
 
     @doc "获取邮箱验证码"
-    @handler GetEmailCodeHandler
+    @handler GetEmailCode
     post /email/code (GetEmailCodeReq) returns (GetEmailCodeRes)
 
     @doc "验证用户账号是否存在"
-    @handler GetRankMasterAccountHandler
+    @handler GetRankMasterAccount
     get /:rank_master_account (GetRankMasterAccountReq) returns (GetRankMasterAccountRes)
 }

@@ -11,6 +11,7 @@ import (
     {{if .HasRequest}}"github.com/zeromicro/go-zero/rest/httpx"{{end}}
 )
 
+
 func {{.HandlerName}}(svcCtx *svc.ServiceContext) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		{{if .HasRequest}}var req types.{{.RequestType}}
