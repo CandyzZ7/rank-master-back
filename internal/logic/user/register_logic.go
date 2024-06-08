@@ -2,7 +2,6 @@ package user
 
 import (
 	"context"
-	"strings"
 
 	"github.com/pkg/errors"
 	"github.com/zeromicro/go-zero/core/logx"
@@ -13,7 +12,7 @@ import (
 	"rank-master-back/infrastructure/pkg/snowflake"
 	"rank-master-back/infrastructure/pkg/uploadfile/local"
 	"rank-master-back/internal/dao/generate/dal"
-	"rank-master-back/internal/dao/generate/model"
+	"rank-master-back/internal/model/entity"
 	"rank-master-back/internal/svc"
 	"rank-master-back/internal/types"
 )
@@ -34,29 +33,25 @@ func NewRegisterLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Register
 
 func (l *RegisterLogic) Register(req *types.RegisterReq) (resp *types.RegisterRes, err error) {
 	// 检查账号是否重复
-	isExist, err := dal.Use(l.svcCtx.DB).User.FindLockWithRankMasterAccount(req.RankMasterAccount)
+	isExist, err := dal.Use(l.svcCtx.DB).User.FindLockWithRankMasterAccount(req.User.RankMasterAccount)
 	if err != nil {
 		return nil, errors.Wrap(err, "查询失败")
 	}
 	if isExist == 1 {
-		return nil, errors.Wrapf(e.ErrRegisterAccountExist, "账号: %s", req.RankMasterAccount)
+		return nil, errors.Wrapf(e.ErrRegisterAccountExist, "账号: %s", req.User.RankMasterAccount)
 	}
-	code, err := l.svcCtx.RDB.Get(l.ctx, req.Email).Result()
+	code, err := l.svcCtx.RDB.Get(l.ctx, req.User.Email).Result()
 	if err != nil {
 		return nil, errors.WithMessage(err, "redis get error")
 	}
-	if code != req.Code {
-		return nil, errors.Wrapf(e.ErrEmailCodeFail, "邮箱: %s", req.Email)
+	if code != req.User.Code {
+		return nil, errors.Wrapf(e.ErrEmailCodeFail, "邮箱: %s", req.User.Email)
 	}
-	// 去除前后空格
-	req.Name = strings.TrimSpace(req.Name)
-	req.Mobile = strings.TrimSpace(req.Mobile)
-	req.Password = strings.TrimSpace(req.Password)
-	req.Avatar = strings.TrimSpace(req.Avatar)
+
 	// 上传头像
-	key, err := local.Upload(l.svcCtx.Config, req.Avatar)
+	key, err := local.Upload(l.svcCtx.Config, req.User.Avatar)
 	if err != nil {
-		return nil, errors.Wrapf(err, "上传头像失败: %s", req.Avatar)
+		return nil, errors.Wrapf(err, "上传头像失败: %s", req.User.Avatar)
 	}
 	// 密码加密
 	// 生成随机盐
@@ -65,13 +60,13 @@ func (l *RegisterLogic) Register(req *types.RegisterReq) (resp *types.RegisterRe
 		return nil, err
 	}
 	// 加密密码
-	encPassword := encrypt.Encryption(req.Password, cryptSalt)
+	encPassword := encrypt.Encryption(req.User.Password, cryptSalt)
 	// 加密手机号
-	mobile := encrypt.Encryption(req.Mobile, cryptSalt)
-	userEntity := &model.User{
+	mobile := encrypt.Encryption(req.User.Mobile, cryptSalt)
+	userEntity := &entity.User{
 		ID:                snowflake.GenerateDefaultSnowflakeID(),
-		RankMasterAccount: req.RankMasterAccount,
-		Name:              req.Name,
+		RankMasterAccount: req.User.RankMasterAccount,
+		Name:              req.User.Name,
 		Avatar:            &key,
 		Mobile:            &mobile,
 		Password:          encPassword,

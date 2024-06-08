@@ -8,13 +8,17 @@ info(
     version: "type version here"
 )
 
+type Template {
+    Function string `json:"function" validate:"required"`
+    Type     string `json:"type" validate:"required"`
+    Topic    string `json:"topic" validate:"required"`
+    Content  string `json:"content" validate:"required"`
+    Remark   string `json:"remark" validate:"required"`
+}
+
 type (
     AddTemplateReq{
-        Function string `json:"function" validate:"required"`
-        Type     string `json:"type" validate:"required"`
-        Topic    string `json:"topic" validate:"required"`
-        Content  string `json:"content" validate:"required"`
-        Remark   string `json:"remark" validate:"required"`
+        Template Template `json:"template"`
     }
     AddTemplateRes{
         Id string `json:"id"`

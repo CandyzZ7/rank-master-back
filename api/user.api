@@ -7,20 +7,25 @@ info(
     email: "type email here"
     version: "type version here"
 )
+
 type Token {
     AccessToken  string `json:"access_token"`
     AccessExpire int64  `json:"access_expire"`
 }
 
+type User{
+    Name             string `json:"name" validate:"required"` // 昵称
+    RankMasterAccount string `json:"rank_master_account" validate:"required"` // RankMaster账号
+    Mobile           string `json:"mobile" validate:"required,len=11,numeric"` // 手机号
+    Avatar           string `json:"avatar" validate:"required"` // 头像
+    Email            string `json:"email" validate:"required,email"` // 邮箱
+    Code             string `json:"code" validate:"required"` // 邮箱验证码
+    Password         string `json:"password" validate:"required"`   // 密码
+}
+
 type (
     RegisterReq {
-        Name             string `json:"name" validate:"required"` // 昵称
-        RankMasterAccount string `json:"rank_master_account" validate:"required"` // RankMaster账号
-        Mobile           string `json:"mobile" validate:"required,len=11,numeric"` // 手机号
-        Avatar           string `json:"avatar" validate:"required"` // 头像
-        Email            string `json:"email" validate:"required,email"` // 邮箱
-        Code             string `json:"code" validate:"required"` // 邮箱验证码
-        Password         string `json:"password" validate:"required"`   // 密码
+        User User `json:"user"`
     }
     RegisterRes {
         UserId string `json:"user_id"` // 用户ID

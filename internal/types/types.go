@@ -2,11 +2,7 @@
 package types
 
 type AddTemplateReq struct {
-	Function string `json:"function" validate:"required"`
-	Type     string `json:"type" validate:"required"`
-	Topic    string `json:"topic" validate:"required"`
-	Content  string `json:"content" validate:"required"`
-	Remark   string `json:"remark" validate:"required"`
+	Template Template `json:"template"`
 }
 
 type AddTemplateRes struct {
@@ -42,13 +38,7 @@ type PingRes struct {
 }
 
 type RegisterReq struct {
-	Name              string `json:"name" validate:"required"`                  // 昵称
-	RankMasterAccount string `json:"rank_master_account" validate:"required"`   // RankMaster账号
-	Mobile            string `json:"mobile" validate:"required,len=11,numeric"` // 手机号
-	Avatar            string `json:"avatar" validate:"required"`                // 头像
-	Email             string `json:"email" validate:"required,email"`           // 邮箱
-	Code              string `json:"code" validate:"required"`                  // 邮箱验证码
-	Password          string `json:"password" validate:"required"`              // 密码
+	User User `json:"user"`
 }
 
 type RegisterRes struct {
@@ -56,7 +46,25 @@ type RegisterRes struct {
 	Token  Token  `json:"token"`   // token
 }
 
+type Template struct {
+	Function string `json:"function" validate:"required"`
+	Type     string `json:"type" validate:"required"`
+	Topic    string `json:"topic" validate:"required"`
+	Content  string `json:"content" validate:"required"`
+	Remark   string `json:"remark" validate:"required"`
+}
+
 type Token struct {
 	AccessToken  string `json:"access_token"`
 	AccessExpire int64  `json:"access_expire"`
+}
+
+type User struct {
+	Name              string `json:"name" validate:"required"`                  // 昵称
+	RankMasterAccount string `json:"rank_master_account" validate:"required"`   // RankMaster账号
+	Mobile            string `json:"mobile" validate:"required,len=11,numeric"` // 手机号
+	Avatar            string `json:"avatar" validate:"required"`                // 头像
+	Email             string `json:"email" validate:"required,email"`           // 邮箱
+	Code              string `json:"code" validate:"required"`                  // 邮箱验证码
+	Password          string `json:"password" validate:"required"`              // 密码
 }

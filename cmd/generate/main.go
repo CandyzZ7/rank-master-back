@@ -15,7 +15,8 @@ import (
 	"rank-master-back/infrastructure/pkg/transform"
 	"rank-master-back/internal/config"
 	"rank-master-back/internal/dao"
-	"rank-master-back/internal/dao/generate/model"
+	"rank-master-back/internal/model/entity"
+	// "rank-master-back/internal/dao/generate/entity"
 )
 
 var configFile = flag.String("f", "../../etc/app.yaml", "the config file")
@@ -33,7 +34,8 @@ func main() {
 	}
 	g := gen.NewGenerator(gen.Config{
 		// 相对执行`go run`时的路径, 会自动创建目录
-		OutPath: "../../internal/dao/generate/dal",
+		OutPath:      "../../internal/dao/generate/dal",
+		ModelPkgPath: "../../model/entity",
 
 		// WithDefaultQuery 生成默认查询结构体(作为全局变量使用), 即`Q`结构体和其字段(各表模型)
 		// WithoutContext 生成没有context调用限制的代码供查询
@@ -100,7 +102,7 @@ func main() {
 
 	// 创建模型的结构体
 	var (
-		user = g.GenerateModel(new(model.User).TableName())
+		user = g.GenerateModel(new(entity.User).TableName())
 	)
 
 	// 创建模型的结构体,生成文件在 model 目录; 先创建的结果会被后面创建的覆盖

@@ -16,14 +16,14 @@ import (
 
 	"gorm.io/plugin/dbresolver"
 
-	"rank-master-back/internal/dao/generate/model"
+	"rank-master-back/internal/model/entity"
 )
 
 func newTemplate(db *gorm.DB, opts ...gen.DOOption) template {
 	_template := template{}
 
 	_template.templateDo.UseDB(db, opts...)
-	_template.templateDo.UseModel(&model.Template{})
+	_template.templateDo.UseModel(&entity.Template{})
 
 	tableName := _template.templateDo.TableName()
 	_template.ALL = field.NewAsterisk(tableName)
@@ -153,17 +153,17 @@ type ITemplateDo interface {
 	Count() (count int64, err error)
 	Scopes(funcs ...func(gen.Dao) gen.Dao) ITemplateDo
 	Unscoped() ITemplateDo
-	Create(values ...*model.Template) error
-	CreateInBatches(values []*model.Template, batchSize int) error
-	Save(values ...*model.Template) error
-	First() (*model.Template, error)
-	Take() (*model.Template, error)
-	Last() (*model.Template, error)
-	Find() ([]*model.Template, error)
-	FindInBatch(batchSize int, fc func(tx gen.Dao, batch int) error) (results []*model.Template, err error)
-	FindInBatches(result *[]*model.Template, batchSize int, fc func(tx gen.Dao, batch int) error) error
+	Create(values ...*entity.Template) error
+	CreateInBatches(values []*entity.Template, batchSize int) error
+	Save(values ...*entity.Template) error
+	First() (*entity.Template, error)
+	Take() (*entity.Template, error)
+	Last() (*entity.Template, error)
+	Find() ([]*entity.Template, error)
+	FindInBatch(batchSize int, fc func(tx gen.Dao, batch int) error) (results []*entity.Template, err error)
+	FindInBatches(result *[]*entity.Template, batchSize int, fc func(tx gen.Dao, batch int) error) error
 	Pluck(column field.Expr, dest interface{}) error
-	Delete(...*model.Template) (info gen.ResultInfo, err error)
+	Delete(...*entity.Template) (info gen.ResultInfo, err error)
 	Update(column field.Expr, value interface{}) (info gen.ResultInfo, err error)
 	UpdateSimple(columns ...field.AssignExpr) (info gen.ResultInfo, err error)
 	Updates(value interface{}) (info gen.ResultInfo, err error)
@@ -175,9 +175,9 @@ type ITemplateDo interface {
 	Assign(attrs ...field.AssignExpr) ITemplateDo
 	Joins(fields ...field.RelationField) ITemplateDo
 	Preload(fields ...field.RelationField) ITemplateDo
-	FirstOrInit() (*model.Template, error)
-	FirstOrCreate() (*model.Template, error)
-	FindByPage(offset int, limit int) (result []*model.Template, count int64, err error)
+	FirstOrInit() (*entity.Template, error)
+	FirstOrCreate() (*entity.Template, error)
+	FindByPage(offset int, limit int) (result []*entity.Template, count int64, err error)
 	ScanByPage(result interface{}, offset int, limit int) (count int64, err error)
 	Scan(result interface{}) (err error)
 	Returning(value interface{}, columns ...string) ITemplateDo
@@ -277,57 +277,57 @@ func (t templateDo) Unscoped() ITemplateDo {
 	return t.withDO(t.DO.Unscoped())
 }
 
-func (t templateDo) Create(values ...*model.Template) error {
+func (t templateDo) Create(values ...*entity.Template) error {
 	if len(values) == 0 {
 		return nil
 	}
 	return t.DO.Create(values)
 }
 
-func (t templateDo) CreateInBatches(values []*model.Template, batchSize int) error {
+func (t templateDo) CreateInBatches(values []*entity.Template, batchSize int) error {
 	return t.DO.CreateInBatches(values, batchSize)
 }
 
 // Save : !!! underlying implementation is different with GORM
 // The method is equivalent to executing the statement: db.Clauses(clause.OnConflict{UpdateAll: true}).Create(values)
-func (t templateDo) Save(values ...*model.Template) error {
+func (t templateDo) Save(values ...*entity.Template) error {
 	if len(values) == 0 {
 		return nil
 	}
 	return t.DO.Save(values)
 }
 
-func (t templateDo) First() (*model.Template, error) {
+func (t templateDo) First() (*entity.Template, error) {
 	if result, err := t.DO.First(); err != nil {
 		return nil, err
 	} else {
-		return result.(*model.Template), nil
+		return result.(*entity.Template), nil
 	}
 }
 
-func (t templateDo) Take() (*model.Template, error) {
+func (t templateDo) Take() (*entity.Template, error) {
 	if result, err := t.DO.Take(); err != nil {
 		return nil, err
 	} else {
-		return result.(*model.Template), nil
+		return result.(*entity.Template), nil
 	}
 }
 
-func (t templateDo) Last() (*model.Template, error) {
+func (t templateDo) Last() (*entity.Template, error) {
 	if result, err := t.DO.Last(); err != nil {
 		return nil, err
 	} else {
-		return result.(*model.Template), nil
+		return result.(*entity.Template), nil
 	}
 }
 
-func (t templateDo) Find() ([]*model.Template, error) {
+func (t templateDo) Find() ([]*entity.Template, error) {
 	result, err := t.DO.Find()
-	return result.([]*model.Template), err
+	return result.([]*entity.Template), err
 }
 
-func (t templateDo) FindInBatch(batchSize int, fc func(tx gen.Dao, batch int) error) (results []*model.Template, err error) {
-	buf := make([]*model.Template, 0, batchSize)
+func (t templateDo) FindInBatch(batchSize int, fc func(tx gen.Dao, batch int) error) (results []*entity.Template, err error) {
+	buf := make([]*entity.Template, 0, batchSize)
 	err = t.DO.FindInBatches(&buf, batchSize, func(tx gen.Dao, batch int) error {
 		defer func() { results = append(results, buf...) }()
 		return fc(tx, batch)
@@ -335,7 +335,7 @@ func (t templateDo) FindInBatch(batchSize int, fc func(tx gen.Dao, batch int) er
 	return results, err
 }
 
-func (t templateDo) FindInBatches(result *[]*model.Template, batchSize int, fc func(tx gen.Dao, batch int) error) error {
+func (t templateDo) FindInBatches(result *[]*entity.Template, batchSize int, fc func(tx gen.Dao, batch int) error) error {
 	return t.DO.FindInBatches(result, batchSize, fc)
 }
 
@@ -361,23 +361,23 @@ func (t templateDo) Preload(fields ...field.RelationField) ITemplateDo {
 	return &t
 }
 
-func (t templateDo) FirstOrInit() (*model.Template, error) {
+func (t templateDo) FirstOrInit() (*entity.Template, error) {
 	if result, err := t.DO.FirstOrInit(); err != nil {
 		return nil, err
 	} else {
-		return result.(*model.Template), nil
+		return result.(*entity.Template), nil
 	}
 }
 
-func (t templateDo) FirstOrCreate() (*model.Template, error) {
+func (t templateDo) FirstOrCreate() (*entity.Template, error) {
 	if result, err := t.DO.FirstOrCreate(); err != nil {
 		return nil, err
 	} else {
-		return result.(*model.Template), nil
+		return result.(*entity.Template), nil
 	}
 }
 
-func (t templateDo) FindByPage(offset int, limit int) (result []*model.Template, count int64, err error) {
+func (t templateDo) FindByPage(offset int, limit int) (result []*entity.Template, count int64, err error) {
 	result, err = t.Offset(offset).Limit(limit).Find()
 	if err != nil {
 		return
@@ -406,7 +406,7 @@ func (t templateDo) Scan(result interface{}) (err error) {
 	return t.DO.Scan(result)
 }
 
-func (t templateDo) Delete(models ...*model.Template) (result gen.ResultInfo, err error) {
+func (t templateDo) Delete(models ...*entity.Template) (result gen.ResultInfo, err error) {
 	return t.DO.Delete(models)
 }
 
