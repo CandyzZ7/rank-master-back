@@ -18,7 +18,7 @@ gen:
 # Generate an executable file
 exe:
 	make gen
-	go build app.go
+	go build app.go wire_gen.go
 .PHONY: run
 # Run the executable file
 run:

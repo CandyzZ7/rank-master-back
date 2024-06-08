@@ -6,7 +6,6 @@ package dal
 
 import (
 	"context"
-	"strings"
 
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
@@ -17,18 +16,18 @@ import (
 
 	"gorm.io/plugin/dbresolver"
 
-	"rank-master-back/internal/model/entity"
+	"rank-master-back/internal/dao/generate/model"
 )
 
 func newTemplate(db *gorm.DB, opts ...gen.DOOption) template {
 	_template := template{}
 
 	_template.templateDo.UseDB(db, opts...)
-	_template.templateDo.UseModel(&entity.Template{})
+	_template.templateDo.UseModel(&model.Template{})
 
 	tableName := _template.templateDo.TableName()
 	_template.ALL = field.NewAsterisk(tableName)
-	_template.Id = field.NewString(tableName, "id")
+	_template.ID = field.NewString(tableName, "id")
 	_template.CreatedAt = field.NewTime(tableName, "created_at")
 	_template.UpdatedAt = field.NewTime(tableName, "updated_at")
 	_template.DeletedAt = field.NewField(tableName, "deleted_at")
@@ -36,7 +35,7 @@ func newTemplate(db *gorm.DB, opts ...gen.DOOption) template {
 	_template.Type = field.NewString(tableName, "type")
 	_template.Topic = field.NewString(tableName, "topic")
 	_template.Content = field.NewString(tableName, "content")
-	_template.Version = field.NewInt64(tableName, "version")
+	_template.Version = field.NewString(tableName, "version")
 	_template.Remark = field.NewString(tableName, "remark")
 
 	_template.fillFieldMap()
@@ -48,7 +47,7 @@ type template struct {
 	templateDo
 
 	ALL       field.Asterisk
-	Id        field.String
+	ID        field.String
 	CreatedAt field.Time
 	UpdatedAt field.Time
 	DeletedAt field.Field
@@ -56,7 +55,7 @@ type template struct {
 	Type      field.String
 	Topic     field.String
 	Content   field.String
-	Version   field.Int64
+	Version   field.String
 	Remark    field.String
 
 	fieldMap map[string]field.Expr
@@ -74,7 +73,7 @@ func (t template) As(alias string) *template {
 
 func (t *template) updateTableName(table string) *template {
 	t.ALL = field.NewAsterisk(table)
-	t.Id = field.NewString(table, "id")
+	t.ID = field.NewString(table, "id")
 	t.CreatedAt = field.NewTime(table, "created_at")
 	t.UpdatedAt = field.NewTime(table, "updated_at")
 	t.DeletedAt = field.NewField(table, "deleted_at")
@@ -82,7 +81,7 @@ func (t *template) updateTableName(table string) *template {
 	t.Type = field.NewString(table, "type")
 	t.Topic = field.NewString(table, "topic")
 	t.Content = field.NewString(table, "content")
-	t.Version = field.NewInt64(table, "version")
+	t.Version = field.NewString(table, "version")
 	t.Remark = field.NewString(table, "remark")
 
 	t.fillFieldMap()
@@ -101,7 +100,7 @@ func (t *template) GetFieldByName(fieldName string) (field.OrderExpr, bool) {
 
 func (t *template) fillFieldMap() {
 	t.fieldMap = make(map[string]field.Expr, 10)
-	t.fieldMap["id"] = t.Id
+	t.fieldMap["id"] = t.ID
 	t.fieldMap["created_at"] = t.CreatedAt
 	t.fieldMap["updated_at"] = t.UpdatedAt
 	t.fieldMap["deleted_at"] = t.DeletedAt
@@ -154,17 +153,17 @@ type ITemplateDo interface {
 	Count() (count int64, err error)
 	Scopes(funcs ...func(gen.Dao) gen.Dao) ITemplateDo
 	Unscoped() ITemplateDo
-	Create(values ...*entity.Template) error
-	CreateInBatches(values []*entity.Template, batchSize int) error
-	Save(values ...*entity.Template) error
-	First() (*entity.Template, error)
-	Take() (*entity.Template, error)
-	Last() (*entity.Template, error)
-	Find() ([]*entity.Template, error)
-	FindInBatch(batchSize int, fc func(tx gen.Dao, batch int) error) (results []*entity.Template, err error)
-	FindInBatches(result *[]*entity.Template, batchSize int, fc func(tx gen.Dao, batch int) error) error
+	Create(values ...*model.Template) error
+	CreateInBatches(values []*model.Template, batchSize int) error
+	Save(values ...*model.Template) error
+	First() (*model.Template, error)
+	Take() (*model.Template, error)
+	Last() (*model.Template, error)
+	Find() ([]*model.Template, error)
+	FindInBatch(batchSize int, fc func(tx gen.Dao, batch int) error) (results []*model.Template, err error)
+	FindInBatches(result *[]*model.Template, batchSize int, fc func(tx gen.Dao, batch int) error) error
 	Pluck(column field.Expr, dest interface{}) error
-	Delete(...*entity.Template) (info gen.ResultInfo, err error)
+	Delete(...*model.Template) (info gen.ResultInfo, err error)
 	Update(column field.Expr, value interface{}) (info gen.ResultInfo, err error)
 	UpdateSimple(columns ...field.AssignExpr) (info gen.ResultInfo, err error)
 	Updates(value interface{}) (info gen.ResultInfo, err error)
@@ -176,31 +175,14 @@ type ITemplateDo interface {
 	Assign(attrs ...field.AssignExpr) ITemplateDo
 	Joins(fields ...field.RelationField) ITemplateDo
 	Preload(fields ...field.RelationField) ITemplateDo
-	FirstOrInit() (*entity.Template, error)
-	FirstOrCreate() (*entity.Template, error)
-	FindByPage(offset int, limit int) (result []*entity.Template, count int64, err error)
+	FirstOrInit() (*model.Template, error)
+	FirstOrCreate() (*model.Template, error)
+	FindByPage(offset int, limit int) (result []*model.Template, count int64, err error)
 	ScanByPage(result interface{}, offset int, limit int) (count int64, err error)
 	Scan(result interface{}) (err error)
 	Returning(value interface{}, columns ...string) ITemplateDo
 	UnderlyingDB() *gorm.DB
 	schema.Tabler
-
-	FindLockWithRankMasterAccount(rankMasterAccount string) (result int64, err error)
-}
-
-// FindLockWithRankMasterAccount SELECT EXISTS(SELECT * FROM @@table WHERE rank_master_account = @rankMasterAccount FOR UPDATE)
-func (t templateDo) FindLockWithRankMasterAccount(rankMasterAccount string) (result int64, err error) {
-	var params []interface{}
-
-	var generateSQL strings.Builder
-	params = append(params, rankMasterAccount)
-	generateSQL.WriteString("SELECT EXISTS(SELECT * FROM template WHERE rank_master_account = ? FOR UPDATE) ")
-
-	var executeSQL *gorm.DB
-	executeSQL = t.UnderlyingDB().Raw(generateSQL.String(), params...).Take(&result) // ignore_security_alert
-	err = executeSQL.Error
-
-	return
 }
 
 func (t templateDo) Debug() ITemplateDo {
@@ -295,57 +277,57 @@ func (t templateDo) Unscoped() ITemplateDo {
 	return t.withDO(t.DO.Unscoped())
 }
 
-func (t templateDo) Create(values ...*entity.Template) error {
+func (t templateDo) Create(values ...*model.Template) error {
 	if len(values) == 0 {
 		return nil
 	}
 	return t.DO.Create(values)
 }
 
-func (t templateDo) CreateInBatches(values []*entity.Template, batchSize int) error {
+func (t templateDo) CreateInBatches(values []*model.Template, batchSize int) error {
 	return t.DO.CreateInBatches(values, batchSize)
 }
 
 // Save : !!! underlying implementation is different with GORM
 // The method is equivalent to executing the statement: db.Clauses(clause.OnConflict{UpdateAll: true}).Create(values)
-func (t templateDo) Save(values ...*entity.Template) error {
+func (t templateDo) Save(values ...*model.Template) error {
 	if len(values) == 0 {
 		return nil
 	}
 	return t.DO.Save(values)
 }
 
-func (t templateDo) First() (*entity.Template, error) {
+func (t templateDo) First() (*model.Template, error) {
 	if result, err := t.DO.First(); err != nil {
 		return nil, err
 	} else {
-		return result.(*entity.Template), nil
+		return result.(*model.Template), nil
 	}
 }
 
-func (t templateDo) Take() (*entity.Template, error) {
+func (t templateDo) Take() (*model.Template, error) {
 	if result, err := t.DO.Take(); err != nil {
 		return nil, err
 	} else {
-		return result.(*entity.Template), nil
+		return result.(*model.Template), nil
 	}
 }
 
-func (t templateDo) Last() (*entity.Template, error) {
+func (t templateDo) Last() (*model.Template, error) {
 	if result, err := t.DO.Last(); err != nil {
 		return nil, err
 	} else {
-		return result.(*entity.Template), nil
+		return result.(*model.Template), nil
 	}
 }
 
-func (t templateDo) Find() ([]*entity.Template, error) {
+func (t templateDo) Find() ([]*model.Template, error) {
 	result, err := t.DO.Find()
-	return result.([]*entity.Template), err
+	return result.([]*model.Template), err
 }
 
-func (t templateDo) FindInBatch(batchSize int, fc func(tx gen.Dao, batch int) error) (results []*entity.Template, err error) {
-	buf := make([]*entity.Template, 0, batchSize)
+func (t templateDo) FindInBatch(batchSize int, fc func(tx gen.Dao, batch int) error) (results []*model.Template, err error) {
+	buf := make([]*model.Template, 0, batchSize)
 	err = t.DO.FindInBatches(&buf, batchSize, func(tx gen.Dao, batch int) error {
 		defer func() { results = append(results, buf...) }()
 		return fc(tx, batch)
@@ -353,7 +335,7 @@ func (t templateDo) FindInBatch(batchSize int, fc func(tx gen.Dao, batch int) er
 	return results, err
 }
 
-func (t templateDo) FindInBatches(result *[]*entity.Template, batchSize int, fc func(tx gen.Dao, batch int) error) error {
+func (t templateDo) FindInBatches(result *[]*model.Template, batchSize int, fc func(tx gen.Dao, batch int) error) error {
 	return t.DO.FindInBatches(result, batchSize, fc)
 }
 
@@ -379,23 +361,23 @@ func (t templateDo) Preload(fields ...field.RelationField) ITemplateDo {
 	return &t
 }
 
-func (t templateDo) FirstOrInit() (*entity.Template, error) {
+func (t templateDo) FirstOrInit() (*model.Template, error) {
 	if result, err := t.DO.FirstOrInit(); err != nil {
 		return nil, err
 	} else {
-		return result.(*entity.Template), nil
+		return result.(*model.Template), nil
 	}
 }
 
-func (t templateDo) FirstOrCreate() (*entity.Template, error) {
+func (t templateDo) FirstOrCreate() (*model.Template, error) {
 	if result, err := t.DO.FirstOrCreate(); err != nil {
 		return nil, err
 	} else {
-		return result.(*entity.Template), nil
+		return result.(*model.Template), nil
 	}
 }
 
-func (t templateDo) FindByPage(offset int, limit int) (result []*entity.Template, count int64, err error) {
+func (t templateDo) FindByPage(offset int, limit int) (result []*model.Template, count int64, err error) {
 	result, err = t.Offset(offset).Limit(limit).Find()
 	if err != nil {
 		return
@@ -424,7 +406,7 @@ func (t templateDo) Scan(result interface{}) (err error) {
 	return t.DO.Scan(result)
 }
 
-func (t templateDo) Delete(models ...*entity.Template) (result gen.ResultInfo, err error) {
+func (t templateDo) Delete(models ...*model.Template) (result gen.ResultInfo, err error) {
 	return t.DO.Delete(models)
 }
 
