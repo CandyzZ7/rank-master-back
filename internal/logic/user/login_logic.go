@@ -9,7 +9,7 @@ import (
 	"rank-master-back/infrastructure/e"
 	"rank-master-back/infrastructure/pkg/encrypt"
 	"rank-master-back/infrastructure/pkg/jwt"
-	"rank-master-back/internal/dao/gen/dal"
+	"rank-master-back/internal/dao/generate/dal"
 	"rank-master-back/internal/svc"
 	"rank-master-back/internal/types"
 )
@@ -58,7 +58,7 @@ func (l *LoginLogic) Login(req *types.LoginReq) (resp *types.LoginRes, err error
 		AccessSecret: l.svcCtx.Config.Auth.AccessSecret,
 		AccessExpire: l.svcCtx.Config.Auth.AccessExpire,
 		Fields: map[string]interface{}{
-			"userId": userEntity.Id,
+			"userId": userEntity.ID,
 		},
 	})
 	if err != nil {
@@ -66,7 +66,7 @@ func (l *LoginLogic) Login(req *types.LoginReq) (resp *types.LoginRes, err error
 		return nil, err
 	}
 	return &types.LoginRes{
-		UserId: userEntity.Id,
+		UserId: userEntity.ID,
 		Token: types.Token{
 			AccessToken:  token.AccessToken,
 			AccessExpire: token.AccessExpire,

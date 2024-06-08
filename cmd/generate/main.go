@@ -73,10 +73,7 @@ func main() {
 	// 自定义模型结体字段的标签
 	// 将特定字段名的 json 标签加上`string`属性,即 MarshalJSON 时该字段由数字类型转成字符串类型
 	jsonField := gen.FieldJSONTagWithNS(func(columnName string) (tagContent string) {
-		toStringField := `id, `
-		if strings.Contains(toStringField, columnName) {
-			return columnName + ",string"
-		} else if strings.Contains(`deleted_at`, columnName) {
+		if strings.Contains(`deleted_at`, columnName) {
 			return "-"
 		}
 		return transform.LowerCamelCase(columnName) // 下划线转小驼峰
@@ -100,6 +97,11 @@ func main() {
 	// 模型自定义选项组
 	fieldOpts := []gen.ModelOpt{jsonField, autoCreateTimeField, autoUpdateTimeField, softDeleteField}
 	// fieldOpts := []gen.ModelOpt{jsonField, softDeleteField}
+
+	// 创建模型的结构体
+	var (
+		user = g.GenerateModel(new(model.User).TableName())
+	)
 
 	// 创建模型的结构体,生成文件在 model 目录; 先创建的结果会被后面创建的覆盖
 	// 这里创建个别模型仅仅是为了拿到`*generate.QueryStructMeta`类型对象用于后面的模型关联操作中
@@ -125,6 +127,6 @@ func main() {
 		allModel := g.GenerateAllTable(fieldOpts...)
 		g.ApplyBasic(allModel...)
 	}
-	g.ApplyInterface(func(dao.IUser) {}, g.GenerateModel(new(model.User).TableName()))
+	g.ApplyInterface(func(dao.IUser) {}, user)
 	g.Execute()
 }

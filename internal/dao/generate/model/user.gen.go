@@ -15,15 +15,15 @@ const TableNameUser = "user"
 // User mapped from table <user>
 type User struct {
 	ID                string         `gorm:"column:id;type:varchar(255);primaryKey" json:"id"`
-	CreatedAt         *time.Time     `gorm:"column:created_at;type:timestamp" json:"created_at"`
-	UpdatedAt         *time.Time     `gorm:"column:updated_at;type:timestamp" json:"updated_at"`
-	DeletedAt         gorm.DeletedAt `gorm:"column:deleted_at;type:timestamp" json:"deleted_at"`
+	CreatedAt         *time.Time     `gorm:"column:created_at;comment:创建时间" json:"createdAt"`
+	UpdatedAt         *time.Time     `gorm:"column:updated_at;comment:更新时间" json:"updatedAt"`
+	DeletedAt         gorm.DeletedAt `gorm:"column:deleted_at;type:timestamp" json:"-"`
 	Name              string         `gorm:"column:name;type:varchar(255);not null" json:"name"`
-	RankMasterAccount string         `gorm:"column:rank_master_account;type:varchar(255);not null" json:"rank_master_account"`
+	RankMasterAccount string         `gorm:"column:rank_master_account;type:varchar(255);not null" json:"rankMasterAccount"`
 	Password          string         `gorm:"column:password;type:varchar(255);not null" json:"password"`
 	Avatar            *string        `gorm:"column:avatar;type:varchar(255)" json:"avatar"`
 	Mobile            *string        `gorm:"column:mobile;type:varchar(255)" json:"mobile"`
-	CryptSalt         string         `gorm:"column:crypt_salt;type:varchar(255);not null" json:"crypt_salt"`
+	CryptSalt         string         `gorm:"column:crypt_salt;type:varchar(255);not null" json:"cryptSalt"`
 }
 
 // TableName User's table name

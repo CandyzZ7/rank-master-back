@@ -12,8 +12,8 @@ import (
 	"rank-master-back/infrastructure/pkg/jwt"
 	"rank-master-back/infrastructure/pkg/snowflake"
 	"rank-master-back/infrastructure/pkg/uploadfile/local"
-	"rank-master-back/internal/dao/gen/dal"
-	"rank-master-back/internal/model/entity"
+	"rank-master-back/internal/dao/generate/dal"
+	"rank-master-back/internal/dao/generate/model"
 	"rank-master-back/internal/svc"
 	"rank-master-back/internal/types"
 )
@@ -68,14 +68,12 @@ func (l *RegisterLogic) Register(req *types.RegisterReq) (resp *types.RegisterRe
 	encPassword := encrypt.Encryption(req.Password, cryptSalt)
 	// 加密手机号
 	mobile := encrypt.Encryption(req.Mobile, cryptSalt)
-	userEntity := &entity.User{
-		BaseEntity: entity.BaseEntity{
-			Id: snowflake.GenerateDefaultSnowflakeID(),
-		},
+	userEntity := &model.User{
+		ID:                snowflake.GenerateDefaultSnowflakeID(),
 		RankMasterAccount: req.RankMasterAccount,
 		Name:              req.Name,
-		Avatar:            key,
-		Mobile:            mobile,
+		Avatar:            &key,
+		Mobile:            &mobile,
 		Password:          encPassword,
 		CryptSalt:         cryptSalt,
 	}
@@ -87,7 +85,7 @@ func (l *RegisterLogic) Register(req *types.RegisterReq) (resp *types.RegisterRe
 		AccessSecret: l.svcCtx.Config.Auth.AccessSecret,
 		AccessExpire: l.svcCtx.Config.Auth.AccessExpire,
 		Fields: map[string]interface{}{
-			"userId": userEntity.Id,
+			"userId": userEntity.ID,
 		},
 	})
 	if err != nil {
@@ -96,7 +94,7 @@ func (l *RegisterLogic) Register(req *types.RegisterReq) (resp *types.RegisterRe
 	}
 
 	return &types.RegisterRes{
-		UserId: userEntity.Id,
+		UserId: userEntity.ID,
 		Token: types.Token{
 			AccessToken:  token.AccessToken,
 			AccessExpire: token.AccessExpire,
