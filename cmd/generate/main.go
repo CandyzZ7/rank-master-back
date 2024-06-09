@@ -24,6 +24,7 @@ var tableName = flag.String("n", "", "the table name")
 //go:generate go run .
 
 func main() {
+	flag.Parse()
 	fileName := transform.Case2Camel(*tableName) // 转为首字目大写
 	var c config.Config
 	conf.MustLoad(*configFile, &c)
