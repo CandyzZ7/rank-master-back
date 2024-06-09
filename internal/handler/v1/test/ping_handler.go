@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"rank-master-back/infrastructure/response"
-	"rank-master-back/internal/logic/test"
+	"rank-master-back/internal/logic/v1/test"
 	"rank-master-back/internal/svc"
 
 	"github.com/zeromicro/go-zero/core/logc"

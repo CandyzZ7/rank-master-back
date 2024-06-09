@@ -4,9 +4,9 @@ package handler
 import (
 	"net/http"
 
-	template "rank-master-back/internal/handler/template"
-	test "rank-master-back/internal/handler/test"
-	user "rank-master-back/internal/handler/user"
+	v1template "rank-master-back/internal/handler/v1/template"
+	v1test "rank-master-back/internal/handler/v1/test"
+	v1user "rank-master-back/internal/handler/v1/user"
 	"rank-master-back/internal/svc"
 
 	"github.com/zeromicro/go-zero/rest"
@@ -19,7 +19,7 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				// 增加模板
 				Method:  http.MethodPost,
 				Path:    "/",
-				Handler: template.AddTemplateHandler(serverCtx),
+				Handler: v1template.AddTemplateHandler(serverCtx),
 			},
 		},
 		rest.WithPrefix("/v1/template"),
@@ -31,7 +31,7 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				// ping
 				Method:  http.MethodGet,
 				Path:    "/ping",
-				Handler: test.PingHandler(serverCtx),
+				Handler: v1test.PingHandler(serverCtx),
 			},
 		},
 	)
@@ -42,25 +42,25 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				// 验证用户账号是否存在
 				Method:  http.MethodGet,
 				Path:    "/:rank_master_account",
-				Handler: user.GetRankMasterAccountHandler(serverCtx),
+				Handler: v1user.GetRankMasterAccountHandler(serverCtx),
 			},
 			{
 				// 获取邮箱验证码
 				Method:  http.MethodPost,
 				Path:    "/email/code",
-				Handler: user.GetEmailCodeHandler(serverCtx),
+				Handler: v1user.GetEmailCodeHandler(serverCtx),
 			},
 			{
 				// 登录
 				Method:  http.MethodPost,
 				Path:    "/login",
-				Handler: user.LoginHandler(serverCtx),
+				Handler: v1user.LoginHandler(serverCtx),
 			},
 			{
 				// 注册
 				Method:  http.MethodPost,
 				Path:    "/register",
-				Handler: user.RegisterHandler(serverCtx),
+				Handler: v1user.RegisterHandler(serverCtx),
 			},
 		},
 		rest.WithPrefix("/v1/user"),

@@ -9,7 +9,6 @@ import (
 	"rank-master-back/infrastructure/e"
 	"rank-master-back/infrastructure/pkg/encrypt"
 	"rank-master-back/infrastructure/pkg/jwt"
-	"rank-master-back/internal/dao/generate/dal"
 	"rank-master-back/internal/svc"
 	"rank-master-back/internal/types"
 )
@@ -31,9 +30,8 @@ func NewLoginLogic(ctx context.Context, svcCtx *svc.ServiceContext) *LoginLogic 
 func (l *LoginLogic) Login(req *types.LoginReq) (resp *types.LoginRes, err error) {
 	rankMasterAccount := strings.TrimSpace(req.RankMasterAccount)
 	password := strings.TrimSpace(req.Password)
-	userDB := dal.Use(l.svcCtx.DB).User
 	// 检查账号是否已经注册
-	isExist, err := userDB.FindLockWithRankMasterAccount(rankMasterAccount)
+	isExist, err := l.svcCtx.UserDao.FindLockWithRankMasterAccountExist(l.ctx, rankMasterAccount)
 	if err != nil {
 		return nil, err
 	}
@@ -42,7 +40,7 @@ func (l *LoginLogic) Login(req *types.LoginReq) (resp *types.LoginRes, err error
 	}
 	// 检查密码是否正确
 	// 从数据库中获取用户信息
-	userEntity, err := userDB.Where(userDB.RankMasterAccount.Eq(rankMasterAccount)).First()
+	userEntity, err := l.svcCtx.UserDao.FindUserByRankMasterAccount(l.ctx, rankMasterAccount)
 	if err != nil {
 		return nil, err
 	}

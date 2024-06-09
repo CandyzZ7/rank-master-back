@@ -26,7 +26,7 @@ type (
 )
 
 @server (
-    group: template
+    group: v1/template
     prefix: /v1/template
 )
 service app {

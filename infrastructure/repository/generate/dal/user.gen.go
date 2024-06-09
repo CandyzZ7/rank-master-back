@@ -185,11 +185,11 @@ type IUserDo interface {
 	UnderlyingDB() *gorm.DB
 	schema.Tabler
 
-	FindLockWithRankMasterAccount(rankMasterAccount string) (result int64, err error)
+	FindLockWithRankMasterAccountExist(rankMasterAccount string) (result int64, err error)
 }
 
-// FindLockWithRankMasterAccount SELECT EXISTS(SELECT * FROM @@table WHERE rank_master_account = @rankMasterAccount FOR UPDATE)
-func (u userDo) FindLockWithRankMasterAccount(rankMasterAccount string) (result int64, err error) {
+// FindLockWithRankMasterAccountExist SELECT EXISTS(SELECT * FROM @@table WHERE rank_master_account = @rankMasterAccount FOR UPDATE)
+func (u userDo) FindLockWithRankMasterAccountExist(rankMasterAccount string) (result int64, err error) {
 	var params []interface{}
 
 	var generateSQL strings.Builder

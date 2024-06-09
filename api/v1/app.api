@@ -16,7 +16,7 @@ type PingRes {
 }
 
 @server (
-	group: test
+	group: v1/test
 )
 service app {
 	@doc "ping"

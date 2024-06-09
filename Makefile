@@ -1,7 +1,7 @@
 .PHONY: api
 # generate api proto
 api:
-	goctl api go -api ./api/app.api -dir . -style go_zero -home=./tpl
+	goctl api go -api ./api/v1/app.api -dir . -style go_zero -home=./tpl
 .PHONY: swagger
 # Generate a swagger file
 swagger:

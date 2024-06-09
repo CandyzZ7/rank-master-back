@@ -7,7 +7,6 @@ import (
 	"github.com/zeromicro/go-zero/core/logx"
 
 	"rank-master-back/infrastructure/e"
-	"rank-master-back/internal/dao/generate/dal"
 	"rank-master-back/internal/svc"
 	"rank-master-back/internal/types"
 )
@@ -27,9 +26,8 @@ func NewGetRankMasterAccountLogic(ctx context.Context, svcCtx *svc.ServiceContex
 }
 
 func (l *GetRankMasterAccountLogic) GetRankMasterAccount(req *types.GetRankMasterAccountReq) (resp *types.GetRankMasterAccountRes, err error) {
-	userDB := dal.Use(l.svcCtx.DB).User
 	rankMasterAccount := strings.TrimSpace(req.RankMasterAccount)
-	isExist, err := userDB.FindLockWithRankMasterAccount(rankMasterAccount)
+	isExist, err := l.svcCtx.UserDao.FindLockWithRankMasterAccountExist(l.ctx, rankMasterAccount)
 	if err != nil {
 		return nil, err
 	}

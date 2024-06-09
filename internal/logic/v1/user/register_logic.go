@@ -11,7 +11,6 @@ import (
 	"rank-master-back/infrastructure/pkg/jwt"
 	"rank-master-back/infrastructure/pkg/snowflake"
 	"rank-master-back/infrastructure/pkg/uploadfile/local"
-	"rank-master-back/internal/dao/generate/dal"
 	"rank-master-back/internal/model/entity"
 	"rank-master-back/internal/svc"
 	"rank-master-back/internal/types"
@@ -33,7 +32,7 @@ func NewRegisterLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Register
 
 func (l *RegisterLogic) Register(req *types.RegisterReq) (resp *types.RegisterRes, err error) {
 	// 检查账号是否重复
-	isExist, err := dal.Use(l.svcCtx.DB).User.FindLockWithRankMasterAccount(req.User.RankMasterAccount)
+	isExist, err := l.svcCtx.UserDao.FindLockWithRankMasterAccountExist(l.ctx, req.User.RankMasterAccount)
 	if err != nil {
 		return nil, errors.Wrap(err, "查询失败")
 	}
@@ -72,7 +71,7 @@ func (l *RegisterLogic) Register(req *types.RegisterReq) (resp *types.RegisterRe
 		Password:          encPassword,
 		CryptSalt:         cryptSalt,
 	}
-	err = dal.Use(l.svcCtx.DB).User.Create(userEntity)
+	err = l.svcCtx.UserDao.Create(l.ctx, userEntity)
 	if err != nil {
 		return nil, errors.Wrap(err, "注册失败")
 	}

@@ -61,7 +61,7 @@ type (
 
 
 @server (
-    group: user
+    group: v1/user
     prefix: /v1/user
 )
 service app {

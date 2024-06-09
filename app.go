@@ -14,9 +14,9 @@ import (
 	"github.com/zeromicro/go-zero/rest"
 
 	"rank-master-back/infrastructure/middleware"
-	"rank-master-back/infrastructure/pkg/snowflake"
 	"rank-master-back/internal/config"
 	"rank-master-back/internal/handler"
+	"rank-master-back/internal/svc"
 )
 
 //go:embed doc/swagger/app.json
@@ -44,12 +44,13 @@ func main() {
 		})
 		fmt.Println("doc: http://localhost:8888/api/doc")
 	}
-	// 初始化
-	snowflake.InitNode(c)
+
 	ctx, err := InitializeServiceContext(c)
 	if err != nil {
 		logc.Error(context.Background(), errors.Cause(err))
 	}
+	// 初始化
+	svc.Init(ctx)
 	// 注册路由
 	handler.RegisterHandlers(server, ctx)
 

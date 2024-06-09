@@ -7,10 +7,12 @@
 package main
 
 import (
+	"github.com/google/wire"
 	"rank-master-back/infrastructure/pkg/ormengine"
 	"rank-master-back/infrastructure/pkg/rdb"
 	"rank-master-back/infrastructure/pkg/uploadfile/oss"
 	"rank-master-back/internal/config"
+	"rank-master-back/internal/repository"
 	"rank-master-back/internal/svc"
 )
 
@@ -30,11 +32,19 @@ func InitializeServiceContext(c config.Config) (*svc.ServiceContext, error) {
 	if err != nil {
 		return nil, err
 	}
+	templateDao := repository.NewTemplateDao()
+	userDao := repository.NewUserDao()
 	serviceContext := &svc.ServiceContext{
-		Config: c,
-		DB:     db,
-		RDB:    client,
-		Oss:    ossClient,
+		Config:      c,
+		DB:          db,
+		RDB:         client,
+		Oss:         ossClient,
+		TemplateDao: templateDao,
+		UserDao:     userDao,
 	}
 	return serviceContext, nil
 }
+
+// wire.go:
+
+var RepositorySet = wire.NewSet(repository.NewTemplateDao, wire.Bind(new(repository.ITemplate), new(*repository.TemplateDao)), repository.NewUserDao, wire.Bind(new(repository.IUser), new(*repository.UserDao)))
