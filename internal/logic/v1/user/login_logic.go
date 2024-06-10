@@ -27,7 +27,7 @@ func NewLoginLogic(ctx context.Context, svcCtx *svc.ServiceContext) *LoginLogic 
 	}
 }
 
-func (l *LoginLogic) Login(req *types.LoginReq) (resp *types.LoginRes, err error) {
+func (l *LoginLogic) Login(req *types.LoginReq) (resp *types.LoginResp, err error) {
 	rankMasterAccount := strings.TrimSpace(req.RankMasterAccount)
 	password := strings.TrimSpace(req.Password)
 	// 检查账号是否已经注册
@@ -63,7 +63,7 @@ func (l *LoginLogic) Login(req *types.LoginReq) (resp *types.LoginRes, err error
 		logx.Errorf("BuildTokens error: %v", err)
 		return nil, err
 	}
-	return &types.LoginRes{
+	return &types.LoginResp{
 		UserId: userEntity.ID,
 		Token: types.Token{
 			AccessToken:  token.AccessToken,

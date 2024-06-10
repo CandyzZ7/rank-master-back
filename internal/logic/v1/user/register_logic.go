@@ -30,7 +30,7 @@ func NewRegisterLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Register
 	}
 }
 
-func (l *RegisterLogic) Register(req *types.RegisterReq) (resp *types.RegisterRes, err error) {
+func (l *RegisterLogic) Register(req *types.RegisterReq) (resp *types.RegisterResp, err error) {
 	// 检查账号是否重复
 	isExist, err := l.svcCtx.UserDao.FindLockWithRankMasterAccountExist(l.ctx, req.User.RankMasterAccount)
 	if err != nil {
@@ -87,7 +87,7 @@ func (l *RegisterLogic) Register(req *types.RegisterReq) (resp *types.RegisterRe
 		return nil, err
 	}
 
-	return &types.RegisterRes{
+	return &types.RegisterResp{
 		UserId: userEntity.ID,
 		Token: types.Token{
 			AccessToken:  token.AccessToken,

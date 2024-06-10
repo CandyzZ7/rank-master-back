@@ -27,7 +27,7 @@ type (
     RegisterReq {
         User User `json:"user"`
     }
-    RegisterRes {
+    RegisterResp {
         UserId string `json:"user_id"` // 用户ID
         Token  Token `json:"token"`  // token
     }
@@ -38,7 +38,7 @@ type (
         RankMasterAccount string `json:"rank_master_account" validate:"required"` // RankMaster账号
         Password         string `json:"password" validate:"required"`  // 密码
     }
-    LoginRes {
+    LoginResp {
         UserId string `json:"user_id"` // 用户ID
         Token  Token `json:"token"` // token
     }
@@ -48,7 +48,7 @@ type (
     GetEmailCodeReq {
         Email string `json:"email" validate:"required,email"` // 邮箱
     }
-    GetEmailCodeRes {
+    GetEmailCodeResp {
     }
 )
 
@@ -56,7 +56,14 @@ type (
     GetRankMasterAccountReq{
         RankMasterAccount string `path:"rank_master_account" validate:"required"` // RankMaster账号
     }
-    GetRankMasterAccountRes{}
+    GetRankMasterAccountResp{}
+)
+
+type (
+    GetUserInfoReq{}
+    GetUserInfoResp{
+        User User `json:"user"`
+    }
 )
 
 
@@ -67,17 +74,28 @@ type (
 service app {
     @doc "注册"
     @handler Register
-    post /register (RegisterReq) returns (RegisterRes)
+    post /register (RegisterReq) returns (RegisterResp)
 
     @doc "登录"
     @handler Login
-    post /login (LoginReq) returns (LoginRes)
+    post /login (LoginReq) returns (LoginResp)
 
     @doc "获取邮箱验证码"
     @handler GetEmailCode
-    post /email/code (GetEmailCodeReq) returns (GetEmailCodeRes)
+    post /email/code (GetEmailCodeReq) returns (GetEmailCodeResp)
 
     @doc "验证用户账号是否存在"
     @handler GetRankMasterAccount
-    get /:rank_master_account (GetRankMasterAccountReq) returns (GetRankMasterAccountRes)
+    get /:rank_master_account (GetRankMasterAccountReq) returns (GetRankMasterAccountResp)
+}
+
+@server (
+    group: v1/user
+    prefix: /v1/user
+    jwt: Auth
+)
+service app {
+    @doc "用户信息"
+    @handler UserInfo
+    get /user_info returns (GetUserInfoResp)
 }

@@ -11,7 +11,7 @@ info (
 	version: "type version here"
 )
 
-type PingRes {
+type PingResp {
 	Msg string `json:"msg"`
 }
 
@@ -21,6 +21,6 @@ type PingRes {
 service app {
 	@doc "ping"
 	@handler Ping
-	get /ping returns (PingRes)
+	get /ping returns (PingResp)
 }
 

@@ -25,7 +25,7 @@ func NewAddTemplateLogic(ctx context.Context, svcCtx *svc.ServiceContext) *AddTe
 	}
 }
 
-func (l *AddTemplateLogic) AddTemplate(req *types.AddTemplateReq) (resp *types.AddTemplateRes, err error) {
+func (l *AddTemplateLogic) AddTemplate(req *types.AddTemplateReq) (resp *types.AddTemplateResp, err error) {
 	templateEntity, err := build.TemplateTypes2Entity(req.Template)
 	if err != nil {
 		return nil, err
@@ -34,7 +34,7 @@ func (l *AddTemplateLogic) AddTemplate(req *types.AddTemplateReq) (resp *types.A
 	if err != nil {
 		return nil, errors.WithMessage(err, "创建模板失败")
 	}
-	return &types.AddTemplateRes{
+	return &types.AddTemplateResp{
 		Id: templateEntity.ID,
 	}, nil
 }

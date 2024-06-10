@@ -5,7 +5,7 @@ type AddTemplateReq struct {
 	Template Template `json:"template"`
 }
 
-type AddTemplateRes struct {
+type AddTemplateResp struct {
 	Id string `json:"id"`
 }
 
@@ -13,14 +13,21 @@ type GetEmailCodeReq struct {
 	Email string `json:"email" validate:"required,email"` // 邮箱
 }
 
-type GetEmailCodeRes struct {
+type GetEmailCodeResp struct {
 }
 
 type GetRankMasterAccountReq struct {
 	RankMasterAccount string `path:"rank_master_account" validate:"required"` // RankMaster账号
 }
 
-type GetRankMasterAccountRes struct {
+type GetRankMasterAccountResp struct {
+}
+
+type GetUserInfoReq struct {
+}
+
+type GetUserInfoResp struct {
+	User User `json:"user"`
 }
 
 type LoginReq struct {
@@ -28,12 +35,12 @@ type LoginReq struct {
 	Password          string `json:"password" validate:"required"`            // 密码
 }
 
-type LoginRes struct {
+type LoginResp struct {
 	UserId string `json:"user_id"` // 用户ID
 	Token  Token  `json:"token"`   // token
 }
 
-type PingRes struct {
+type PingResp struct {
 	Msg string `json:"msg"`
 }
 
@@ -41,7 +48,7 @@ type RegisterReq struct {
 	User User `json:"user"`
 }
 
-type RegisterRes struct {
+type RegisterResp struct {
 	UserId string `json:"user_id"` // 用户ID
 	Token  Token  `json:"token"`   // token
 }

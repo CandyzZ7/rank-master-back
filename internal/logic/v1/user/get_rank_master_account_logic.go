@@ -25,7 +25,7 @@ func NewGetRankMasterAccountLogic(ctx context.Context, svcCtx *svc.ServiceContex
 	}
 }
 
-func (l *GetRankMasterAccountLogic) GetRankMasterAccount(req *types.GetRankMasterAccountReq) (resp *types.GetRankMasterAccountRes, err error) {
+func (l *GetRankMasterAccountLogic) GetRankMasterAccount(req *types.GetRankMasterAccountReq) (resp *types.GetRankMasterAccountResp, err error) {
 	rankMasterAccount := strings.TrimSpace(req.RankMasterAccount)
 	isExist, err := l.svcCtx.UserDao.FindLockWithRankMasterAccountExist(l.ctx, rankMasterAccount)
 	if err != nil {

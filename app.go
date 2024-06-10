@@ -6,6 +6,7 @@ import (
 	"flag"
 	"fmt"
 	"net/http"
+	"strings"
 
 	"github.com/pkg/errors"
 	"github.com/zeromicro/go-zero/core/conf"
@@ -37,9 +38,13 @@ func main() {
 		// 新增swagger json接口
 		server.AddRoute(rest.Route{
 			Method: http.MethodGet,
-			Path:   middleware.SwaggerJsonAPI,
+			Path:   "/api/doc",
 			Handler: func(w http.ResponseWriter, r *http.Request) {
-				_, _ = w.Write(spec)
+				if strings.HasPrefix(r.URL.Path, middleware.SwaggerJsonAPI) {
+					_, _ = w.Write(spec)
+				}
+				middleware.SwaggerHandle.ServeHTTP(w, r)
+
 			},
 		})
 		fmt.Println("doc: http://localhost:8888/api/doc")

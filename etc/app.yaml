@@ -5,7 +5,7 @@ WorkerId: 1
 Mode: test
 
 Auth:
-  AccessSecret: candy
+  AccessSecret: candy_secret
   AccessExpire: 604800
   RefreshSecret: candy
   RefreshExpire: 2592000

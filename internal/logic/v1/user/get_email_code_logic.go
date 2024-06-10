@@ -26,7 +26,7 @@ func NewGetEmailCodeLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetE
 	}
 }
 
-func (l *GetEmailCodeLogic) GetEmailCode(req *types.GetEmailCodeReq) (resp *types.GetEmailCodeRes, err error) {
+func (l *GetEmailCodeLogic) GetEmailCode(req *types.GetEmailCodeReq) (resp *types.GetEmailCodeResp, err error) {
 	code := verificationcode.GetRand(verificationcode.Six)
 	err = l.svcCtx.RDB.Set(l.ctx, req.Email, code, time.Minute*verificationcode.CodeValidityTime).Err()
 	if err != nil {

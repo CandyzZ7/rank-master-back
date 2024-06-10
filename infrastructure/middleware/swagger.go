@@ -13,7 +13,7 @@ const (
 	Title          = "title"
 )
 
-var swaggerHandle = v5emb.New(
+var SwaggerHandle = v5emb.New(
 	Title,
 	SwaggerJsonAPI,
 	swaggerAPI,
@@ -22,7 +22,7 @@ var swaggerHandle = v5emb.New(
 func Notfound() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		if strings.HasPrefix(r.URL.Path, swaggerAPI) {
-			swaggerHandle.ServeHTTP(w, r)
+			SwaggerHandle.ServeHTTP(w, r)
 			return
 		}
 		http.NotFound(w, r)

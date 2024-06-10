@@ -10,17 +10,22 @@ import (
 
 var _ IUser = (*UserDao)(nil)
 
-type IUser interface {
-	Create(ctx context.Context, template *entity.User) error
-	FindLockWithRankMasterAccountExist(ctx context.Context, rankMasterAccount string) (int64, error)
-	FindUserByRankMasterAccount(ctx context.Context, rankMasterAccount string) (*entity.User, error)
-}
-
 type UserDao struct {
 }
 
 func NewUserDao() *UserDao {
 	return &UserDao{}
+}
+
+type IUser interface {
+	Create(ctx context.Context, template *entity.User) error
+	FindLockWithRankMasterAccountExist(ctx context.Context, rankMasterAccount string) (int64, error)
+	FindUserByRankMasterAccount(ctx context.Context, rankMasterAccount string) (*entity.User, error)
+	FindUserByID(ctx context.Context, id string) (*entity.User, error)
+}
+
+func (d *UserDao) FindUserByID(ctx context.Context, id string) (*entity.User, error) {
+	return dal.User.WithContext(ctx).Where(dal.User.ID.Eq(id)).First()
 }
 
 func (d *UserDao) Create(ctx context.Context, user *entity.User) error {
