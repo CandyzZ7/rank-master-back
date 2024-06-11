@@ -3,11 +3,11 @@ package user
 import (
 	"net/http"
 
-	"rank-master-back/infrastructure/response"
 	"rank-master-back/internal/logic/v1/user"
 	"rank-master-back/internal/svc"
 
 	"github.com/zeromicro/go-zero/core/logc"
+	"github.com/zeromicro/go-zero/rest/httpx"
 )
 
 func UserInfoHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
@@ -16,9 +16,9 @@ func UserInfoHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 		resp, err := l.UserInfo()
 		if err != nil {
 			logc.Error(r.Context(), err)
-			response.Handler(w, nil, err)
+			httpx.ErrorCtx(r.Context(), w, err)
 		} else {
-			response.Handler(w, resp, err)
+			httpx.OkJsonCtx(r.Context(), w, resp)
 		}
 	}
 }

@@ -39,7 +39,7 @@ func newStatusCode(code Code, msg string) *StatusCode {
 }
 
 // DefaultErrHandler 默认异常状态码函数，只需传递错误信息即可，默认返回code-10001
-func DefaultErrHandler(msg string) error {
+func DefaultErrHandler(msg string) *StatusCode {
 	return &StatusCode{
 		Code:    ServerError.Code,
 		Message: msg,
@@ -47,12 +47,12 @@ func DefaultErrHandler(msg string) error {
 }
 
 // ErrHandler 自定义错误返回函数 错误函数主入口
-func ErrHandler(err error) interface{} {
+func ErrHandler(err error) *StatusCode {
 	var codeError *StatusCode
 	switch {
 	// 如果错误类型为CodeError，就返回错误类型的结构体
 	case errors.As(err, &codeError):
-		return err
+		return codeError
 	default:
 		// 系统错误，500 错误提示
 		return DefaultErrHandler(err.Error())

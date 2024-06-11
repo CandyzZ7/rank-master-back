@@ -13,8 +13,10 @@ import (
 	"github.com/zeromicro/go-zero/core/logc"
 	"github.com/zeromicro/go-zero/core/service"
 	"github.com/zeromicro/go-zero/rest"
+	"github.com/zeromicro/go-zero/rest/httpx"
 
 	"rank-master-back/infrastructure/middleware"
+	"rank-master-back/infrastructure/response"
 	"rank-master-back/internal/config"
 	"rank-master-back/internal/handler"
 	"rank-master-back/internal/svc"
@@ -60,7 +62,9 @@ func main() {
 	handler.RegisterHandlers(server, ctx)
 
 	fmt.Printf("Starting server at %s:%d...\n", c.Host, c.Port)
-
-	logc.Error(context.Background(), "test")
+	// 自定义错误处理方法
+	httpx.SetErrorHandlerCtx(response.ErrHandler)
+	// 自定义返回成功方法
+	httpx.SetOkHandler(response.OKHandler)
 	server.Start()
 }

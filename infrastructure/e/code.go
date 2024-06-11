@@ -2,7 +2,7 @@ package e
 
 //go:generate stringer -type Code -linecomment
 
-type Code int64
+type Code int
 
 const (
 	// OKCode 成功
@@ -12,15 +12,15 @@ const (
 )
 
 const (
+	// ErrLoginPasswdCode 密码错误
+	ErrLoginPasswdCode Code = 1000 + iota // password error
+)
+
+const (
 	// ErrRegisterMobileExistCode 手机号已存在
 	ErrRegisterMobileExistCode Code = 2000 + iota // mobile already exists
 	// ErrRegisterAccountExistCode 账号已存在
 	ErrRegisterAccountExistCode // account already exists
-)
-
-const (
-	// ErrLoginPasswdCode 密码错误
-	ErrLoginPasswdCode Code = 1000 + iota // password error
 )
 
 const (
