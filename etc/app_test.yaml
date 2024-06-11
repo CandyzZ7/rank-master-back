@@ -4,7 +4,7 @@ Port: 8888
 WorkerId: 1
 
 Auth:
-  AccessSecret: candy
+  AccessSecret: candy_secret
   AccessExpire: 604800
   RefreshSecret: candy
   RefreshExpire: 2592000

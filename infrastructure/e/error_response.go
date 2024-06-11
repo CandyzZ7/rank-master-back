@@ -41,7 +41,7 @@ func newStatusCode(code Code, msg string) *StatusCode {
 // DefaultErrHandler 默认异常状态码函数，只需传递错误信息即可，默认返回code-10001
 func DefaultErrHandler(msg string) *StatusCode {
 	return &StatusCode{
-		Code:    ServerError.Code,
+		Code:    BadRequest.Code,
 		Message: msg,
 	}
 }

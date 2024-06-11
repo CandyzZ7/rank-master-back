@@ -9,10 +9,10 @@ func _() {
 	// Re-run the stringer command to generate them again.
 	var x [1]struct{}
 	_ = x[OKCode-200]
-	_ = x[ServerErrorCode-500]
+	_ = x[BadRequestCode-400]
+	_ = x[ErrLoginPasswdCode-1000]
 	_ = x[ErrRegisterMobileExistCode-2000]
 	_ = x[ErrRegisterAccountExistCode-2001]
-	_ = x[ErrLoginPasswdCode-1000]
 	_ = x[ErrEmailCodeFailCode-3000]
 	_ = x[ErrLoginMobileNotExistCode-4000]
 }
@@ -34,7 +34,7 @@ func (i Code) String() string {
 	switch {
 	case i == 200:
 		return _Code_name_0
-	case i == 500:
+	case i == 400:
 		return _Code_name_1
 	case i == 1000:
 		return _Code_name_2

@@ -65,6 +65,6 @@ func main() {
 	// 自定义错误处理方法
 	httpx.SetErrorHandlerCtx(response.ErrHandler)
 	// 自定义返回成功方法
-	httpx.SetOkHandler(response.OKHandler)
+	// httpx.SetOkHandler(response.OKHandler)
 	server.Start()
 }

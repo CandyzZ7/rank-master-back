@@ -7,8 +7,8 @@ type Code int
 const (
 	// OKCode 成功
 	OKCode Code = 200 // OK
-	// ServerErrorCode 服务器错误
-	ServerErrorCode Code = 500 // Server Error
+	// BadRequestCode 错误请求
+	BadRequestCode Code = 400 // Server Error
 )
 
 const (

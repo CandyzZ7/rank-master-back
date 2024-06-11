@@ -49,7 +49,7 @@ func ErrHandler(ctx context.Context, err error) (int, any) {
 		default:
 			return http.StatusBadRequest, Body{
 				Code:    http.StatusBadRequest,
-				Message: codeError.Message,
+				Message: err.Error(),
 			}
 		}
 	}

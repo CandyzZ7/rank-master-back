@@ -1,8 +1,8 @@
 package e
 
 var (
-	OK          = newStatusCode(OKCode, OKCode.String())
-	ServerError = newStatusCode(ServerErrorCode, ServerErrorCode.String())
+	OK         = newStatusCode(OKCode, OKCode.String())
+	BadRequest = newStatusCode(BadRequestCode, BadRequestCode.String())
 )
 
 var (
