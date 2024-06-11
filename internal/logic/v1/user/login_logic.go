@@ -47,7 +47,7 @@ func (l *LoginLogic) Login(req *types.LoginReq) (resp *types.LoginResp, err erro
 	// 密码加盐加密
 	passwordWithSalt := password + userEntity.CryptSalt
 	// 比较密码是否相同
-	isSame := encrypt.EqualsEncryption(passwordWithSalt, userEntity.Password)
+	isSame := encrypt.EqualsEncryptMD5(passwordWithSalt, userEntity.Password)
 	if !isSame {
 		return nil, e.ErrLoginPasswd
 	}

@@ -3,7 +3,6 @@ package encrypt
 import (
 	"crypto/rand"
 	"encoding/hex"
-	"strings"
 )
 
 const RandomNumberLen = 10
@@ -16,19 +15,6 @@ func RandomString(len int) (string, error) {
 		return "", err
 	}
 	return hex.EncodeToString(bytes), nil
-}
-
-func Encryption(target, cryptSalt string) string {
-	return Md5Sum([]byte(strings.TrimSpace(target + cryptSalt)))
-}
-
-// EqualsEncryption 对比密码是否正确
-func EqualsEncryption(target, encryptTarget string) bool {
-	md5Target := Md5Sum([]byte(strings.TrimSpace(target)))
-	if md5Target == encryptTarget {
-		return true
-	}
-	return false
 }
 
 func byte16ToBytes(in [16]byte) []byte {
