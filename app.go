@@ -63,7 +63,7 @@ func main() {
 
 	fmt.Printf("Starting server at %s:%d...\n", c.Host, c.Port)
 	// 自定义错误处理方法
-	httpx.SetErrorHandlerCtx(response.ErrHandler)
+	httpx.SetErrorHandlerCtx(response.ErrHandlerCtx)
 	// 自定义返回成功方法
 	// httpx.SetOkHandler(response.OKHandler)
 	server.Start()

@@ -31,7 +31,31 @@ func Handler(w http.ResponseWriter, resp any, err error) {
 	}
 }
 
-func ErrHandler(ctx context.Context, err error) (int, any) {
+func ErrHandlerCtx(ctx context.Context, err error) (int, any) {
+	if e.IsGrpcError(err) {
+		return e.CodeFromGrpcError(err), Body{
+			Code:    e.Code(e.CodeFromGrpcError(err)),
+			Message: err.Error(),
+		}
+	} else {
+		var codeError *e.StatusCode
+		switch {
+		// 如果错误类型为CodeError，就返回错误类型的结构体
+		case errors.As(err, &codeError):
+			return http.StatusOK, Body{
+				Code:    codeError.Code,
+				Message: codeError.Message,
+			}
+		default:
+			return http.StatusBadRequest, Body{
+				Code:    http.StatusBadRequest,
+				Message: err.Error(),
+			}
+		}
+	}
+}
+
+func ErrHandler(err error) (int, any) {
 	if e.IsGrpcError(err) {
 		return e.CodeFromGrpcError(err), Body{
 			Code:    e.Code(e.CodeFromGrpcError(err)),
