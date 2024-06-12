@@ -2,7 +2,6 @@ version: '3'
 services:
   mysql:
     image: mysql
-    container_name: mysql
     environment:
       MYSQL_ROOT_PASSWORD: 123456
     ports:
@@ -12,16 +11,13 @@ services:
 
   redis:
     image: redis
-    container_name: redis
     command: redis-server --requirepass 123456 --appendonly yes
     ports:
       - "6379:6379"
-
     networks:
       - rank-master-back
   zookeeper:
     image: zookeeper
-    container_name: zookeeper
     ports:
       - "2181:2181"
     networks:
@@ -29,7 +25,6 @@ services:
 
   kafka:
     image: bitnami/kafka
-    container_name: kafka
     restart: always
     privileged: true
     ports:
@@ -47,7 +42,6 @@ services:
     build:
      context: .
      dockerfile: Dockerfile
-    container_name: rank-master-back
     ports:
       - "8888:8888"
     depends_on:
