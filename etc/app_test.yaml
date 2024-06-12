@@ -2,6 +2,7 @@ Name: app
 Host: 0.0.0.0
 Port: 8888
 WorkerId: 1
+Mode: test
 
 Auth:
   AccessSecret: candy_secret
