@@ -5,8 +5,8 @@ import (
 )
 
 // EncryptASEBase64ByECB ECB模式
-func EncryptASEBase64ByECB(encrypt, key string) (string, error) {
-	data, err := codec.EcbEncryptBase64(key, encrypt)
+func EncryptASEBase64ByECB(key, encrypt string) (string, error) {
+	data, err := codec.EcbEncryptBase64(encrypt, key)
 	if err != nil {
 		return "", err
 	}

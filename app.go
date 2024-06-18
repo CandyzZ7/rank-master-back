@@ -15,7 +15,7 @@ import (
 	"github.com/zeromicro/go-zero/rest/httpx"
 
 	"rank-master-back/infrastructure/middleware"
-	"rank-master-back/infrastructure/response"
+	"rank-master-back/infrastructure/pkg/response"
 	"rank-master-back/internal/config"
 	"rank-master-back/internal/handler"
 	"rank-master-back/internal/svc"

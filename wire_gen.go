@@ -11,6 +11,7 @@ import (
 	"rank-master-back/infrastructure/pkg/ormengine"
 	"rank-master-back/infrastructure/pkg/rdb"
 	"rank-master-back/infrastructure/pkg/uploadfile/oss"
+	"rank-master-back/internal/cache"
 	"rank-master-back/internal/config"
 	"rank-master-back/internal/repository"
 	"rank-master-back/internal/svc"
@@ -32,19 +33,22 @@ func InitializeServiceContext(c config.Config) (*svc.ServiceContext, error) {
 	if err != nil {
 		return nil, err
 	}
-	templateDao := repository.NewTemplateDao()
-	userDao := repository.NewUserDao()
+	iTemplate := repository.NewTemplateDao()
+	iUserCache := cache.NewUserCache(c)
+	iUser := repository.NewUserDao(iUserCache)
 	serviceContext := &svc.ServiceContext{
 		Config:      c,
 		DB:          db,
 		RDB:         client,
 		Oss:         ossClient,
-		TemplateDao: templateDao,
-		UserDao:     userDao,
+		TemplateDao: iTemplate,
+		UserDao:     iUser,
 	}
 	return serviceContext, nil
 }
 
 // wire.go:
 
-var RepositorySet = wire.NewSet(repository.NewTemplateDao, wire.Bind(new(repository.ITemplate), new(*repository.TemplateDao)), repository.NewUserDao, wire.Bind(new(repository.IUser), new(*repository.UserDao)))
+var RepositorySet = wire.NewSet(repository.NewTemplateDao, repository.NewUserDao)
+
+var CacheSet = wire.NewSet(cache.NewUserCache)

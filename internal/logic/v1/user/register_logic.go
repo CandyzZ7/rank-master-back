@@ -61,10 +61,8 @@ func (l *RegisterLogic) Register(req *types.RegisterReq) (resp *types.RegisterRe
 	// 加密密码
 	encPassword := encrypt.EncryptMD5(req.User.Password + cryptSalt)
 	// 加密手机号
-	mobile, err := encrypt.EncryptASEBase64ByECB(req.User.Mobile, encrypt.MobileAesKey)
-	if err != nil {
-		return nil, err
-	}
+	mobile := encrypt.EncryptMD5(req.User.Mobile + cryptSalt)
+
 	userEntity := &entity.User{
 		ID:                snowflake.GenerateDefaultSnowflakeID(),
 		RankMasterAccount: req.User.RankMasterAccount,

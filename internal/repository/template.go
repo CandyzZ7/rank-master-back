@@ -17,7 +17,7 @@ type ITemplate interface {
 type TemplateDao struct {
 }
 
-func NewTemplateDao() *TemplateDao {
+func NewTemplateDao() ITemplate {
 	return &TemplateDao{}
 }
 

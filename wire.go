@@ -10,6 +10,7 @@ import (
 	"rank-master-back/infrastructure/pkg/ormengine"
 	"rank-master-back/infrastructure/pkg/rdb"
 	"rank-master-back/infrastructure/pkg/uploadfile/oss"
+	"rank-master-back/internal/cache"
 	"rank-master-back/internal/config"
 	"rank-master-back/internal/repository"
 	"rank-master-back/internal/svc"
@@ -22,12 +23,18 @@ func InitializeServiceContext(c config.Config) (*svc.ServiceContext, error) {
 		rdb.NewRdbClient,
 		oss.NewOssClient,
 		RepositorySet,
+		CacheSet,
 	))
 }
 
 var RepositorySet = wire.NewSet(
 	repository.NewTemplateDao,
-	wire.Bind(new(repository.ITemplate), new(*repository.TemplateDao)),
+	// wire.Bind(new(repository.ITemplate), new(*repository.TemplateDao)),
 	repository.NewUserDao,
-	wire.Bind(new(repository.IUser), new(*repository.UserDao)),
+	// wire.Bind(new(repository.IUser), new(*repository.UserDao)),
+)
+
+var CacheSet = wire.NewSet(
+	cache.NewUserCache,
+	// wire.Bind(new(cache.IUserCache), new(*cache.UserCache)),
 )
