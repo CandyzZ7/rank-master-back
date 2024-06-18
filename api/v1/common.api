@@ -1,0 +1,22 @@
+syntax = "v1"
+
+info(
+    title: "type title here"
+    desc: "type desc here"
+    author: "type author here"
+    email: "type email here"
+    version: "type version here"
+)
+
+type Token {
+    AccessToken  string `json:"access_token"`
+    AccessExpire int64  `json:"access_expire"`
+}
+
+type Pagination {
+    Page      int         `json:"page"`           // 当前页码
+    PageSize  int         `json:"pageSize"`   // 每页条数
+    SortBy    string      `json:"sortBy"`       // 排序字段
+    SortOrder string      `json:"sortOrder"` // 排序顺序：asc 或 desc
+    Filter    interface{} `json:"filter"`       // 过滤条件，可以是一个结构体
+}

@@ -60,7 +60,7 @@ func main() {
 	})
 	g.UseDB(db)
 	// 自定义字段的数据类型
-	// 统一数字类型为int64,兼容protobuf和thrift
+	// 统一数字类型为int64,兼容protobuf和thriftma
 	dataMap := map[string]func(detailType gorm.ColumnType) (dataType string){
 		"tinyint":   func(detailType gorm.ColumnType) (dataType string) { return "int64" },
 		"smallint":  func(detailType gorm.ColumnType) (dataType string) { return "int64" },

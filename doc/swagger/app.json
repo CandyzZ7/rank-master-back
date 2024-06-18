@@ -1,0 +1,534 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "type title here",
+    "description": "type desc here",
+    "version": "type version here"
+  },
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/ping": {
+      "get": {
+        "summary": "ping",
+        "operationId": "Ping",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/PingResp"
+            }
+          }
+        },
+        "tags": [
+          "v1/test"
+        ]
+      }
+    },
+    "/v1/template/": {
+      "post": {
+        "summary": "增加模板",
+        "operationId": "AddTemplate",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/AddTemplateResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/AddTemplateReq"
+            }
+          }
+        ],
+        "tags": [
+          "v1/template"
+        ]
+      }
+    },
+    "/v1/user/email/code": {
+      "post": {
+        "summary": "获取邮箱验证码",
+        "operationId": "GetEmailCode",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GetEmailCodeResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/GetEmailCodeReq"
+            }
+          }
+        ],
+        "tags": [
+          "v1/user"
+        ]
+      }
+    },
+    "/v1/user/login": {
+      "post": {
+        "summary": "登录",
+        "operationId": "Login",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/LoginResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/LoginReq"
+            }
+          }
+        ],
+        "tags": [
+          "v1/user"
+        ]
+      }
+    },
+    "/v1/user/register": {
+      "post": {
+        "summary": "注册",
+        "operationId": "Register",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/RegisterResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/RegisterReq"
+            }
+          }
+        ],
+        "tags": [
+          "v1/user"
+        ]
+      }
+    },
+    "/v1/user/user_info": {
+      "get": {
+        "summary": "用户信息",
+        "operationId": "UserInfo",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GetUserInfoResp"
+            }
+          }
+        },
+        "tags": [
+          "v1/user"
+        ],
+        "security": [
+          {
+            "apiKey": []
+          }
+        ]
+      }
+    },
+    "/v1/user/user_info_list": {
+      "post": {
+        "summary": "用户信息列表",
+        "operationId": "UserInfoList",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GetUserInfoListResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/GetUserInfoListReq"
+            }
+          }
+        ],
+        "tags": [
+          "v1/user"
+        ],
+        "security": [
+          {
+            "apiKey": []
+          }
+        ]
+      }
+    },
+    "/v1/user/{rank_master_account}": {
+      "get": {
+        "summary": "验证用户账号是否存在",
+        "operationId": "GetRankMasterAccount",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GetRankMasterAccountResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "rank_master_account",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "v1/user"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "AddTemplateReq": {
+      "type": "object",
+      "properties": {
+        "template": {
+          "$ref": "#/definitions/Template"
+        }
+      },
+      "title": "AddTemplateReq",
+      "required": [
+        "template"
+      ]
+    },
+    "AddTemplateResp": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        }
+      },
+      "title": "AddTemplateResp",
+      "required": [
+        "id"
+      ]
+    },
+    "GetEmailCodeReq": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "description": " 邮箱"
+        }
+      },
+      "title": "GetEmailCodeReq",
+      "required": [
+        "email"
+      ]
+    },
+    "GetEmailCodeResp": {
+      "type": "object",
+      "title": "GetEmailCodeResp"
+    },
+    "GetRankMasterAccountReq": {
+      "type": "object",
+      "title": "GetRankMasterAccountReq"
+    },
+    "GetRankMasterAccountResp": {
+      "type": "object",
+      "title": "GetRankMasterAccountResp"
+    },
+    "GetUserInfoListReq": {
+      "type": "object",
+      "properties": {
+        "pagination": {
+          "$ref": "#/definitions/Pagination",
+          "description": " 分页信息"
+        }
+      },
+      "title": "GetUserInfoListReq",
+      "required": [
+        "pagination"
+      ]
+    },
+    "GetUserInfoListResp": {
+      "type": "object",
+      "properties": {
+        "user_list": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/User"
+          }
+        },
+        "count": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 总数"
+        }
+      },
+      "title": "GetUserInfoListResp",
+      "required": [
+        "user_list",
+        "count"
+      ]
+    },
+    "GetUserInfoReq": {
+      "type": "object",
+      "title": "GetUserInfoReq"
+    },
+    "GetUserInfoResp": {
+      "type": "object",
+      "properties": {
+        "user": {
+          "$ref": "#/definitions/User"
+        }
+      },
+      "title": "GetUserInfoResp",
+      "required": [
+        "user"
+      ]
+    },
+    "LoginReq": {
+      "type": "object",
+      "properties": {
+        "rank_master_account": {
+          "type": "string",
+          "description": " RankMaster账号"
+        },
+        "password": {
+          "type": "string",
+          "description": " 密码"
+        }
+      },
+      "title": "LoginReq",
+      "required": [
+        "rank_master_account",
+        "password"
+      ]
+    },
+    "LoginResp": {
+      "type": "object",
+      "properties": {
+        "user_id": {
+          "type": "string",
+          "description": " 用户ID"
+        },
+        "token": {
+          "$ref": "#/definitions/Token",
+          "description": " token"
+        }
+      },
+      "title": "LoginResp",
+      "required": [
+        "user_id",
+        "token"
+      ]
+    },
+    "Pagination": {
+      "type": "object",
+      "properties": {
+        "page": {
+          "type": "integer",
+          "format": "int32",
+          "description": " 当前页码"
+        },
+        "pageSize": {
+          "type": "integer",
+          "format": "int32",
+          "description": " 每页条数"
+        },
+        "sortBy": {
+          "type": "string",
+          "description": " 排序字段"
+        },
+        "sortOrder": {
+          "type": "string",
+          "description": " 排序顺序：asc 或 desc"
+        },
+        "filter": {
+          "type": "object",
+          "description": " 过滤条件，可以是一个结构体"
+        }
+      },
+      "title": "Pagination",
+      "required": [
+        "page",
+        "pageSize",
+        "sortBy",
+        "sortOrder",
+        "filter"
+      ]
+    },
+    "PingResp": {
+      "type": "object",
+      "properties": {
+        "msg": {
+          "type": "string"
+        }
+      },
+      "title": "PingResp",
+      "required": [
+        "msg"
+      ]
+    },
+    "RegisterReq": {
+      "type": "object",
+      "properties": {
+        "user": {
+          "$ref": "#/definitions/User"
+        }
+      },
+      "title": "RegisterReq",
+      "required": [
+        "user"
+      ]
+    },
+    "RegisterResp": {
+      "type": "object",
+      "properties": {
+        "user_id": {
+          "type": "string",
+          "description": " 用户ID"
+        },
+        "token": {
+          "$ref": "#/definitions/Token",
+          "description": " token"
+        }
+      },
+      "title": "RegisterResp",
+      "required": [
+        "user_id",
+        "token"
+      ]
+    },
+    "Template": {
+      "type": "object",
+      "properties": {
+        "function": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "topic": {
+          "type": "string"
+        },
+        "content": {
+          "type": "string"
+        },
+        "remark": {
+          "type": "string"
+        }
+      },
+      "title": "Template",
+      "required": [
+        "function",
+        "type",
+        "topic",
+        "content",
+        "remark"
+      ]
+    },
+    "Token": {
+      "type": "object",
+      "properties": {
+        "access_token": {
+          "type": "string"
+        },
+        "access_expire": {
+          "type": "integer",
+          "format": "int64"
+        }
+      },
+      "title": "Token",
+      "required": [
+        "access_token",
+        "access_expire"
+      ]
+    },
+    "User": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": " 昵称"
+        },
+        "rank_master_account": {
+          "type": "string",
+          "description": " RankMaster账号"
+        },
+        "mobile": {
+          "type": "string",
+          "description": " 手机号"
+        },
+        "avatar": {
+          "type": "string",
+          "description": " 头像"
+        },
+        "email": {
+          "type": "string",
+          "description": " 邮箱"
+        },
+        "code": {
+          "type": "string",
+          "description": " 邮箱验证码"
+        },
+        "password": {
+          "type": "string",
+          "description": " 密码"
+        }
+      },
+      "title": "User",
+      "required": [
+        "name",
+        "rank_master_account",
+        "mobile",
+        "avatar",
+        "email",
+        "code",
+        "password"
+      ]
+    }
+  },
+  "securityDefinitions": {
+    "apiKey": {
+      "type": "apiKey",
+      "description": "Enter JWT Bearer token **_only_**",
+      "name": "Authorization",
+      "in": "header"
+    }
+  }
+}

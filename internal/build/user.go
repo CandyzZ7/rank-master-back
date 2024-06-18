@@ -26,3 +26,15 @@ func UserEntity2Types(user *entity.User) (*types.User, error) {
 	}
 	return userTypes, nil
 }
+
+func UserEntityList2Types(userList []*entity.User) ([]*types.User, error) {
+	userListEntity := make([]*types.User, len(userList))
+	for i, user := range userList {
+		userTypes, err := UserEntity2Types(user)
+		if err != nil {
+			return nil, err
+		}
+		userListEntity[i] = userTypes
+	}
+	return userListEntity, nil
+}

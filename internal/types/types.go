@@ -23,6 +23,15 @@ type GetRankMasterAccountReq struct {
 type GetRankMasterAccountResp struct {
 }
 
+type GetUserInfoListReq struct {
+	Pagination Pagination `json:"pagination"` // 分页信息
+}
+
+type GetUserInfoListResp struct {
+	UserList []*User `json:"user_list"`
+	Count    int64   `json:"count"` // 总数
+}
+
 type GetUserInfoReq struct {
 }
 
@@ -38,6 +47,14 @@ type LoginReq struct {
 type LoginResp struct {
 	UserId string `json:"user_id"` // 用户ID
 	Token  Token  `json:"token"`   // token
+}
+
+type Pagination struct {
+	Page      int         `json:"page"`      // 当前页码
+	PageSize  int         `json:"pageSize"`  // 每页条数
+	SortBy    string      `json:"sortBy"`    // 排序字段
+	SortOrder string      `json:"sortOrder"` // 排序顺序：asc 或 desc
+	Filter    interface{} `json:"filter"`    // 过滤条件，可以是一个结构体
 }
 
 type PingResp struct {

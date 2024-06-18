@@ -48,8 +48,8 @@ type template struct {
 
 	ALL       field.Asterisk
 	ID        field.String
-	CreatedAt field.Time
-	UpdatedAt field.Time
+	CreatedAt field.Time // 创建时间
+	UpdatedAt field.Time // 更新时间
 	DeletedAt field.Field
 	Function  field.String
 	Type      field.String

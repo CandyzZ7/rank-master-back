@@ -1,5 +1,7 @@
 syntax = "v1"
 
+import "common.api"
+
 info(
     title: "type title here"
     desc: "type desc here"
@@ -8,10 +10,7 @@ info(
     version: "type version here"
 )
 
-type Token {
-    AccessToken  string `json:"access_token"`
-    AccessExpire int64  `json:"access_expire"`
-}
+
 
 type User{
     Name             string `json:"name" validate:"required"` // 昵称
@@ -66,6 +65,16 @@ type (
     }
 )
 
+type (
+    GetUserInfoListReq{
+        Pagination Pagination `json:"pagination"` // 分页信息
+    }
+    GetUserInfoListResp{
+        UserList []*User `json:"user_list"`
+        Count    int64    `json:"count"` // 总数
+    }
+)
+
 
 @server (
     group: v1/user
@@ -92,10 +101,15 @@ service app {
 @server (
     group: v1/user
     prefix: /v1/user
+    signature: true
     jwt: Auth
 )
 service app {
     @doc "用户信息"
     @handler UserInfo
     get /user_info returns (GetUserInfoResp)
+
+    @doc "用户信息列表"
+    @handler UserInfoList
+    post /user_info_list (GetUserInfoListReq) returns (GetUserInfoListResp)
 }

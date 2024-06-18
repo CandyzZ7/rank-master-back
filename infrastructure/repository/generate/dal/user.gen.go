@@ -49,8 +49,8 @@ type user struct {
 
 	ALL               field.Asterisk
 	ID                field.String
-	CreatedAt         field.Time
-	UpdatedAt         field.Time
+	CreatedAt         field.Time // 创建时间
+	UpdatedAt         field.Time // 更新时间
 	DeletedAt         field.Field
 	Name              field.String
 	RankMasterAccount field.String

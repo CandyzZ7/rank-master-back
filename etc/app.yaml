@@ -11,7 +11,7 @@ Auth:
   RefreshExpire: 2592000
   RefreshAfter: 604800
 
-DataSource: root:123456@tcp(172.28.176.1:3306)/rank_master?charset=utf8mb4&parseTime=True&loc=Local
+DataSource: root:123456@tcp(172.21.203.129:3306)/rank_master?charset=utf8mb4&parseTime=True&loc=Local
 
 Log:
   ServiceName: "rank-master"

@@ -74,8 +74,15 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Path:    "/user_info",
 				Handler: v1user.UserInfoHandler(serverCtx),
 			},
+			{
+				// 用户信息列表
+				Method:  http.MethodPost,
+				Path:    "/user_info_list",
+				Handler: v1user.UserInfoListHandler(serverCtx),
+			},
 		},
 		rest.WithJwt(serverCtx.Config.Auth.AccessSecret),
+		rest.WithSignature(serverCtx.Config.Signature),
 		rest.WithPrefix("/v1/user"),
 	)
 }
