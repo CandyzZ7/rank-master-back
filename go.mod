@@ -4,6 +4,7 @@ go 1.22.1
 
 require (
 	github.com/aliyun/aliyun-oss-go-sdk v3.0.2+incompatible
+	github.com/allegro/bigcache/v3 v3.1.0
 	github.com/bwmarrin/snowflake v0.3.0
 	github.com/dgraph-io/ristretto v0.1.1
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible

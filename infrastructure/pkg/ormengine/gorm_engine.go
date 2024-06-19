@@ -14,6 +14,7 @@ var (
 	gormEngine *gorm.DB
 	once       sync.Once
 )
+var DBNotFound = gorm.ErrRecordNotFound
 
 func NewGormEngine(c config.Config) (*gorm.DB, error) {
 	var err error

@@ -3,12 +3,11 @@ package repository
 import (
 	"context"
 
-	"github.com/go-redis/redis/v8"
 	"github.com/pkg/errors"
 	"golang.org/x/sync/singleflight"
-	"gorm.io/gorm"
 
 	cachePkg "rank-master-back/infrastructure/pkg/cache"
+	"rank-master-back/infrastructure/pkg/ormengine"
 	"rank-master-back/infrastructure/repository/generate/dal"
 	"rank-master-back/internal/cache"
 	"rank-master-back/internal/types"
@@ -47,20 +46,19 @@ func (d *UserDao) FindUserByID(ctx context.Context, id string) (*entity.User, er
 	if err == nil {
 		return record, nil
 	}
-	if errors.Is(err, redis.Nil) {
+	if errors.Is(err, cachePkg.CacheNotFound) {
 		val, err, _ := d.sfg.Do(id, func() (interface{}, error) {
 			user, err := d.Query.User.WithContext(ctx).Where(dal.User.ID.Eq(id)).First()
 			if err != nil {
-				if errors.Is(err, gorm.ErrRecordNotFound) {
+				if errors.Is(err, ormengine.DBNotFound) {
 					err = d.cache.SetCacheWithNotFound(ctx, id)
 					if err != nil {
 						return nil, err
 					}
-					return nil, gorm.ErrRecordNotFound
+					return nil, ormengine.DBNotFound
 				}
 				return nil, err
 			}
-			// set cache
 			err = d.cache.Set(ctx, id, user, cachePkg.DefaultExpireTime)
 			if err != nil {
 				return nil, err
@@ -72,11 +70,11 @@ func (d *UserDao) FindUserByID(ctx context.Context, id string) (*entity.User, er
 		}
 		user, ok := val.(*entity.User)
 		if !ok {
-			return nil, gorm.ErrRecordNotFound
+			return nil, ormengine.DBNotFound
 		}
 		return user, err
 	} else if errors.Is(err, cachePkg.ErrPlaceholder) {
-		return nil, gorm.ErrRecordNotFound
+		return nil, ormengine.DBNotFound
 	}
 	return nil, err
 }

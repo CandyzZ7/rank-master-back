@@ -2,44 +2,40 @@ package cache
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"reflect"
 	"time"
 
-	"github.com/dgraph-io/ristretto"
+	"github.com/allegro/bigcache/v3"
 
 	"rank-master-back/infrastructure/pkg/encoding"
 )
 
-type memoryCache struct {
-	client            *ristretto.Cache
+type bigcacheCache struct {
+	client            *bigcache.BigCache
 	KeyPrefix         string
 	encoding          encoding.Encoding
 	DefaultExpireTime time.Duration
 	newObject         func() interface{}
 }
 
-// NewMemoryCache create a memory cache
-func NewMemoryCache(keyPrefix string, encoding encoding.Encoding, newObject func() interface{}) ICache {
-	// see: https://dgraph.io/blog/post/introducing-ristretto-high-perf-go-cache/
-	//		https://www.start.io/blog/we-chose-ristretto-cache-for-go-heres-why/
-	config := &ristretto.Config{
-		NumCounters: 1e7,     // number of keys to track frequency of (10M).
-		MaxCost:     1 << 30, // maximum cost of cache (1GB).
-		BufferItems: 64,      // number of keys per Get buffer.
+// NewBigcacheCache create a memory cache
+func NewBigcacheCache(ctx context.Context, keyPrefix string, encoding encoding.Encoding, newObject func() interface{}) (*bigcacheCache, error) {
+	config := bigcache.DefaultConfig(DefaultExpireTime)
+	store, err := bigcache.New(ctx, config)
+	if err != nil {
+		return nil, err
 	}
-	store, _ := ristretto.NewCache(config)
-	return &memoryCache{
+	return &bigcacheCache{
 		client:    store,
 		KeyPrefix: keyPrefix,
 		encoding:  encoding,
 		newObject: newObject,
-	}
+	}, nil
 }
 
 // Set data
-func (m *memoryCache) Set(ctx context.Context, key string, val interface{}, expiration time.Duration) error {
+func (m *bigcacheCache) Set(ctx context.Context, key string, val interface{}, expiration time.Duration) error {
 	buf, err := encoding.Marshal(m.encoding, val)
 	if err != nil {
 		return fmt.Errorf("encoding.Marshal error: %v, key=%s, val=%+v ", err, key, val)
@@ -48,40 +44,40 @@ func (m *memoryCache) Set(ctx context.Context, key string, val interface{}, expi
 	if err != nil {
 		return fmt.Errorf("BuildCacheKey error: %v, key=%s", err, key)
 	}
-	ok := m.client.SetWithTTL(cacheKey, buf, 0, expiration)
-	if !ok {
-		return errors.New("SetWithTTL failed")
+	err = m.client.Set(cacheKey, buf)
+	if err != nil {
+		return err
 	}
 
 	return nil
 }
 
 // Get data
-func (m *memoryCache) Get(ctx context.Context, key string, val interface{}) error {
+func (m *bigcacheCache) Get(ctx context.Context, key string, val interface{}) error {
 	cacheKey, err := BuildCacheKey(m.KeyPrefix, key)
 	if err != nil {
 		return fmt.Errorf("BuildCacheKey error: %v, key=%s", err, key)
 	}
 
-	data, ok := m.client.Get(cacheKey)
-	if !ok {
-		return CacheNotFound
+	data, err := m.client.Get(cacheKey)
+	if err != nil {
+		return err
 	}
 
-	if string(data.([]byte)) == NotFoundPlaceholder {
+	if string(data) == NotFoundPlaceholder {
 		return ErrPlaceholder
 	}
 
-	err = encoding.Unmarshal(m.encoding, data.([]byte), val)
+	err = encoding.Unmarshal(m.encoding, data, val)
 	if err != nil {
 		return fmt.Errorf("encoding.Unmarshal error: %v, key=%s, cacheKey=%s, type=%v, json=%+v ",
-			err, key, cacheKey, reflect.TypeOf(val), string(data.([]byte)))
+			err, key, cacheKey, reflect.TypeOf(val), string(data))
 	}
 	return nil
 }
 
 // Del delete data
-func (m *memoryCache) Del(ctx context.Context, keys ...string) error {
+func (m *bigcacheCache) Del(ctx context.Context, keys ...string) error {
 	if len(keys) == 0 {
 		return nil
 	}
@@ -91,12 +87,15 @@ func (m *memoryCache) Del(ctx context.Context, keys ...string) error {
 	if err != nil {
 		return fmt.Errorf("build cache key error, err=%v, key=%s", err, key)
 	}
-	m.client.Del(cacheKey)
+	err = m.client.Delete(cacheKey)
+	if err != nil {
+		return err
+	}
 	return nil
 }
 
 // MultiSet multiple set data
-func (m *memoryCache) MultiSet(ctx context.Context, valueMap map[string]interface{}, expiration time.Duration) error {
+func (m *bigcacheCache) MultiSet(ctx context.Context, valueMap map[string]interface{}, expiration time.Duration) error {
 	var err error
 	for key, value := range valueMap {
 		err = m.Set(ctx, key, value, expiration)
@@ -108,7 +107,7 @@ func (m *memoryCache) MultiSet(ctx context.Context, valueMap map[string]interfac
 }
 
 // MultiGet multiple get data
-func (m *memoryCache) MultiGet(ctx context.Context, keys []string, value interface{}) error {
+func (m *bigcacheCache) MultiGet(ctx context.Context, keys []string, value interface{}) error {
 	valueMap := reflect.ValueOf(value)
 	var err error
 	for _, key := range keys {
@@ -124,15 +123,15 @@ func (m *memoryCache) MultiGet(ctx context.Context, keys []string, value interfa
 }
 
 // SetCacheWithNotFound set not found
-func (m *memoryCache) SetCacheWithNotFound(ctx context.Context, key string) error {
+func (m *bigcacheCache) SetCacheWithNotFound(ctx context.Context, key string) error {
 	cacheKey, err := BuildCacheKey(m.KeyPrefix, key)
 	if err != nil {
 		return fmt.Errorf("BuildCacheKey error: %v, key=%s", err, key)
 	}
 
-	ok := m.client.SetWithTTL(cacheKey, []byte(NotFoundPlaceholder), 0, DefaultNotFoundExpireTime)
-	if !ok {
-		return errors.New("SetWithTTL failed")
+	err = m.client.Set(cacheKey, []byte(NotFoundPlaceholder))
+	if err != nil {
+		return err
 	}
 
 	return nil
