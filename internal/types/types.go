@@ -84,11 +84,11 @@ type Token struct {
 }
 
 type User struct {
-	Name              string `json:"name" validate:"required"`                  // 昵称
-	RankMasterAccount string `json:"rank_master_account" validate:"required"`   // RankMaster账号
-	Mobile            string `json:"mobile" validate:"required,len=11,numeric"` // 手机号
-	Avatar            string `json:"avatar" validate:"required"`                // 头像
-	Email             string `json:"email" validate:"required,email"`           // 邮箱
-	Code              string `json:"code" validate:"required"`                  // 邮箱验证码
-	Password          string `json:"password" validate:"required"`              // 密码
+	Name              string `json:"name" validate:"required"`                // 昵称
+	RankMasterAccount string `json:"rank_master_account" validate:"required"` // RankMaster账号
+	Mobile            string `json:"mobile" validate:"required,len=11,phone"` // 手机号
+	Avatar            string `json:"avatar" validate:"required"`              // 头像
+	Email             string `json:"email" validate:"required,email"`         // 邮箱
+	Code              string `json:"code" validate:"required"`                // 邮箱验证码
+	Password          string `json:"password" validate:"required"`            // 密码
 }
