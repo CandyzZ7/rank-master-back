@@ -40,7 +40,7 @@ func (l *LoginLogic) Login(req *types.LoginReq) (resp *types.LoginResp, err erro
 	}
 	// 检查密码是否正确
 	// 从数据库中获取用户信息
-	userEntity, err := l.svcCtx.UserDao.FindUserByRankMasterAccount(l.ctx, rankMasterAccount)
+	userEntity, err := l.svcCtx.UserDao.GetUserByRankMasterAccount(l.ctx, rankMasterAccount)
 	if err != nil {
 		return nil, err
 	}

@@ -3,6 +3,7 @@ package ormengine
 import (
 	"sync"
 
+	"github.com/pkg/errors"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
@@ -14,7 +15,7 @@ var (
 	gormEngine *gorm.DB
 	once       sync.Once
 )
-var DBNotFound = gorm.ErrRecordNotFound
+var ErrFieldNotFound = errors.New("field not found")
 
 func NewGormEngine(c config.Config) (*gorm.DB, error) {
 	var err error

@@ -28,7 +28,7 @@ func NewUserInfoLogic(ctx context.Context, svcCtx *svc.ServiceContext) *UserInfo
 
 func (l *UserInfoLogic) UserInfo() (resp *types.GetUserInfoResp, err error) {
 	userID := l.ctx.Value(constant.UserIdKey).(string)
-	userEntity, err := l.svcCtx.UserDao.FindUserByID(l.ctx, userID)
+	userEntity, err := l.svcCtx.UserDao.GetUserByID(l.ctx, userID)
 	if err != nil {
 		return nil, err
 	}
