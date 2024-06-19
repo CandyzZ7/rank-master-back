@@ -4,8 +4,8 @@ import (
 	"net/http"
 
 	{{.ImportPackages}}
+	{{if .HasRequest}}"rank-master-back/infrastructure/pkg/validator"{{end}}
 
-	{{if .HasRequest}}"github.com/go-playground/validator/v10"{{end}}
    	"github.com/zeromicro/go-zero/core/logc"
    	"github.com/zeromicro/go-zero/rest/httpx"
 )

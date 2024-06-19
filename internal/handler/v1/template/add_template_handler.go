@@ -7,7 +7,8 @@ import (
 	"rank-master-back/internal/svc"
 	"rank-master-back/internal/types"
 
-	"github.com/go-playground/validator/v10"
+	"rank-master-back/infrastructure/pkg/validator"
+
 	"github.com/zeromicro/go-zero/core/logc"
 	"github.com/zeromicro/go-zero/rest/httpx"
 )
