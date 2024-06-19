@@ -4,8 +4,8 @@ import (
 	"context"
 	"time"
 
-	"github.com/go-redis/redis/v8"
 	"github.com/pkg/errors"
+	"github.com/redis/go-redis/v9"
 	"github.com/spf13/cast"
 	"golang.org/x/sync/singleflight"
 	"gorm.io/gen/field"

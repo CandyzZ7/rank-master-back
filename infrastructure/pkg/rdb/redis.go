@@ -3,7 +3,7 @@ package rdb
 import (
 	"sync"
 
-	"github.com/go-redis/redis/v8"
+	"github.com/redis/go-redis/v9"
 
 	"rank-master-back/internal/config"
 )

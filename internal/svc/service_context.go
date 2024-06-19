@@ -2,13 +2,13 @@ package svc
 
 import (
 	"github.com/aliyun/aliyun-oss-go-sdk/oss"
+	"github.com/redis/go-redis/v9"
 
 	"rank-master-back/infrastructure/pkg/snowflake"
 	"rank-master-back/infrastructure/repository/generate/dal"
 	"rank-master-back/internal/config"
 	"rank-master-back/internal/repository"
 
-	"github.com/go-redis/redis/v8"
 	"gorm.io/gorm"
 )
 
