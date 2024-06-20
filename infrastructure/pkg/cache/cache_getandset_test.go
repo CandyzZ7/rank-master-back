@@ -23,52 +23,52 @@ var config = bigcache.Config{
 }
 
 // Benchmark for BigCache Set operation
-func BenchmarkBigCacheSet(t *testing.B) {
+func BenchmarkBigCacheSet(b *testing.B) {
 	cache, _ := bigcache.New(context.Background(), config)
-	t.ResetTimer()
-	for i := 0; i < t.N; i++ {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
 		cache.Set(strconv.Itoa(i), []byte("value"))
 	}
 }
 
 // Benchmark for BigCache Get operation
-func BenchmarkBigCacheGet(t *testing.B) {
+func BenchmarkBigCacheGet(b *testing.B) {
 	cache, _ := bigcache.New(context.Background(), config)
-	for i := 0; i < t.N; i++ {
+	for i := 0; i < b.N; i++ {
 		cache.Set(strconv.Itoa(i), []byte("value"))
 	}
-	t.ResetTimer()
-	for i := 0; i < t.N; i++ {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
 		cache.Get(strconv.Itoa(i))
 	}
 }
 
 // Benchmark for Ristretto Set operation
-func BenchmarkRistrettoSet(t *testing.B) {
+func BenchmarkRistrettoSet(b *testing.B) {
 	cache, _ := ristretto.NewCache(&ristretto.Config{
 		NumCounters: 1e7,     // number of keys to track frequency of (10M).
 		MaxCost:     1 << 30, // maximum cost of cache (1GB).
 		BufferItems: 64,      // number of keys per Get buffer.
 	})
-	t.ResetTimer()
-	for i := 0; i < t.N; i++ {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
 		cache.Set(strconv.Itoa(i), "value", 1)
 	}
 }
 
 // Benchmark for Ristretto Get operation
-func BenchmarkRistrettoGet(t *testing.B) {
+func BenchmarkRistrettoGet(b *testing.B) {
 	cache, _ := ristretto.NewCache(&ristretto.Config{
 		NumCounters: 1e7,     // number of keys to track frequency of (10M).
 		MaxCost:     1 << 30, // maximum cost of cache (1GB).
 		BufferItems: 64,      // number of keys per Get buffer.
 	})
-	for i := 0; i < t.N; i++ {
+	for i := 0; i < b.N; i++ {
 		cache.Set(strconv.Itoa(i), "value", 1)
 	}
 	cache.Wait()
-	t.ResetTimer()
-	for i := 0; i < t.N; i++ {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
 		cache.Get(strconv.Itoa(i))
 	}
 }
@@ -76,30 +76,30 @@ func BenchmarkRistrettoGet(t *testing.B) {
 // New benchmark test to compare sequential and random access patterns
 
 // Benchmark for sequential BigCache Get operation
-func BenchmarkBigCacheSequentialGet(t *testing.B) {
+func BenchmarkBigCacheSequentialGet(b *testing.B) {
 	cache, _ := bigcache.New(context.Background(), config)
-	for i := 0; i < t.N; i++ {
+	for i := 0; i < b.N; i++ {
 		cache.Set(strconv.Itoa(i), []byte("value"))
 	}
-	t.ResetTimer()
-	for i := 0; i < t.N; i++ {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
 		cache.Get(strconv.Itoa(i))
 	}
 }
 
 // Benchmark for random Ristretto Get operation
-func BenchmarkRistrettoRandomGet(t *testing.B) {
+func BenchmarkRistrettoRandomGet(b *testing.B) {
 	cache, _ := ristretto.NewCache(&ristretto.Config{
 		NumCounters: 1e7,     // number of keys to track frequency of (10M).
 		MaxCost:     1 << 30, // maximum cost of cache (1GB).
 		BufferItems: 64,      // number of keys per Get buffer.
 	})
-	for i := 0; i < t.N; i++ {
+	for i := 0; i < b.N; i++ {
 		cache.Set(strconv.Itoa(i), "value", 1)
 	}
 	cache.Wait()
-	t.ResetTimer()
-	for i := 0; i < t.N; i++ {
-		cache.Get(strconv.Itoa(i + t.N))
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		cache.Get(strconv.Itoa(i + b.N))
 	}
 }
