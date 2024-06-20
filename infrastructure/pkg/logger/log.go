@@ -25,11 +25,11 @@ var (
 type Logger struct {
 	level         logger.LogLevel
 	SlowThreshold time.Duration
-	// logger        logx.Logger
+	logger        logx.Logger
 }
 
 func NewLogger(logger logx.Logger, slowThreshold time.Duration) *Logger {
-	return &Logger{SlowThreshold: slowThreshold}
+	return &Logger{logger: logger, SlowThreshold: slowThreshold}
 }
 
 func (l *Logger) LogMode(level logger.LogLevel) logger.Interface {
@@ -40,19 +40,19 @@ func (l *Logger) LogMode(level logger.LogLevel) logger.Interface {
 func (l *Logger) Info(ctx context.Context, s string, i ...interface{}) {
 
 	if l.level == 0 || l.level >= logger.Info {
-		logx.WithContext(ctx).Infof(infoStr+s, append([]interface{}{utils.FileWithLineNum()}, i...)...)
+		l.logger.WithContext(ctx).Infof(infoStr+s, append([]interface{}{utils.FileWithLineNum()}, i...)...)
 	}
 }
 
 func (l *Logger) Warn(ctx context.Context, s string, i ...interface{}) {
 	if l.level == 0 || l.level >= logger.Warn {
-		logx.WithContext(ctx).Errorf(warnStr+s, append([]interface{}{utils.FileWithLineNum()}, i...)...)
+		l.logger.WithContext(ctx).Errorf(warnStr+s, append([]interface{}{utils.FileWithLineNum()}, i...)...)
 	}
 }
 
 func (l *Logger) Error(ctx context.Context, s string, i ...interface{}) {
 	if l.level == 0 || l.level >= logger.Error {
-		logx.WithContext(ctx).Errorf(errStr+s, append([]interface{}{utils.FileWithLineNum()}, i...)...)
+		l.logger.WithContext(ctx).Errorf(errStr+s, append([]interface{}{utils.FileWithLineNum()}, i...)...)
 	}
 }
 
@@ -70,9 +70,9 @@ func (l *Logger) Trace(ctx context.Context, begin time.Time, fc func() (sql stri
 		sql, rows := fc()
 		slowLog := fmt.Sprintf("SLOW SQL >= %v", l.SlowThreshold)
 		if rows == -1 {
-			logx.Slowf(traceWarnStr, utils.FileWithLineNum(), slowLog, float64(elapsed.Nanoseconds())/1e6, "-", sql)
+			l.logger.Slowf(traceWarnStr, utils.FileWithLineNum(), slowLog, float64(elapsed.Nanoseconds())/1e6, "-", sql)
 		} else {
-			logx.Slowf(traceWarnStr, utils.FileWithLineNum(), slowLog, float64(elapsed.Nanoseconds())/1e6, rows, sql)
+			l.logger.Slowf(traceWarnStr, utils.FileWithLineNum(), slowLog, float64(elapsed.Nanoseconds())/1e6, rows, sql)
 		}
 	default:
 		sql, rows := fc()
