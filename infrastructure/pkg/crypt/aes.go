@@ -1,6 +1,7 @@
-package encrypt
+package crypt
 
 import (
+	"bytes"
 	"encoding/base64"
 
 	"github.com/zeromicro/go-zero/core/codec"
@@ -40,4 +41,20 @@ func DecryptASEBase64ByECB(key, encrypt string) (string, error) {
 		return "", err
 	}
 	return data, nil
+}
+
+func pkcs5Padding(ciphertext []byte, blockSize int) []byte {
+	padding := blockSize - len(ciphertext)%blockSize
+	padtext := bytes.Repeat([]byte{byte(padding)}, padding)
+	return append(ciphertext, padtext...)
+}
+
+func pkcs5Unpadding(src []byte, blockSize int) ([]byte, error) {
+	length := len(src)
+	unpadding := int(src[length-1])
+	if unpadding >= length || unpadding > blockSize {
+		return nil, codec.ErrPaddingSize
+	}
+
+	return src[:length-unpadding], nil
 }

@@ -7,7 +7,6 @@ import (
 	"github.com/zeromicro/go-zero/core/logx"
 
 	"rank-master-back/infrastructure/e"
-	"rank-master-back/infrastructure/pkg/encrypt"
 	"rank-master-back/infrastructure/pkg/jwt"
 	"rank-master-back/infrastructure/pkg/snowflake"
 	"rank-master-back/infrastructure/pkg/uploadfile/local"
@@ -54,14 +53,14 @@ func (l *RegisterLogic) Register(req *types.RegisterReq) (resp *types.RegisterRe
 	}
 	// 密码加密
 	// 生成随机盐
-	cryptSalt, err := encrypt.RandomString(encrypt.RandomNumberLen)
+	cryptSalt, err := crypt.RandomString(crypt.RandomNumberLen)
 	if err != nil {
 		return nil, err
 	}
 	// 加密密码
-	encPassword := encrypt.EncryptMD5(req.User.Password + cryptSalt)
+	encPassword := crypt.EncryptMD5(req.User.Password + cryptSalt)
 	// 加密手机号
-	mobile := encrypt.EncryptMD5(req.User.Mobile + cryptSalt)
+	mobile := crypt.EncryptMD5(req.User.Mobile + cryptSalt)
 
 	userEntity := &entity.User{
 		ID:                snowflake.GenerateDefaultSnowflakeID(),
