@@ -33,6 +33,7 @@ type Redis struct {
 	Password string
 	DB       int
 }
+
 type UploadFile struct {
 	AliYunOss AliYunOss
 	Path      string
