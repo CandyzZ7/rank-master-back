@@ -61,5 +61,12 @@ func main() {
 	httpx.SetErrorHandlerCtx(response.ErrHandlerCtx)
 	// 自定义返回成功方法
 	// httpx.SetOkHandler(response.OKHandler)
-	server.Start()
+	serviceGroup := service.NewServiceGroup()
+	defer serviceGroup.Stop()
+
+	for _, mq := range mqs.Consumers(c, ctx, svcCtx) {
+		serviceGroup.Add(mq)
+	}
+
+	serviceGroup.Start()
 }
