@@ -137,3 +137,38 @@ func (m *ristrettoCache) SetCacheWithNotFound(ctx context.Context, key string) e
 
 	return nil
 }
+
+// LPush
+func (m *ristrettoCache) LPush(ctx context.Context, key string, val interface{}, expiration time.Duration) error {
+	cacheKey, err := BuildCacheKey(m.KeyPrefix, key)
+	if err != nil {
+		return fmt.Errorf("BuildCacheKey error: %v, key=%s", err, key)
+	}
+
+	data, ok := m.client.Get(cacheKey)
+	if !ok {
+		return CacheNotFound
+	}
+
+	if string(data.([]byte)) == NotFoundPlaceholder {
+		return ErrPlaceholder
+	}
+	var list []interface{}
+	err = encoding.Unmarshal(m.encoding, data.([]byte), val)
+	if err != nil {
+		return fmt.Errorf("encoding.Unmarshal error: %v, key=%s, cacheKey=%s, type=%v, json=%+v ",
+			err, key, cacheKey, reflect.TypeOf(val), string(data.([]byte)))
+	}
+	vals := []interface{}{val}
+	// 将新值添加到列表的前面
+	vals = append(vals, list...)
+	buf, err := encoding.Marshal(m.encoding, vals)
+	if err != nil {
+		return err
+	}
+	ok = m.client.SetWithTTL(cacheKey, buf, 0, expiration)
+	if !ok {
+		return errors.New("SetWithTTL failed")
+	}
+	return nil
+}

@@ -39,6 +39,7 @@ type ICache interface {
 	MultiGet(ctx context.Context, keys []string, valueMap interface{}) error
 	Del(ctx context.Context, keys ...string) error
 	SetCacheWithNotFound(ctx context.Context, key string) error
+	LPush(ctx context.Context, key string, val interface{}, expiration time.Duration) error
 }
 
 // Set data
@@ -69,4 +70,8 @@ func Del(ctx context.Context, keys ...string) error {
 // SetCacheWithNotFound .
 func SetCacheWithNotFound(ctx context.Context, key string) error {
 	return DefaultClient.SetCacheWithNotFound(ctx, key)
+}
+
+func LPush(ctx context.Context, key string, val interface{}, expiration time.Duration) error {
+	return DefaultClient.LPush(ctx, key, val, expiration)
 }

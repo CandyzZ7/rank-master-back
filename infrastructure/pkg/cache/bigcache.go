@@ -136,3 +136,38 @@ func (m *bigcacheCache) SetCacheWithNotFound(ctx context.Context, key string) er
 
 	return nil
 }
+
+// LPush
+func (m *bigcacheCache) LPush(ctx context.Context, key string, val interface{}, expiration time.Duration) error {
+	cacheKey, err := BuildCacheKey(m.KeyPrefix, key)
+	if err != nil {
+		return fmt.Errorf("BuildCacheKey error: %v, key=%s", err, key)
+	}
+
+	data, err := m.client.Get(cacheKey)
+	if err != nil {
+		return err
+	}
+
+	if string(data) == NotFoundPlaceholder {
+		return ErrPlaceholder
+	}
+	var list []interface{}
+	err = encoding.Unmarshal(m.encoding, data, &list)
+	if err != nil {
+		return fmt.Errorf("encoding.Unmarshal error: %v, key=%s, cacheKey=%s, type=%v, json=%+v ",
+			err, key, cacheKey, reflect.TypeOf(val), string(data))
+	}
+	vals := []interface{}{val}
+	// 将新值添加到列表的前面
+	vals = append(vals, list...)
+	buf, err := encoding.Marshal(m.encoding, vals)
+	if err != nil {
+		return err
+	}
+	err = m.client.Set(cacheKey, buf)
+	if err != nil {
+		return err
+	}
+	return nil
+}

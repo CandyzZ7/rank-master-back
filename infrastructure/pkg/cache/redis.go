@@ -195,6 +195,28 @@ func (c *redisCache) SetCacheWithNotFound(ctx context.Context, key string) error
 	return c.client.Set(ctx, cacheKey, NotFoundPlaceholder, DefaultNotFoundExpireTime).Err()
 }
 
+// LPush
+func (c *redisCache) LPush(ctx context.Context, key string, val interface{}, expiration time.Duration) error {
+	buf, err := encoding.Marshal(c.encoding, val)
+	if err != nil {
+		return fmt.Errorf("encoding.Marshal error: %v, key=%s, val=%+v ", err, key, val)
+	}
+
+	cacheKey, err := BuildCacheKey(c.KeyPrefix, key)
+	if err != nil {
+		return fmt.Errorf("BuildCacheKey error: %v, key=%s", err, key)
+	}
+	err = c.client.LPush(ctx, cacheKey, buf).Err()
+	if err != nil {
+		return fmt.Errorf("c.client.Set error: %v, cacheKey=%s", err, cacheKey)
+	}
+	err = c.client.Expire(ctx, cacheKey, expiration).Err()
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 // BuildCacheKey construct a cache key with a prefix
 func BuildCacheKey(keyPrefix string, key string) (string, error) {
 	if key == "" {
