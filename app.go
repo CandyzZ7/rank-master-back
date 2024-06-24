@@ -18,6 +18,7 @@ import (
 	"rank-master-back/infrastructure/pkg/response"
 	"rank-master-back/internal/config"
 	"rank-master-back/internal/handler"
+	"rank-master-back/internal/mqs"
 	"rank-master-back/internal/svc"
 )
 
@@ -46,15 +47,15 @@ func main() {
 		})
 		fmt.Println("doc: http://localhost:8888/api/doc")
 	}
-
-	ctx, err := InitializeServiceContext(c)
+	ctx := context.Background()
+	svcCtx, err := InitializeServiceContext(c)
 	if err != nil {
 		logc.Error(context.Background(), errors.Cause(err))
 	}
 	// 初始化
-	svc.Init(ctx)
+	svc.Init(svcCtx)
 	// 注册路由
-	handler.RegisterHandlers(server, ctx)
+	handler.RegisterHandlers(server, svcCtx)
 
 	fmt.Printf("Starting server at %s:%d...\n", c.Host, c.Port)
 	// 自定义错误处理方法
