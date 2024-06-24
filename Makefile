@@ -24,5 +24,4 @@ exe:
 # Run the executable file
 run:
 	make gen
-	go mod tidy
 	go run app.go wire_gen.go
