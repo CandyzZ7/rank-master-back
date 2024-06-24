@@ -3,7 +3,9 @@ package svc
 import (
 	"github.com/aliyun/aliyun-oss-go-sdk/oss"
 	"github.com/redis/go-redis/v9"
+	"github.com/zeromicro/go-queue/kq"
 
+	"rank-master-back/infrastructure/pkg/es"
 	"rank-master-back/infrastructure/pkg/snowflake"
 	"rank-master-back/infrastructure/repository/generate/dal"
 	"rank-master-back/internal/config"
@@ -13,12 +15,14 @@ import (
 )
 
 type ServiceContext struct {
-	Config      config.Config
-	DB          *gorm.DB
-	RDB         *redis.Client
-	Oss         *oss.Client
-	TemplateDao repository.ITemplate
-	UserDao     repository.IUser
+	Config         config.Config
+	DB             *gorm.DB
+	RDB            *redis.Client
+	KqPusherClient *kq.Pusher
+	Es             *es.Es
+	Oss            *oss.Client
+	TemplateDao    repository.ITemplate
+	UserDao        repository.IUser
 }
 
 func Init(ctx *ServiceContext) {

@@ -7,6 +7,7 @@ import (
 	"github.com/zeromicro/go-zero/core/logx"
 
 	"rank-master-back/infrastructure/e"
+	"rank-master-back/infrastructure/pkg/crypt"
 	"rank-master-back/infrastructure/pkg/jwt"
 	"rank-master-back/internal/svc"
 	"rank-master-back/internal/types"

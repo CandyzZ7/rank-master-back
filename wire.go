@@ -7,6 +7,8 @@ package main
 import (
 	"github.com/google/wire"
 
+	"rank-master-back/infrastructure/pkg/es"
+	"rank-master-back/infrastructure/pkg/mq"
 	"rank-master-back/infrastructure/pkg/ormengine"
 	"rank-master-back/infrastructure/pkg/rdb"
 	"rank-master-back/infrastructure/pkg/uploadfile/oss"
@@ -22,6 +24,8 @@ func InitializeServiceContext(c config.Config) (*svc.ServiceContext, error) {
 		ormengine.NewGormEngine,
 		rdb.NewRdbClient,
 		oss.NewOssClient,
+		mq.NewPusher,
+		es.NewEs,
 		RepositorySet,
 		CacheSet,
 	))

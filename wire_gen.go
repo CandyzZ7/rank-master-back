@@ -8,6 +8,7 @@ package main
 
 import (
 	"github.com/google/wire"
+	"rank-master-back/infrastructure/pkg/mq"
 	"rank-master-back/infrastructure/pkg/ormengine"
 	"rank-master-back/infrastructure/pkg/rdb"
 	"rank-master-back/infrastructure/pkg/uploadfile/oss"
@@ -29,6 +30,7 @@ func InitializeServiceContext(c config.Config) (*svc.ServiceContext, error) {
 		return nil, err
 	}
 	client := rdb.NewRdbClient(c)
+	pusher := mq.NewPusher(c)
 	ossClient, err := oss.NewOssClient(c)
 	if err != nil {
 		return nil, err
@@ -37,12 +39,13 @@ func InitializeServiceContext(c config.Config) (*svc.ServiceContext, error) {
 	iUserCache := cache.NewUserCache(c)
 	iUser := repository.NewUserDao(iUserCache)
 	serviceContext := &svc.ServiceContext{
-		Config:      c,
-		DB:          db,
-		RDB:         client,
-		Oss:         ossClient,
-		TemplateDao: iTemplate,
-		UserDao:     iUser,
+		Config:         c,
+		DB:             db,
+		RDB:            client,
+		KqPusherClient: pusher,
+		Oss:            ossClient,
+		TemplateDao:    iTemplate,
+		UserDao:        iUser,
 	}
 	return serviceContext, nil
 }

@@ -23,6 +23,27 @@ Log:
 Email:
   AuthorizationPassword: "QPKTINKYCZORKVOH"
 
+KqPusherConf:
+  Brokers:
+    - 127.0.0.1:9092
+  Topic: topic-beyond-like
+
+KqConsumerConf:
+  Name: article-kq-consumer
+  Brokers:
+    - 127.0.1:9092
+  Group: group-like-count
+  Topic: topic-like-count
+  Offset: last
+  Consumers: 1
+  Processors: 1
+
+Es:
+  Addresses:
+    - http://localhost:9200/
+  Username: elastic
+  Password: HLmVfh-0Pr*YX5x4JSFl
+  MaxRetries: 0
 Redis:
   Address: "127.0.0.1:6379"
   Password: "123456"
