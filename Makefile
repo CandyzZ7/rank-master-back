@@ -20,6 +20,10 @@ gen:
 exe:
 	make gen
 	go build app.go wire_gen.go
+.PHONY: docker
+# Run the executable file
+docker:
+	goctl docker --go app.go --exe rank-master-back
 .PHONY: run
 # Run the executable file
 run:
