@@ -23,3 +23,16 @@ func FilterSlice[T comparable](slice []T) []T {
 	}
 	return filteredSlice
 }
+
+func FilterSlice2[T comparable](slice []T) []T {
+	filteredMap := make(map[T]struct{}, len(slice))
+	for _, v := range slice {
+		filteredMap[v] = struct{}{}
+	}
+
+	filteredSlice := make([]T, len(filteredMap))
+	for v := range filteredMap {
+		filteredSlice = append(filteredSlice, v)
+	}
+	return filteredSlice
+}
