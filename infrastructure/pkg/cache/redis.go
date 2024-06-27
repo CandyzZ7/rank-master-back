@@ -13,8 +13,14 @@ import (
 	"rank-master-back/infrastructure/pkg/encoding"
 )
 
-// CacheNotFound no hit cache
-var CacheNotFound = redis.Nil
+// RedisNotFound no hit cache
+const RedisNotFound = redis.Nil
+
+const (
+	Hour  = 3600
+	Day   = 86400
+	Mouth = 2592000
+)
 
 // redisCache redis cache object
 type redisCache struct {

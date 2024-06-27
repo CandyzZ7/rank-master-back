@@ -12,6 +12,8 @@ import (
 	"rank-master-back/infrastructure/pkg/encoding"
 )
 
+var RistrettoCacheNotFound = errors.New("ristretto: key not found")
+
 type ristrettoCache struct {
 	client            *ristretto.Cache
 	KeyPrefix         string
@@ -65,7 +67,7 @@ func (m *ristrettoCache) Get(ctx context.Context, key string, val interface{}) e
 
 	data, ok := m.client.Get(cacheKey)
 	if !ok {
-		return CacheNotFound
+		return RistrettoCacheNotFound
 	}
 
 	if string(data.([]byte)) == NotFoundPlaceholder {
@@ -147,7 +149,7 @@ func (m *ristrettoCache) LPush(ctx context.Context, key string, val interface{},
 
 	data, ok := m.client.Get(cacheKey)
 	if !ok {
-		return CacheNotFound
+		return RistrettoCacheNotFound
 	}
 
 	if string(data.([]byte)) == NotFoundPlaceholder {
