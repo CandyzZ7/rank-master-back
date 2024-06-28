@@ -10,6 +10,7 @@ import (
 	"golang.org/x/sync/singleflight"
 	"gorm.io/gen/field"
 	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 
 	cachePkg "rank-master-back/infrastructure/pkg/cache"
 	"rank-master-back/infrastructure/pkg/ormengine"
@@ -39,6 +40,8 @@ func NewUserDao(cache cache.IUserCache) IUser {
 type IUser interface {
 	Create(ctx context.Context, template *entity.User) error
 	GetUserByID(ctx context.Context, id string) (*entity.User, error)
+	GetUserByIDLock(ctx context.Context, id string) (*entity.User, error)
+	GetUserByIDWithCache(ctx context.Context, id string) (*entity.User, error)
 	GetUserByIDWithField(ctx context.Context, id string, fieldList []string) (*entity.User, error)
 	FindUserByIDList(ctx context.Context, ids []string) ([]*entity.User, error)
 	FindLockWithRankMasterAccountExist(ctx context.Context, rankMasterAccount string) (int64, error)
@@ -49,6 +52,26 @@ type IUser interface {
 }
 
 func (d *UserDao) GetUserByID(ctx context.Context, id string) (*entity.User, error) {
+	return d.Query.User.WithContext(ctx).Where(dal.User.ID.Eq(id)).First()
+}
+
+func (d *UserDao) GetUserByIDLock(ctx context.Context, id string) (*entity.User, error) {
+	var user *entity.User
+	var err error
+	err = d.Query.Transaction(func(tx *dal.Query) error {
+		user, err = tx.User.Clauses(clause.Locking{Strength: "UPDATE"}).WithContext(ctx).Where(dal.User.ID.Eq(id)).First()
+		if err != nil {
+			return err
+		}
+		return nil
+	})
+	if err != nil {
+		return nil, err
+	}
+	return user, err
+}
+
+func (d *UserDao) GetUserByIDWithCache(ctx context.Context, id string) (*entity.User, error) {
 	record, err := d.cache.Get(ctx, id)
 	if err == nil {
 		return record, nil
