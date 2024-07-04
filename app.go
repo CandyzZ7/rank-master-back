@@ -58,6 +58,7 @@ func main() {
 	handler.RegisterHandlers(server, svcCtx)
 
 	fmt.Printf("Starting server at %s:%d...\n", c.Host, c.Port)
+	server.Start()
 	// 自定义错误处理方法
 	httpx.SetErrorHandlerCtx(response.ErrHandlerCtx)
 	// 自定义返回成功方法
