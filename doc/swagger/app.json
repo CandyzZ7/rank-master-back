@@ -16,6 +16,23 @@
     "application/json"
   ],
   "paths": {
+    "/kafka": {
+      "get": {
+        "summary": "kafka",
+        "operationId": "Kafka",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/KafkaResp"
+            }
+          }
+        },
+        "tags": [
+          "v1/test"
+        ]
+      }
+    },
     "/ping": {
       "get": {
         "summary": "ping",
@@ -320,6 +337,10 @@
       "required": [
         "user"
       ]
+    },
+    "KafkaResp": {
+      "type": "object",
+      "title": "KafkaResp"
     },
     "LoginReq": {
       "type": "object",

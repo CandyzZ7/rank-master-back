@@ -39,6 +39,9 @@ type GetUserInfoResp struct {
 	User User `json:"user"`
 }
 
+type KafkaResp struct {
+}
+
 type LoginReq struct {
 	RankMasterAccount string `json:"rank_master_account" validate:"required"` // RankMaster账号
 	Password          string `json:"password" validate:"required"`            // 密码

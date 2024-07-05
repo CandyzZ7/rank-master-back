@@ -2,6 +2,7 @@ Name: app
 Host: 0.0.0.0
 Port: 8888
 WorkerId: 1
+Mode: test
 
 Auth:
   AccessSecret: candy_secret
@@ -10,12 +11,12 @@ Auth:
   RefreshExpire: 2592000
   RefreshAfter: 604800
 
-DataSource: root:123456@tcp(172.21.203.129:3306)/rank_master?charset=utf8mb4&parseTime=True&loc=Local
+DataSource: root:123456@tcp(127.0.0.1:3306)/rank_master?charset=utf8mb4&parseTime=True&loc=Local
 
 Log:
   ServiceName: "rank-master"
-  Mode: "file"
-  Encoding: "json"
+  Mode: "console"
+  Encoding: "plain"
   Path: "logs"
   Level: "debug"
 
@@ -24,18 +25,24 @@ Email:
 
 KqPusherConf:
   Brokers:
-    - 127.0.0.1:9092
-  Topic: topic-beyond-like
+    - 123.60.171.43:9095
+    - 123.60.91.186:9095
+    - 123.60.156.103:9095
+  Topic: payment-success
 
 KqConsumerConf:
-  Name: article-kq-consumer
+  Name: kqConsumer
   Brokers:
-    - 127.0.1:9092
-  Group: group-like-count
-  Topic: topic-like-count
+    - 123.60.171.43:9095
+    - 123.60.91.186:9095
+    - 123.60.156.103:9095
+  Group: kqConsumer
+  Topic: payment-success
   Offset: last
-  Consumers: 1
-  Processors: 1
+  Consumers: 8
+  Processors: 8
+  Username: kafkatest
+  Password: dZX61diTKwQHeBL
 
 Es:
   Addresses:
@@ -43,9 +50,8 @@ Es:
   Username: elastic
   Password: HLmVfh-0Pr*YX5x4JSFl
   MaxRetries: 0
-
 Redis:
-  Address: "172.28.176.1:6379"
+  Address: "127.0.0.1:6379"
   Password: "123456"
   DB: 0
 

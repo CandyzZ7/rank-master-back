@@ -28,6 +28,12 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 	server.AddRoutes(
 		[]rest.Route{
 			{
+				// kafka
+				Method:  http.MethodGet,
+				Path:    "/kafka",
+				Handler: v1test.KafkaHandler(serverCtx),
+			},
+			{
 				// ping
 				Method:  http.MethodGet,
 				Path:    "/ping",
