@@ -11,6 +11,7 @@ import (
 	"github.com/zeromicro/go-zero/core/conf"
 	"github.com/zeromicro/go-zero/core/logc"
 	"github.com/zeromicro/go-zero/core/service"
+	"github.com/zeromicro/go-zero/core/threading"
 	"github.com/zeromicro/go-zero/rest"
 	"github.com/zeromicro/go-zero/rest/httpx"
 
@@ -58,7 +59,7 @@ func main() {
 	handler.RegisterHandlers(server, svcCtx)
 
 	fmt.Printf("Starting server at %s:%d...\n", c.Host, c.Port)
-	server.Start()
+	threading.GoSafe(func() { server.Start() })
 	// 自定义错误处理方法
 	httpx.SetErrorHandlerCtx(response.ErrHandlerCtx)
 	// 自定义返回成功方法

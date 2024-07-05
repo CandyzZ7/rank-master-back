@@ -29,8 +29,6 @@ KqPusherConf:
     - 127.0.0.1:29092
     - 127.0.0.1:39092
   Topic: payment-success
-  Username: kafkatest
-  Password: dZX61diTKwQHeBL
 
 KqConsumerConf:
   Name: kqConsumer
@@ -40,11 +38,9 @@ KqConsumerConf:
     - 127.0.0.1:39092
   Group: kqConsumer
   Topic: payment-success
-  Offset: first
+  Offset: last
   Consumers: 8
   Processors: 8
-  Username: kafkatest
-  Password: dZX61diTKwQHeBL
 
 Es:
   Addresses:
