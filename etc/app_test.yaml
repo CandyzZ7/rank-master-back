@@ -18,7 +18,7 @@ Log:
   Mode: "console"
   Encoding: "plain"
   Path: "logs"
-  Level: "debug"
+  Level: "info"
 
 Email:
   AuthorizationPassword: "QPKTINKYCZORKVOH"
@@ -60,3 +60,23 @@ UploadFile:
     AccessKeySecret: candy
     BucketName: candy
   Path: "./upload_file/"
+
+NacosConfig:
+  DataId: app.yaml
+  Group: dev
+  ServerConfigs:
+    - IpAddr: 127.0.0.1
+      Port: 8848
+  ClientConfig:
+    NamespaceId:
+    TimeoutMs: 5000
+    NotLoadCacheAtStart: true
+    LogDir: logs
+    RotateTime: 1h
+    MaxAge: 3
+    LogLevel: error
+    Username: nacos
+    Password: nacos
+    AppendToStdout: false
+
+

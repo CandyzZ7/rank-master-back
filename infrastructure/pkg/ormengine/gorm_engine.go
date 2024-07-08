@@ -7,7 +7,7 @@ import (
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 
-	"rank-master-back/infrastructure/pkg/logger"
+	"rank-master-back/infrastructure/pkg/xlogger"
 	"rank-master-back/internal/config"
 )
 
@@ -21,7 +21,7 @@ func NewGormEngine(c config.Config) (*gorm.DB, error) {
 	var err error
 	once.Do(func() {
 		gormEngine, err = gorm.Open(mysql.Open(c.DataSource), &gorm.Config{
-			Logger: logger.Default, // 调整日志级别，根据需要修改
+			Logger: xlogger.DefaultGormLogger, // 调整日志级别，根据需要修改
 		})
 		if err != nil {
 			return

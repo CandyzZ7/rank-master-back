@@ -18,7 +18,7 @@ import (
 	"rank-master-back/internal/svc"
 )
 
-func InitializeServiceContext(c config.Config) (*svc.ServiceContext, error) {
+func InitializeServiceContext(c config.Config) (svc.ServiceContext, error) {
 	panic(wire.Build(
 		wire.Struct(new(svc.ServiceContext), "*"),
 		ormengine.NewGormEngine,

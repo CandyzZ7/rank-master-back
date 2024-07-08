@@ -8,6 +8,7 @@ package main
 
 import (
 	"github.com/google/wire"
+	"rank-master-back/infrastructure/pkg/es"
 	"rank-master-back/infrastructure/pkg/mq"
 	"rank-master-back/infrastructure/pkg/ormengine"
 	"rank-master-back/infrastructure/pkg/rdb"
@@ -24,25 +25,30 @@ import (
 
 // Injectors from wire.go:
 
-func InitializeServiceContext(c config.Config) (*svc.ServiceContext, error) {
+func InitializeServiceContext(c config.Config) (svc.ServiceContext, error) {
 	db, err := ormengine.NewGormEngine(c)
 	if err != nil {
-		return nil, err
+		return svc.ServiceContext{}, err
 	}
 	client := rdb.NewRdbClient(c)
 	pusher := mq.NewPusher(c)
+	esEs, err := es.NewEs(c)
+	if err != nil {
+		return svc.ServiceContext{}, err
+	}
 	ossClient, err := oss.NewOssClient(c)
 	if err != nil {
-		return nil, err
+		return svc.ServiceContext{}, err
 	}
 	iTemplate := repository.NewTemplateDao()
 	iUserCache := cache.NewUserCache(c)
 	iUser := repository.NewUserDao(iUserCache)
-	serviceContext := &svc.ServiceContext{
+	serviceContext := svc.ServiceContext{
 		Config:         c,
 		DB:             db,
 		RDB:            client,
 		KqPusherClient: pusher,
+		Es:             esEs,
 		Oss:            ossClient,
 		TemplateDao:    iTemplate,
 		UserDao:        iUser,

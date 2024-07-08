@@ -65,7 +65,7 @@ func (t *esTransport) RoundTrip(req *http.Request) (resp *http.Response, err err
 	return
 }
 
-func NewEs(c *config.Config) (*Es, error) {
+func NewEs(c config.Config) (*Es, error) {
 	conf := es8.Config{
 		Addresses:  c.Es.Addresses,
 		Username:   c.Es.Username,
