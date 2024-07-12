@@ -41,6 +41,9 @@ KqConsumerConf:
   Offset: last
   Consumers: 8
   Processors: 8
+  Username: kafkatest
+  Password: dZX61diTKwQHeBL
+
 
 Es:
   Addresses:
