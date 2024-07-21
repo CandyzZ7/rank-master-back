@@ -186,6 +186,7 @@ type IUserDo interface {
 	schema.Tabler
 
 	FindLockWithRankMasterAccountExist(rankMasterAccount string) (result int64, err error)
+	UpdateBatchUser(idList []string, userList []*entity.User) (result int64, err error)
 }
 
 // FindLockWithRankMasterAccountExist SELECT EXISTS(SELECT * FROM @@table WHERE rank_master_account = @rankMasterAccount FOR UPDATE)
@@ -195,6 +196,45 @@ func (u userDo) FindLockWithRankMasterAccountExist(rankMasterAccount string) (re
 	var generateSQL strings.Builder
 	params = append(params, rankMasterAccount)
 	generateSQL.WriteString("SELECT EXISTS(SELECT * FROM user WHERE rank_master_account = ? FOR UPDATE) ")
+
+	var executeSQL *gorm.DB
+	executeSQL = u.UnderlyingDB().Raw(generateSQL.String(), params...).Take(&result) // ignore_security_alert
+	err = executeSQL.Error
+
+	return
+}
+
+// UpdateBatchUser
+// UPDATE @@table SET
+// name = CASE id
+// {{for _, user1 := range userList}}
+// WHEN @user1.ID THEN @user1.Name
+// {{end}}
+// END,
+// mobile = CASE id
+// {{for _, user2 := range userList}}
+// WHEN @user2.ID THEN @user2.Mobile
+// {{end}}
+// END
+// WHERE id IN @idList
+func (u userDo) UpdateBatchUser(idList []string, userList []*entity.User) (result int64, err error) {
+	var params []interface{}
+
+	var generateSQL strings.Builder
+	generateSQL.WriteString("UPDATE user SET name = CASE id ")
+	for _, user1 := range userList {
+		params = append(params, user1.ID)
+		params = append(params, user1.Name)
+		generateSQL.WriteString("WHEN ? THEN ? ")
+	}
+	generateSQL.WriteString("END, mobile = CASE id ")
+	for _, user2 := range userList {
+		params = append(params, user2.ID)
+		params = append(params, user2.Mobile)
+		generateSQL.WriteString("WHEN ? THEN ? ")
+	}
+	params = append(params, idList)
+	generateSQL.WriteString("END WHERE id IN ? ")
 
 	var executeSQL *gorm.DB
 	executeSQL = u.UnderlyingDB().Raw(generateSQL.String(), params...).Take(&result) // ignore_security_alert
