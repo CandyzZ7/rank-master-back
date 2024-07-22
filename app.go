@@ -31,28 +31,8 @@ var configFile = flag.String("f", "etc/app.yaml", "the config file")
 func main() {
 	flag.Parse()
 
-	var bootstrapConfig config.BootstrapConfig
-	conf.MustLoad(*configFile, &bootstrapConfig)
 	var c config.Config
-	var svcCtx svc.ServiceContext
-	nacosConfig := bootstrapConfig.NacosConfig
-	serviceConfigContent := nacosConfig.InitConfig(func(data string) {
-		err := conf.LoadFromYamlBytes([]byte(data), &c)
-		if err != nil {
-			panic(err)
-		}
-		svcCtx, err = InitializeServiceContext(c)
-		if err != nil {
-			logc.Error(context.Background(), errors.Cause(err))
-		}
-	})
-	err := conf.LoadFromYamlBytes([]byte(serviceConfigContent), &c)
-	if err != nil {
-		panic(err)
-	}
-
-	// 注册到nacos
-	nacosConfig.Discovery(c)
+	conf.MustLoad(*configFile, &c)
 
 	server := rest.MustNewServer(c.RestConf, rest.WithCors(), rest.WithNotFoundHandler(middleware.Notfound()))
 	defer server.Stop()
@@ -69,7 +49,7 @@ func main() {
 		fmt.Println("doc: http://localhost:8888/api/doc")
 	}
 	ctx := context.Background()
-	svcCtx, err = InitializeServiceContext(c)
+	svcCtx, err := InitializeServiceContext(c)
 	if err != nil {
 		logc.Error(context.Background(), errors.Cause(err))
 	}
