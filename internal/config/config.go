@@ -1,6 +1,8 @@
 package config
 
 import (
+	"time"
+
 	"github.com/zeromicro/go-queue/kq"
 	"github.com/zeromicro/go-zero/core/logx"
 	"github.com/zeromicro/go-zero/rest"
@@ -9,7 +11,7 @@ import (
 type Config struct {
 	rest.RestConf
 	Auth           Auth
-	DataSource     string
+	Mysql          Mysql
 	LogConf        logx.LogConf
 	Email          Email
 	Redis          Redis
@@ -62,4 +64,12 @@ type AliYunOss struct {
 	BucketName       string
 	ConnectTimeout   int64 `json:",optional"`
 	ReadWriteTimeout int64 `json:",optional"`
+}
+
+type Mysql struct {
+	DataSource    string
+	MaxOpenConns  int
+	MaxIdleConns  int
+	MaxLifetime   int
+	SlowThreshold time.Duration
 }
