@@ -5,6 +5,7 @@ import (
 
 	"github.com/zeromicro/go-queue/kq"
 	"github.com/zeromicro/go-zero/core/logx"
+	"github.com/zeromicro/go-zero/core/stores/redis"
 	"github.com/zeromicro/go-zero/rest"
 )
 
@@ -14,7 +15,7 @@ type Config struct {
 	Mysql          Mysql
 	LogConf        logx.LogConf
 	Email          Email
-	Redis          Redis
+	Redis          redis.RedisConf
 	UploadFile     UploadFile
 	WorkerId       int64
 	KqPusherConf   KqPusherConf
@@ -44,12 +45,6 @@ type Auth struct {
 
 type Email struct {
 	AuthorizationPassword string
-}
-
-type Redis struct {
-	Address  string
-	Password string
-	DB       int
 }
 
 type UploadFile struct {

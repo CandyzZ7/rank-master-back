@@ -3,6 +3,8 @@ Host: 0.0.0.0
 Port: 8888
 WorkerId: 1
 Mode: test
+Telemetry:
+  Endpoint: http://127.0.0.1:14268/api/traces
 
 Auth:
   AccessSecret: candy_secret
@@ -44,7 +46,6 @@ KqConsumerConf:
   Username: kafkatest
   Password: dZX61diTKwQHeBL
 
-
 Es:
   Addresses:
     - http://localhost:9200/
@@ -52,9 +53,8 @@ Es:
   Password: HLmVfh-0Pr*YX5x4JSFl
   MaxRetries: 0
 Redis:
-  Address: "127.0.0.1:6379"
-  Password: "123456"
-  DB: 0
+  Host: "127.0.0.1:6379"
+  Pass: "123456"
 
 UploadFile:
   AliYunOss:
@@ -63,23 +63,3 @@ UploadFile:
     AccessKeySecret: candy
     BucketName: candy
   Path: "./upload_file/"
-
-NacosConfig:
-  DataId: app.yaml
-  Group: dev
-  ServerConfigs:
-    - IpAddr: 127.0.0.1
-      Port: 8848
-  ClientConfig:
-    NamespaceId:
-    TimeoutMs: 5000
-    NotLoadCacheAtStart: true
-    LogDir: logs
-    RotateTime: 1h
-    MaxAge: 3
-    LogLevel: error
-    Username: nacos
-    Password: nacos
-    AppendToStdout: false
-
-

@@ -4,12 +4,11 @@ import (
 	"context"
 	"time"
 
-	"github.com/redis/go-redis/v9"
 	"github.com/spf13/cast"
+	"github.com/zeromicro/go-zero/core/stores/redis"
 
 	"rank-master-back/infrastructure/pkg/cache"
 	"rank-master-back/infrastructure/pkg/encoding"
-	"rank-master-back/infrastructure/pkg/rdb"
 	"rank-master-back/internal/config"
 	"rank-master-back/internal/model/entity"
 )
@@ -20,13 +19,13 @@ const (
 )
 
 type UserCache struct {
-	RDB   *redis.Client
+	RDB   *redis.Redis
 	cache cache.ICache
 }
 
 func NewUserCache(config config.Config) IUserCache {
 	jsonEncoding := encoding.JSONEncoding{}
-	rdbClient := rdb.NewRdbClient(config)
+	rdbClient := redis.MustNewRedis(config.Redis)
 	c := cache.NewRedisCache(rdbClient, PrefixUserCacheKey, jsonEncoding, func() interface{} {
 		return &entity.User{}
 	})

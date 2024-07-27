@@ -2,8 +2,8 @@ package svc
 
 import (
 	"github.com/aliyun/aliyun-oss-go-sdk/oss"
-	"github.com/redis/go-redis/v9"
 	"github.com/zeromicro/go-queue/kq"
+	"github.com/zeromicro/go-zero/core/stores/redis"
 
 	"rank-master-back/infrastructure/pkg/es"
 	"rank-master-back/infrastructure/pkg/snowflake"
@@ -17,7 +17,7 @@ import (
 type ServiceContext struct {
 	Config         config.Config
 	DB             *gorm.DB
-	RDB            *redis.Client
+	RDB            *redis.Redis
 	KqPusherClient *kq.Pusher
 	Es             *es.Es
 	Oss            *oss.Client

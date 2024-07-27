@@ -8,7 +8,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/redis/go-redis/v9"
+	"github.com/zeromicro/go-zero/core/stores/redis"
 
 	"rank-master-back/infrastructure/pkg/encoding"
 )
@@ -16,15 +16,9 @@ import (
 // RedisNotFound no hit cache
 const RedisNotFound = redis.Nil
 
-const (
-	Hour  = 3600
-	Day   = 86400
-	Mouth = 2592000
-)
-
 // redisCache redis cache object
 type redisCache struct {
-	client            *redis.Client
+	client            *redis.Redis
 	KeyPrefix         string
 	encoding          encoding.Encoding
 	DefaultExpireTime time.Duration
@@ -32,7 +26,7 @@ type redisCache struct {
 }
 
 // NewRedisCache new a cache, client parameter can be passed in for unit testing
-func NewRedisCache(client *redis.Client, keyPrefix string, encoding encoding.Encoding, newObject func() interface{}) ICache {
+func NewRedisCache(client *redis.Redis, keyPrefix string, encoding encoding.Encoding, newObject func() interface{}) ICache {
 	return &redisCache{
 		client:    client,
 		KeyPrefix: keyPrefix,
@@ -55,7 +49,7 @@ func (c *redisCache) Set(ctx context.Context, key string, val interface{}, expir
 	if expiration == 0 {
 		expiration = DefaultExpireTime
 	}
-	err = c.client.Set(ctx, cacheKey, buf, expiration).Err()
+	err = c.client.SetexCtx(ctx, cacheKey, string(buf), int(expiration))
 	if err != nil {
 		return fmt.Errorf("c.client.Set error: %v, cacheKey=%s", err, cacheKey)
 	}
@@ -69,7 +63,7 @@ func (c *redisCache) Get(ctx context.Context, key string, val interface{}) error
 		return fmt.Errorf("BuildCacheKey error: %v, key=%s", err, key)
 	}
 
-	bytes, err := c.client.Get(ctx, cacheKey).Bytes()
+	str, err := c.client.GetCtx(ctx, cacheKey)
 	// NOTE: don't handle the case where redis value is nil
 	// but leave it to the upstream for processing
 	if err != nil {
@@ -77,16 +71,16 @@ func (c *redisCache) Get(ctx context.Context, key string, val interface{}) error
 	}
 
 	// prevent Unmarshal from reporting an error if data is empty
-	if string(bytes) == "" {
+	if str == "" {
 		return nil
 	}
-	if string(bytes) == NotFoundPlaceholder {
+	if str == NotFoundPlaceholder {
 		return ErrPlaceholder
 	}
-	err = encoding.Unmarshal(c.encoding, bytes, val)
+	err = encoding.Unmarshal(c.encoding, []byte(str), val)
 	if err != nil {
 		return fmt.Errorf("encoding.Unmarshal error: %v, key=%s, cacheKey=%s, type=%v, json=%+v ",
-			err, key, cacheKey, reflect.TypeOf(val), string(bytes))
+			err, key, cacheKey, reflect.TypeOf(val), str)
 	}
 	return nil
 }
@@ -115,22 +109,20 @@ func (c *redisCache) MultiSet(ctx context.Context, valueMap map[string]interface
 		paris = append(paris, []byte(cacheKey))
 		paris = append(paris, buf)
 	}
-	pipeline := c.client.Pipeline()
-	err := pipeline.MSet(ctx, paris...).Err()
+	_, err := c.client.MsetCtx(ctx, paris...)
 	if err != nil {
-		return fmt.Errorf("pipeline.MSet error: %v", err)
+		return err
 	}
 	for i := 0; i < len(paris); i = i + 2 {
 		switch paris[i].(type) {
 		case []byte:
-			pipeline.Expire(ctx, string(paris[i].([]byte)), expiration)
+			err := c.client.ExpireCtx(ctx, string(paris[i].([]byte)), int(expiration))
+			if err != nil {
+				return err
+			}
 		default:
 			fmt.Printf("redis expire is unsupported key type: %+v\n", reflect.TypeOf(paris[i]))
 		}
-	}
-	_, err = pipeline.Exec(ctx)
-	if err != nil {
-		return fmt.Errorf("pipeline.Exec error: %v", err)
 	}
 	return nil
 }
@@ -148,7 +140,7 @@ func (c *redisCache) MultiGet(ctx context.Context, keys []string, value interfac
 		}
 		cacheKeys[index] = cacheKey
 	}
-	values, err := c.client.MGet(ctx, cacheKeys...).Result()
+	values, err := c.client.MgetCtx(ctx, cacheKeys...)
 	if err != nil {
 		return fmt.Errorf("c.client.MGet error: %v, keys=%+v", err, cacheKeys)
 	}
@@ -156,11 +148,11 @@ func (c *redisCache) MultiGet(ctx context.Context, keys []string, value interfac
 	// Injection into map via reflection
 	valueMap := reflect.ValueOf(value)
 	for i, v := range values {
-		if v == nil {
+		if v == "" {
 			continue
 		}
 		object := c.newObject()
-		err = encoding.Unmarshal(c.encoding, []byte(v.(string)), object)
+		err = encoding.Unmarshal(c.encoding, []byte(v), object)
 		if err != nil {
 			fmt.Printf("unmarshal data error: %+v, key=%s, cacheKey=%s type=%v\n", err, keys[i], cacheKeys[i], reflect.TypeOf(value))
 			continue
@@ -184,7 +176,7 @@ func (c *redisCache) Del(ctx context.Context, keys ...string) error {
 		}
 		cacheKeys[index] = cacheKey
 	}
-	err := c.client.Del(ctx, cacheKeys...).Err()
+	_, err := c.client.DelCtx(ctx, cacheKeys...)
 	if err != nil {
 		return fmt.Errorf("c.client.Del error: %v, keys=%+v", err, cacheKeys)
 	}
@@ -198,7 +190,7 @@ func (c *redisCache) SetCacheWithNotFound(ctx context.Context, key string) error
 		return fmt.Errorf("BuildCacheKey error: %v, key=%s", err, key)
 	}
 
-	return c.client.Set(ctx, cacheKey, NotFoundPlaceholder, DefaultNotFoundExpireTime).Err()
+	return c.client.SetexCtx(ctx, cacheKey, NotFoundPlaceholder, int(DefaultNotFoundExpireTime))
 }
 
 // LPush
@@ -212,11 +204,11 @@ func (c *redisCache) LPush(ctx context.Context, key string, val interface{}, exp
 	if err != nil {
 		return fmt.Errorf("BuildCacheKey error: %v, key=%s", err, key)
 	}
-	err = c.client.LPush(ctx, cacheKey, buf).Err()
+	_, err = c.client.LpushCtx(ctx, cacheKey, buf)
 	if err != nil {
 		return fmt.Errorf("c.client.Set error: %v, cacheKey=%s", err, cacheKey)
 	}
-	err = c.client.Expire(ctx, cacheKey, expiration).Err()
+	err = c.client.ExpireCtx(ctx, cacheKey, int(expiration))
 	if err != nil {
 		return err
 	}

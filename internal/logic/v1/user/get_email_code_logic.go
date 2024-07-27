@@ -2,7 +2,6 @@ package user
 
 import (
 	"context"
-	"time"
 
 	"github.com/pkg/errors"
 	"github.com/zeromicro/go-zero/core/logx"
@@ -28,7 +27,7 @@ func NewGetEmailCodeLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetE
 
 func (l *GetEmailCodeLogic) GetEmailCode(req *types.GetEmailCodeReq) (resp *types.GetEmailCodeResp, err error) {
 	code := verificationcode.GetRand(verificationcode.Six)
-	err = l.svcCtx.RDB.Set(l.ctx, req.Email, code, time.Minute*verificationcode.CodeValidityTime).Err()
+	err = l.svcCtx.RDB.SetexCtx(l.ctx, req.Email, code, 60*verificationcode.CodeValidityTime)
 	if err != nil {
 		return nil, errors.WithMessage(err, "redis set error")
 	}

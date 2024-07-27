@@ -30,13 +30,16 @@ func InitializeServiceContext(c config.Config) (svc.ServiceContext, error) {
 	if err != nil {
 		return svc.ServiceContext{}, err
 	}
-	client := rdb.NewRdbClient(c)
+	redis, err := rdb.NewRdbClient(c)
+	if err != nil {
+		return svc.ServiceContext{}, err
+	}
 	pusher := mq.NewPusher(c)
 	esEs, err := es.NewEs(c)
 	if err != nil {
 		return svc.ServiceContext{}, err
 	}
-	ossClient, err := oss.NewOssClient(c)
+	client, err := oss.NewOssClient(c)
 	if err != nil {
 		return svc.ServiceContext{}, err
 	}
@@ -46,10 +49,10 @@ func InitializeServiceContext(c config.Config) (svc.ServiceContext, error) {
 	serviceContext := svc.ServiceContext{
 		Config:         c,
 		DB:             db,
-		RDB:            client,
+		RDB:            redis,
 		KqPusherClient: pusher,
 		Es:             esEs,
-		Oss:            ossClient,
+		Oss:            client,
 		TemplateDao:    iTemplate,
 		UserDao:        iUser,
 	}

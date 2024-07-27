@@ -39,7 +39,7 @@ func (l *RegisterLogic) Register(req *types.RegisterReq) (resp *types.RegisterRe
 	if isExist == 1 {
 		return nil, errors.Wrapf(e.ErrRegisterAccountExist, "账号: %s", req.User.RankMasterAccount)
 	}
-	code, err := l.svcCtx.RDB.Get(l.ctx, req.User.Email).Result()
+	code, err := l.svcCtx.RDB.GetCtx(l.ctx, req.User.Email)
 	if err != nil {
 		return nil, errors.WithMessage(err, "redis get error")
 	}

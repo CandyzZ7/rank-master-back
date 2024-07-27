@@ -3,6 +3,8 @@ Host: 0.0.0.0
 Port: 8888
 WorkerId: 1
 Mode: test
+Telemetry:
+  Endpoint: http://127.0.0.1:14268/api/traces
 
 Auth:
   AccessSecret: candy_secret
@@ -51,9 +53,8 @@ Es:
   Password: HLmVfh-0Pr*YX5x4JSFl
   MaxRetries: 0
 Redis:
-  Address: "127.0.0.1:6379"
-  Password: "123456"
-  DB: 0
+  Host: "127.0.0.1:6379"
+  Pass: "123456"
 
 UploadFile:
   AliYunOss:
