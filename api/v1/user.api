@@ -10,9 +10,18 @@ info(
     version: "type version here"
 )
 
-
-
 type User{
+    ID               string  `json:"id,optional"`
+    Name             string `json:"name,optional"` // 昵称
+    RankMasterAccount string `json:"rank_master_account,optional"` // RankMaster账号
+    Mobile           string `json:"mobile,optional"` // 手机号
+    Avatar           string `json:"avatar,optional"` // 头像
+    Email            string `json:"email,optional"` // 邮箱
+    Code             string `json:"code,optional"` // 邮箱验证码
+    Password         string `json:"password,optional"`   // 密码
+}
+
+type RegisterUser{
     Name             string `json:"name" validate:"required"` // 昵称
     RankMasterAccount string `json:"rank_master_account" validate:"required"` // RankMaster账号
     Mobile           string `json:"mobile" validate:"required,len=11,phone"` // 手机号
@@ -24,7 +33,7 @@ type User{
 
 type (
     RegisterReq {
-        User User `json:"user"`
+        User RegisterUser `json:"user"`
     }
     RegisterResp {
         UserId string `json:"user_id"` // 用户ID
@@ -75,6 +84,14 @@ type (
     }
 )
 
+type (
+    UpdateUserListReq{
+        UserList []*User `json:"user_list,omitempty"`
+    }
+    UpdateUserListResp{
+    }
+)
+
 
 @server (
     group: v1/user
@@ -109,7 +126,7 @@ service app {
     @handler UserInfo
     get /user_info returns (GetUserInfoResp)
 
-    @doc "用户信息列表"
-    @handler UserInfoList
-    post /user_info_list (GetUserInfoListReq) returns (GetUserInfoListResp)
+    @doc "更新用户信息列表"
+    @handler UserList
+    put /user_list (UpdateUserListReq) returns (UpdateUserListResp)
 }

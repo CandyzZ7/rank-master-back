@@ -2,7 +2,13 @@
 package types
 
 type AddTemplateReq struct {
-	Template Template `json:"template"`
+	Template struct {
+		Function string `json:"function" validate:"required"`
+		Type     string `json:"type" validate:"required"`
+		Topic    string `json:"topic" validate:"required"`
+		Content  string `json:"content" validate:"required"`
+		Remark   string `json:"remark" validate:"required"`
+	} `json:"template"`
 }
 
 type AddTemplateResp struct {
@@ -24,7 +30,13 @@ type GetRankMasterAccountResp struct {
 }
 
 type GetUserInfoListReq struct {
-	Pagination Pagination `json:"pagination"` // 分页信息
+	Pagination struct {
+		Page      int         `json:"page"`      // 当前页码
+		PageSize  int         `json:"pageSize"`  // 每页条数
+		SortBy    string      `json:"sortBy"`    // 排序字段
+		SortOrder string      `json:"sortOrder"` // 排序顺序：asc 或 desc
+		Filter    interface{} `json:"filter"`    // 过滤条件，可以是一个结构体
+	} `json:"pagination"` // 分页信息
 }
 
 type GetUserInfoListResp struct {
@@ -36,7 +48,16 @@ type GetUserInfoReq struct {
 }
 
 type GetUserInfoResp struct {
-	User User `json:"user"`
+	User struct {
+		ID                string `json:"id,optional"`
+		Name              string `json:"name,optional"`                // 昵称
+		RankMasterAccount string `json:"rank_master_account,optional"` // RankMaster账号
+		Mobile            string `json:"mobile,optional"`              // 手机号
+		Avatar            string `json:"avatar,optional"`              // 头像
+		Email             string `json:"email,optional"`               // 邮箱
+		Code              string `json:"code,optional"`                // 邮箱验证码
+		Password          string `json:"password,optional"`            // 密码
+	} `json:"user"`
 }
 
 type KafkaResp struct {
@@ -49,7 +70,10 @@ type LoginReq struct {
 
 type LoginResp struct {
 	UserId string `json:"user_id"` // 用户ID
-	Token  Token  `json:"token"`   // token
+	Token  struct {
+		AccessToken  string `json:"access_token"`
+		AccessExpire int64  `json:"access_expire"`
+	} `json:"token"` // token
 }
 
 type Pagination struct {
@@ -65,12 +89,33 @@ type PingResp struct {
 }
 
 type RegisterReq struct {
-	User User `json:"user"`
+	User struct {
+		Name              string `json:"name" validate:"required"`                // 昵称
+		RankMasterAccount string `json:"rank_master_account" validate:"required"` // RankMaster账号
+		Mobile            string `json:"mobile" validate:"required,len=11,phone"` // 手机号
+		Avatar            string `json:"avatar" validate:"required"`              // 头像
+		Email             string `json:"email" validate:"required,email"`         // 邮箱
+		Code              string `json:"code" validate:"required"`                // 邮箱验证码
+		Password          string `json:"password" validate:"required"`            // 密码
+	} `json:"user"`
 }
 
 type RegisterResp struct {
 	UserId string `json:"user_id"` // 用户ID
-	Token  Token  `json:"token"`   // token
+	Token  struct {
+		AccessToken  string `json:"access_token"`
+		AccessExpire int64  `json:"access_expire"`
+	} `json:"token"` // token
+}
+
+type RegisterUser struct {
+	Name              string `json:"name" validate:"required"`                // 昵称
+	RankMasterAccount string `json:"rank_master_account" validate:"required"` // RankMaster账号
+	Mobile            string `json:"mobile" validate:"required,len=11,phone"` // 手机号
+	Avatar            string `json:"avatar" validate:"required"`              // 头像
+	Email             string `json:"email" validate:"required,email"`         // 邮箱
+	Code              string `json:"code" validate:"required"`                // 邮箱验证码
+	Password          string `json:"password" validate:"required"`            // 密码
 }
 
 type Template struct {
@@ -86,12 +131,20 @@ type Token struct {
 	AccessExpire int64  `json:"access_expire"`
 }
 
+type UpdateUserListReq struct {
+	UserList []*User `json:"user_list,omitempty"`
+}
+
+type UpdateUserListResp struct {
+}
+
 type User struct {
-	Name              string `json:"name" validate:"required"`                // 昵称
-	RankMasterAccount string `json:"rank_master_account" validate:"required"` // RankMaster账号
-	Mobile            string `json:"mobile" validate:"required,len=11,phone"` // 手机号
-	Avatar            string `json:"avatar" validate:"required"`              // 头像
-	Email             string `json:"email" validate:"required,email"`         // 邮箱
-	Code              string `json:"code" validate:"required"`                // 邮箱验证码
-	Password          string `json:"password" validate:"required"`            // 密码
+	ID                string `json:"id,optional"`
+	Name              string `json:"name,optional"`                // 昵称
+	RankMasterAccount string `json:"rank_master_account,optional"` // RankMaster账号
+	Mobile            string `json:"mobile,optional"`              // 手机号
+	Avatar            string `json:"avatar,optional"`              // 头像
+	Email             string `json:"email,optional"`               // 邮箱
+	Code              string `json:"code,optional"`                // 邮箱验证码
+	Password          string `json:"password,optional"`            // 密码
 }

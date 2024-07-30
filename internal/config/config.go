@@ -1,8 +1,6 @@
 package config
 
 import (
-	"time"
-
 	"github.com/zeromicro/go-queue/kq"
 	"github.com/zeromicro/go-zero/core/logx"
 	"github.com/zeromicro/go-zero/core/stores/redis"
@@ -66,5 +64,5 @@ type Mysql struct {
 	MaxOpenConns  int
 	MaxIdleConns  int
 	MaxLifetime   int
-	SlowThreshold time.Duration
+	SlowThreshold int64
 }

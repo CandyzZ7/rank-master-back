@@ -38,7 +38,7 @@ func NewUserDao(cache cache.IUserCache) IUser {
 }
 
 type IUser interface {
-	Create(ctx context.Context, template *entity.User) error
+	Create(ctx context.Context, user *entity.User) error
 	GetUserByID(ctx context.Context, id string) (*entity.User, error)
 	GetUserByIDLock(ctx context.Context, id string) (*entity.User, error)
 	GetUserByIDWithCache(ctx context.Context, id string) (*entity.User, error)
@@ -49,6 +49,7 @@ type IUser interface {
 	DeleteUserByID(ctx context.Context, id string) error
 	DeleteByIDList(ctx context.Context, ids []string) error
 	Page(ctx context.Context, pagination types.Pagination) ([]*entity.User, int64, error)
+	UpdateBatchByFields(ctx context.Context, userList []*entity.User, fields []string) error
 }
 
 func (d *UserDao) GetUserByID(ctx context.Context, id string) (*entity.User, error) {
@@ -176,6 +177,20 @@ func (d *UserDao) Create(ctx context.Context, user *entity.User) error {
 		return err
 	}
 	_ = d.cache.Del(ctx, user.ID)
+	return nil
+}
+
+func (d *UserDao) UpdateBatchByFields(ctx context.Context, userList []*entity.User, fields []string) error {
+	err := d.Query.User.WithContext(ctx).Clauses(clause.OnConflict{
+		DoUpdates: clause.AssignmentColumns(fields),
+	}).Create(userList...)
+	if err != nil {
+		return err
+	}
+	for _, user := range userList {
+		_ = d.cache.Del(ctx, user.ID)
+	}
+
 	return nil
 }
 

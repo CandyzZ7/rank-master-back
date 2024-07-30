@@ -29,12 +29,12 @@ func NewGormEngine(c config.Config) (*gorm.DB, error) {
 		c.Mysql.MaxLifetime = 3600
 	}
 	if c.Mysql.SlowThreshold == 0 {
-		c.Mysql.SlowThreshold = 200 * time.Millisecond
+		c.Mysql.SlowThreshold = int64(200 * time.Millisecond)
 	}
 	var err error
 	once.Do(func() {
 		gormEngine, err = gorm.Open(mysql.Open(c.Mysql.DataSource), &gorm.Config{
-			Logger: NewGormLogger(c.Mysql.SlowThreshold), // 调整日志级别，根据需要修改
+			Logger: NewGormLogger(time.Duration(c.Mysql.SlowThreshold)), // 调整日志级别，根据需要修改
 		})
 		if err != nil {
 			return

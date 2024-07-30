@@ -81,10 +81,10 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Handler: v1user.UserInfoHandler(serverCtx),
 			},
 			{
-				// 用户信息列表
-				Method:  http.MethodPost,
-				Path:    "/user_info_list",
-				Handler: v1user.UserInfoListHandler(serverCtx),
+				// 更新用户信息列表
+				Method:  http.MethodPut,
+				Path:    "/user_list",
+				Handler: v1user.UserListHandler(serverCtx),
 			},
 		},
 		rest.WithJwt(serverCtx.Config.Auth.AccessSecret),

@@ -180,15 +180,15 @@
         ]
       }
     },
-    "/v1/user/user_info_list": {
-      "post": {
-        "summary": "用户信息列表",
-        "operationId": "UserInfoList",
+    "/v1/user/user_list": {
+      "put": {
+        "summary": "更新用户信息列表",
+        "operationId": "UserList",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/GetUserInfoListResp"
+              "$ref": "#/definitions/UpdateUserListResp"
             }
           }
         },
@@ -198,7 +198,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/GetUserInfoListReq"
+              "$ref": "#/definitions/UpdateUserListReq"
             }
           }
         ],
@@ -429,7 +429,7 @@
       "type": "object",
       "properties": {
         "user": {
-          "$ref": "#/definitions/User"
+          "$ref": "#/definitions/RegisterUser"
         }
       },
       "title": "RegisterReq",
@@ -453,6 +453,49 @@
       "required": [
         "user_id",
         "token"
+      ]
+    },
+    "RegisterUser": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": " 昵称"
+        },
+        "rank_master_account": {
+          "type": "string",
+          "description": " RankMaster账号"
+        },
+        "mobile": {
+          "type": "string",
+          "description": " 手机号"
+        },
+        "avatar": {
+          "type": "string",
+          "description": " 头像"
+        },
+        "email": {
+          "type": "string",
+          "description": " 邮箱"
+        },
+        "code": {
+          "type": "string",
+          "description": " 邮箱验证码"
+        },
+        "password": {
+          "type": "string",
+          "description": " 密码"
+        }
+      },
+      "title": "RegisterUser",
+      "required": [
+        "name",
+        "rank_master_account",
+        "mobile",
+        "avatar",
+        "email",
+        "code",
+        "password"
       ]
     },
     "Template": {
@@ -500,9 +543,28 @@
         "access_expire"
       ]
     },
+    "UpdateUserListReq": {
+      "type": "object",
+      "properties": {
+        "user_list": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/User"
+          }
+        }
+      },
+      "title": "UpdateUserListReq"
+    },
+    "UpdateUserListResp": {
+      "type": "object",
+      "title": "UpdateUserListResp"
+    },
     "User": {
       "type": "object",
       "properties": {
+        "id": {
+          "type": "string"
+        },
         "name": {
           "type": "string",
           "description": " 昵称"
@@ -532,16 +594,7 @@
           "description": " 密码"
         }
       },
-      "title": "User",
-      "required": [
-        "name",
-        "rank_master_account",
-        "mobile",
-        "avatar",
-        "email",
-        "code",
-        "password"
-      ]
+      "title": "User"
     }
   },
   "securityDefinitions": {
