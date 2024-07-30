@@ -35,7 +35,7 @@ KqPusherConf:
     - 127.0.0.1:19092
     - 127.0.0.1:29092
     - 127.0.0.1:39092
-  Topic: payment-success
+  Topic: test
 
 KqConsumerConf:
   Name: kqConsumer
@@ -44,12 +44,10 @@ KqConsumerConf:
     - 127.0.0.1:29092
     - 127.0.0.1:39092
   Group: kqConsumer
-  Topic: payment-success
+  Topic: test
   Offset: last
   Consumers: 8
   Processors: 8
-  Username: kafkatest
-  Password: dZX61diTKwQHeBL
 
 Es:
   Addresses:

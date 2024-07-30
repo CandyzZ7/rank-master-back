@@ -12,7 +12,7 @@ import (
 
 func Consumers(c config.Config, ctx context.Context, svcContext *svc.ServiceContext) []service.Service {
 	return []service.Service{
-		kq.MustNewQueue(c.KqConsumerConf, NewPaymentSuccess(ctx, svcContext)),
+		kq.MustNewQueue(c.KqConsumerConf, NewTestKafka(ctx, svcContext)),
 	}
 
 }
