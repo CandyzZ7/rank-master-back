@@ -186,7 +186,7 @@ type IUserDo interface {
 	schema.Tabler
 
 	FindLockWithRankMasterAccountExist(rankMasterAccount string) (result int64, err error)
-	UpdateBatchUser(idList []string, userList []*entity.User) (result int64, err error)
+	UpdateBatchUserByID(idList []string, userList []*entity.User) (result int64, err error)
 }
 
 // FindLockWithRankMasterAccountExist SELECT EXISTS(SELECT * FROM @@table WHERE rank_master_account = @rankMasterAccount FOR UPDATE)
@@ -204,7 +204,7 @@ func (u userDo) FindLockWithRankMasterAccountExist(rankMasterAccount string) (re
 	return
 }
 
-// UpdateBatchUser
+// UpdateBatchUserByID
 // UPDATE @@table SET
 // name = CASE id
 // {{for _, user1 := range userList}}
@@ -217,7 +217,7 @@ func (u userDo) FindLockWithRankMasterAccountExist(rankMasterAccount string) (re
 // {{end}}
 // END
 // WHERE id IN @idList
-func (u userDo) UpdateBatchUser(idList []string, userList []*entity.User) (result int64, err error) {
+func (u userDo) UpdateBatchUserByID(idList []string, userList []*entity.User) (result int64, err error) {
 	var params []interface{}
 
 	var generateSQL strings.Builder
