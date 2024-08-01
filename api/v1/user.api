@@ -2,131 +2,129 @@ syntax = "v1"
 
 import "common.api"
 
-info(
-    title: "type title here"
-    desc: "type desc here"
-    author: "type author here"
-    email: "type email here"
-    version: "type version here"
+info (
+	title:   "type title here"
+	desc:    "type desc here"
+	author:  "type author here"
+	email:   "type email here"
+	version: "type version here"
 )
 
-type User{
-    ID               string  `json:"id,optional"`
-    Name             string `json:"name,optional"` // 昵称
-    RankMasterAccount string `json:"rank_master_account,optional"` // RankMaster账号
-    Mobile           string `json:"mobile,optional"` // 手机号
-    Avatar           string `json:"avatar,optional"` // 头像
-    Email            string `json:"email,optional"` // 邮箱
-    Code             string `json:"code,optional"` // 邮箱验证码
-    Password         string `json:"password,optional"`   // 密码
+type User {
+	ID                string `json:"id,optional"`
+	Name              string `json:"name,optional"` // 昵称
+	RankMasterAccount string `json:"rank_master_account,optional"` // RankMaster账号
+	Mobile            string `json:"mobile,optional"` // 手机号
+	Avatar            string `json:"avatar,optional"` // 头像
+	Email             string `json:"email,optional"` // 邮箱
+	Code              string `json:"code,optional"` // 邮箱验证码
+	Password          string `json:"password,optional"` // 密码
 }
 
-type RegisterUser{
-    Name             string `json:"name" validate:"required"` // 昵称
-    RankMasterAccount string `json:"rank_master_account" validate:"required"` // RankMaster账号
-    Mobile           string `json:"mobile" validate:"required,len=11,phone"` // 手机号
-    Avatar           string `json:"avatar" validate:"required"` // 头像
-    Email            string `json:"email" validate:"required,email"` // 邮箱
-    Code             string `json:"code" validate:"required"` // 邮箱验证码
-    Password         string `json:"password" validate:"required"`   // 密码
+type RegisterUser {
+	Name              string `json:"name" validate:"required"` // 昵称
+	RankMasterAccount string `json:"rank_master_account" validate:"required"` // RankMaster账号
+	Mobile            string `json:"mobile" validate:"required,len=11,phone"` // 手机号
+	Avatar            string `json:"avatar" validate:"required"` // 头像
+	Email             string `json:"email" validate:"required,email"` // 邮箱
+	Code              string `json:"code" validate:"required"` // 邮箱验证码
+	Password          string `json:"password" validate:"required"` // 密码
 }
 
 type (
-    RegisterReq {
-        User RegisterUser `json:"user"`
-    }
-    RegisterResp {
-        UserId string `json:"user_id"` // 用户ID
-        Token  Token `json:"token"`  // token
-    }
+	RegisterReq {
+		User RegisterUser `json:"user"`
+	}
+	RegisterResp {
+		UserId string `json:"user_id"` // 用户ID
+		Token  Token  `json:"token"` // token
+	}
 )
 
 type (
-    LoginReq {
-        RankMasterAccount string `json:"rank_master_account" validate:"required"` // RankMaster账号
-        Password         string `json:"password" validate:"required"`  // 密码
-    }
-    LoginResp {
-        UserId string `json:"user_id"` // 用户ID
-        Token  Token `json:"token"` // token
-    }
+	LoginReq {
+		RankMasterAccount string `json:"rank_master_account" validate:"required"` // RankMaster账号
+		Password          string `json:"password" validate:"required"` // 密码
+	}
+	LoginResp {
+		UserId string `json:"user_id"` // 用户ID
+		Token  Token  `json:"token"` // token
+	}
 )
 
 type (
-    GetEmailCodeReq {
-        Email string `json:"email" validate:"required,email"` // 邮箱
-    }
-    GetEmailCodeResp {
-    }
+	GetEmailCodeReq {
+		Email string `json:"email" validate:"required,email"` // 邮箱
+	}
+	GetEmailCodeResp  {}
 )
 
 type (
-    GetRankMasterAccountReq{
-        RankMasterAccount string `path:"rank_master_account" validate:"required"` // RankMaster账号
-    }
-    GetRankMasterAccountResp{}
+	GetRankMasterAccountReq {
+		RankMasterAccount string `path:"rank_master_account" validate:"required"` // RankMaster账号
+	}
+	GetRankMasterAccountResp  {}
 )
 
 type (
-    GetUserInfoReq{}
-    GetUserInfoResp{
-        User User `json:"user"`
-    }
+	GetUserInfoReq  {}
+	GetUserInfoResp {
+		User User `json:"user"`
+	}
 )
 
 type (
-    GetUserInfoListReq{
-        Pagination Pagination `json:"pagination"` // 分页信息
-    }
-    GetUserInfoListResp{
-        UserList []*User `json:"user_list"`
-        Count    int64    `json:"count"` // 总数
-    }
+	GetUserInfoListReq {
+		Pagination Pagination `json:"pagination"` // 分页信息
+	}
+	GetUserInfoListResp {
+		UserList []*User `json:"user_list"`
+		Count    int64   `json:"count"` // 总数
+	}
 )
 
 type (
-    UpdateUserListReq{
-        UserList []*User `json:"user_list,omitempty"`
-    }
-    UpdateUserListResp{
-    }
+	UpdateUserListReq {
+		UserList []*User `json:"user_list,omitempty"`
+	}
+	UpdateUserListResp  {}
 )
-
 
 @server (
-    group: v1/user
-    prefix: /v1/user
+	group:  v1/user
+	prefix: /v1/user
 )
 service app {
-    @doc "注册"
-    @handler Register
-    post /register (RegisterReq) returns (RegisterResp)
+	@doc "注册"
+	@handler Register
+	post /register (RegisterReq) returns (RegisterResp)
 
-    @doc "登录"
-    @handler Login
-    post /login (LoginReq) returns (LoginResp)
+	@doc "登录"
+	@handler Login
+	post /login (LoginReq) returns (LoginResp)
 
-    @doc "获取邮箱验证码"
-    @handler GetEmailCode
-    post /email/code (GetEmailCodeReq) returns (GetEmailCodeResp)
+	@doc "获取邮箱验证码"
+	@handler GetEmailCode
+	post /email/code (GetEmailCodeReq) returns (GetEmailCodeResp)
 
-    @doc "验证用户账号是否存在"
-    @handler GetRankMasterAccount
-    get /:rank_master_account (GetRankMasterAccountReq) returns (GetRankMasterAccountResp)
+	@doc "验证用户账号是否存在"
+	@handler GetRankMasterAccount
+	get /:rank_master_account (GetRankMasterAccountReq) returns (GetRankMasterAccountResp)
 }
 
 @server (
-    group: v1/user
-    prefix: /v1/user
-    signature: true
-    jwt: Auth
+	group:     v1/user
+	prefix:    /v1/user
+	signature: true
+	jwt:       Auth
 )
 service app {
-    @doc "用户信息"
-    @handler UserInfo
-    get /user_info returns (GetUserInfoResp)
+	@doc "用户信息"
+	@handler UserInfo
+	get /user_info returns (GetUserInfoResp)
 
-    @doc "更新用户信息列表"
-    @handler UserList
-    put /user_list (UpdateUserListReq) returns (UpdateUserListResp)
+	@doc "更新用户信息列表"
+	@handler UserList
+	put /user_list (UpdateUserListReq) returns (UpdateUserListResp)
 }
+

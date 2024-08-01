@@ -1,36 +1,37 @@
 syntax = "v1"
 
-info(
-    title: "type title here"
-    desc: "type desc here"
-    author: "type author here"
-    email: "type email here"
-    version: "type version here"
+info (
+	title:   "type title here"
+	desc:    "type desc here"
+	author:  "type author here"
+	email:   "type email here"
+	version: "type version here"
 )
 
 type Template {
-    Function string `json:"function" validate:"required"`
-    Type     string `json:"type" validate:"required"`
-    Topic    string `json:"topic" validate:"required"`
-    Content  string `json:"content" validate:"required"`
-    Remark   string `json:"remark" validate:"required"`
+	Function string `json:"function" validate:"required"`
+	Type     string `json:"type" validate:"required"`
+	Topic    string `json:"topic" validate:"required"`
+	Content  string `json:"content" validate:"required"`
+	Remark   string `json:"remark" validate:"required"`
 }
 
 type (
-    AddTemplateReq{
-        Template Template `json:"template"`
-    }
-    AddTemplateResp{
-        Id string `json:"id"`
-    }
+	AddTemplateReq {
+		Template Template `json:"template"`
+	}
+	AddTemplateResp {
+		Id string `json:"id"`
+	}
 )
 
 @server (
-    group: v1/template
-    prefix: /v1/template
+	group:  v1/template
+	prefix: /v1/template
 )
 service app {
-    @doc "增加模板"
-    @handler AddTemplate
-    post / (AddTemplateReq) returns (AddTemplateResp)
+	@doc "增加模板"
+	@handler AddTemplate
+	post / (AddTemplateReq) returns (AddTemplateResp)
 }
+
