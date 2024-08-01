@@ -28,7 +28,7 @@ func NewKafkaLogic(ctx context.Context, svcCtx *svc.ServiceContext) *KafkaLogic 
 
 func (l *KafkaLogic) Kafka() (resp *types.KafkaResp, err error) {
 	threading.GoSafe(func() {
-		if err := l.svcCtx.KqPusherClient.Push("kafka_test"); err != nil {
+		if err := l.svcCtx.KqPusherClient.Push(l.ctx, "kafka_test"); err != nil {
 			logx.Errorf("KqPusherClient Push Error , err :%v", err)
 		}
 	})

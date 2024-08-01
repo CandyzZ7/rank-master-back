@@ -20,7 +20,7 @@ func NewTestKafka(ctx context.Context, svcCtx *svc.ServiceContext) *TestKafka {
 	}
 }
 
-func (l *TestKafka) Consume(key, val string) error {
+func (l *TestKafka) Consume(ctx context.Context, key, val string) error {
 	logx.Infof("test kafka key :%s , val :%s", key, val)
 	return nil
 }

@@ -23,7 +23,7 @@ require (
 	github.com/stretchr/testify v1.9.0
 	github.com/swaggest/swgui v1.8.1
 	github.com/vmihailenco/msgpack v4.0.4+incompatible
-	github.com/zeromicro/go-queue v1.2.1
+	github.com/zeromicro/go-queue v1.2.2
 	github.com/zeromicro/go-zero v1.7.0
 	github.com/zeromicro/zero-contrib/zrpc/registry/nacos v0.0.0-20231030135404-af9ae855016f
 	github.com/zhufuyi/sponge v1.8.2
