@@ -22,6 +22,8 @@ require (
 	github.com/spf13/cast v1.5.0
 	github.com/stretchr/testify v1.9.0
 	github.com/swaggest/swgui v1.8.1
+	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common v1.0.1018
+	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/sms v1.0.1018
 	github.com/vmihailenco/msgpack v4.0.4+incompatible
 	github.com/zeromicro/go-queue v1.2.2
 	github.com/zeromicro/go-zero v1.7.0

@@ -1467,6 +1467,10 @@ github.com/stretchr/testify v1.9.0 h1:HtqpIVDClZ4nwg75+f6Lvsy/wHu+3BoSGCbBAcpTsT
 github.com/stretchr/testify v1.9.0/go.mod h1:r2ic/lqez/lEtzL7wO/rwa5dbSLXVDPFyf8C91i36aY=
 github.com/swaggest/swgui v1.8.1 h1:OLcigpoelY0spbpvp6WvBt0I1z+E9egMQlUeEKya+zU=
 github.com/swaggest/swgui v1.8.1/go.mod h1:YBaAVAwS3ndfvdtW8A4yWDJpge+W57y+8kW+f/DqZtU=
+github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common v1.0.1018 h1:PjTcH8XozO53JcLt7Vm4/RIeH7vKS/AZuGERl/4ehdM=
+github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common v1.0.1018/go.mod h1:r5r4xbfxSaeR04b166HGsBa/R4U3SueirEUpXGuw+Q0=
+github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/sms v1.0.1018 h1:nrSkE0nmOBb0etnOSMEjR27jid1BwRtW36OV6vcc7Mk=
+github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/sms v1.0.1018/go.mod h1:+lMlMwHzdHAQDpuJlCGA67Oh8G92M+ozr23tS3ce/Eg=
 github.com/tv42/httpunix v0.0.0-20150427012821-b75d8614f926/go.mod h1:9ESjWnEqriFuLhtthL60Sar/7RFoluCcXsuvEwTV5KM=
 github.com/urfave/cli/v2 v2.11.0/go.mod h1:f8iq5LtQ/bLxafbdBSLPPNsgaW0l/2fYYEHhAyPlwvo=
 github.com/vearutop/statigz v1.4.0 h1:RQL0KG3j/uyA/PFpHeZ/L6l2ta920/MxlOAIGEOuwmU=
@@ -1496,8 +1500,6 @@ github.com/yuin/gopher-lua v1.1.1 h1:kYKnWBjvbNP4XLT3+bPEwAXJx262OhaHDWDVOPjL46M
 github.com/yuin/gopher-lua v1.1.1/go.mod h1:GBR0iDaNXjAgGg9zfCvksxSRnQx76gclCIb7kdAd1Pw=
 github.com/zeebo/assert v1.3.0/go.mod h1:Pq9JiuJQpG8JLJdtkwrJESF0Foym2/D9XMU5ciN/wJ0=
 github.com/zeebo/xxh3 v1.0.2/go.mod h1:5NWz9Sef7zIDm2JHfFlcQvNekmcEl9ekUZQQKCYaDcA=
-github.com/zeromicro/go-queue v1.2.1 h1:S8FbCMqnRPvmZxpJCu3/sGtZFTXvcbmF15Y+4COn6og=
-github.com/zeromicro/go-queue v1.2.1/go.mod h1:pPDLox9OY8+8+9+WHjr4pEnGpl+YRwkU4WxGy4BbIGw=
 github.com/zeromicro/go-queue v1.2.2 h1:3TMhRlI/8lZy13Sj6FBBWWRXlsQhGCchRxY2itfV1Is=
 github.com/zeromicro/go-queue v1.2.2/go.mod h1:5HiNTEw1tACi9itho0JYQ1+EpIGpSFM4tOQ4bit+yKM=
 github.com/zeromicro/go-zero v1.5.4/go.mod h1:x/aUyLmSwRECvOyjOf+lhwThBOilJIY+s3slmPAeboA=
