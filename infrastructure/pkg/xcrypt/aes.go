@@ -1,4 +1,4 @@
-package crypt
+package xcrypt
 
 import (
 	"bytes"
@@ -7,7 +7,27 @@ import (
 	"github.com/zeromicro/go-zero/core/codec"
 )
 
-func EncryptASEByECB(key, encrypt string) (string, error) {
+func EncryptAESByCBC(key, iv, encrypt string) (string, error) {
+	encrypted, err := CbcEncryptBase64(key, iv, base64.StdEncoding.EncodeToString([]byte(encrypt)))
+	if err != nil {
+		return "", err
+	}
+	return encrypted, nil
+}
+
+func DecryptAESByCBC(key, iv, encrypt string) (string, error) {
+	decrypted, err := CbcDecryptBase64(key, iv, encrypt)
+	if err != nil {
+		return "", err
+	}
+	decodeString, err := base64.StdEncoding.DecodeString(decrypted)
+	if err != nil {
+		return "", err
+	}
+	return string(decodeString), nil
+}
+
+func EncryptAESByECB(key, encrypt string) (string, error) {
 	data, err := codec.EcbEncrypt([]byte(key), []byte(encrypt))
 	if err != nil {
 		return "", err
@@ -15,7 +35,7 @@ func EncryptASEByECB(key, encrypt string) (string, error) {
 	return base64.StdEncoding.EncodeToString(data), nil
 }
 
-func DecryptASEByECB(key, encrypt string) (string, error) {
+func DecryptAESByECB(key, encrypt string) (string, error) {
 	originalData, err := base64.StdEncoding.DecodeString(encrypt)
 	if err != nil {
 		return "", err
@@ -27,7 +47,7 @@ func DecryptASEByECB(key, encrypt string) (string, error) {
 	return string(data), nil
 }
 
-func EncryptASEBase64ByECB(key, encrypt string) (string, error) {
+func EncryptAESBase64ByECB(key, encrypt string) (string, error) {
 	data, err := codec.EcbEncryptBase64(key, encrypt)
 	if err != nil {
 		return "", err
@@ -35,7 +55,7 @@ func EncryptASEBase64ByECB(key, encrypt string) (string, error) {
 	return data, nil
 }
 
-func DecryptASEBase64ByECB(key, encrypt string) (string, error) {
+func DecryptAESBase64ByECB(key, encrypt string) (string, error) {
 	data, err := codec.EcbDecryptBase64(key, encrypt)
 	if err != nil {
 		return "", err

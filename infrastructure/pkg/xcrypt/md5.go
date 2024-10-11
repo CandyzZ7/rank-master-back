@@ -1,4 +1,4 @@
-package crypt
+package xcrypt
 
 import (
 	"crypto/md5"

@@ -7,8 +7,8 @@ import (
 	"github.com/zeromicro/go-zero/core/logx"
 
 	"rank-master-back/infrastructure/e"
-	"rank-master-back/infrastructure/pkg/crypt"
 	"rank-master-back/infrastructure/pkg/jwt"
+	"rank-master-back/infrastructure/pkg/xcrypt"
 	"rank-master-back/internal/svc"
 	"rank-master-back/internal/types"
 )
@@ -47,7 +47,7 @@ func (l *LoginLogic) Login(req *types.LoginReq) (resp *types.LoginResp, err erro
 	// 密码加盐加密
 	passwordWithSalt := password + userEntity.CryptSalt
 	// 比较密码是否相同
-	isSame := crypt.EqualsEncryptMD5(passwordWithSalt, userEntity.Password)
+	isSame := xcrypt.EqualsEncryptMD5(passwordWithSalt, userEntity.Password)
 	if !isSame {
 		return nil, e.ErrLoginPasswd
 	}

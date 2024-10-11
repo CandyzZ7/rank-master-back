@@ -1,4 +1,4 @@
-package crypt
+package xcrypt
 
 import (
 	"crypto/rand"
@@ -6,8 +6,6 @@ import (
 )
 
 const RandomNumberLen = 10
-
-const MobileAesKey = "5A2E746B08D846502F37A6E2D85D583B"
 
 func RandomString(len int) (string, error) {
 	bytes := make([]byte, len)
