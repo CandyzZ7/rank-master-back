@@ -24,7 +24,7 @@ func main() {
 	flag.Parse()
 	var c config.Config
 	conf.MustLoad(*configFile, &c)
-	db, err := ormengine.NewGormEngine(c)
+	db, err := ormengine.NewGormEngine(c.MysqlConf)
 	if err != nil {
 		panic(fmt.Errorf("cannot establish db connection: %w", err))
 	}

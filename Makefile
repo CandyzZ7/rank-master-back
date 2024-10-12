@@ -14,7 +14,6 @@ gen:
 	make api
 	make swagger
 	go generate ./...
-	wire
 	go mod tidy
 .PHONY: exe
 # Generate an executable file

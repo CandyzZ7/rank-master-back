@@ -1,4 +1,4 @@
-package rdb
+package xrdb
 
 import (
 	"github.com/zeromicro/go-zero/core/stores/redis"

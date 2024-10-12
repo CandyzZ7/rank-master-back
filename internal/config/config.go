@@ -5,12 +5,14 @@ import (
 	"github.com/zeromicro/go-zero/core/logx"
 	"github.com/zeromicro/go-zero/core/stores/redis"
 	"github.com/zeromicro/go-zero/rest"
+
+	"rank-master-back/infrastructure/pkg/ormengine"
 )
 
 type Config struct {
 	rest.RestConf
 	Auth           Auth
-	Mysql          Mysql
+	MysqlConf      ormengine.MysqlConf
 	LogConf        logx.LogConf
 	Email          Email
 	Redis          redis.RedisConf
