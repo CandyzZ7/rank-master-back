@@ -3,7 +3,6 @@ package main
 import (
 	"flag"
 	"fmt"
-	"strings"
 
 	"github.com/zeromicro/go-zero/core/conf"
 	"gorm.io/gen/field"
@@ -12,20 +11,17 @@ import (
 	"gorm.io/gen"
 
 	"rank-master-back/infrastructure/pkg/ormengine"
-	"rank-master-back/infrastructure/pkg/transform"
 	"rank-master-back/infrastructure/repository"
 	"rank-master-back/internal/config"
 	"rank-master-back/internal/model/entity"
 )
 
 var configFile = flag.String("f", "../../etc/app.yaml", "the config file")
-var tableName = flag.String("n", "", "the table name")
 
 //go:generate go run .
 
 func main() {
 	flag.Parse()
-	fileName := transform.Case2Camel(*tableName) // 转为首字目大写
 	var c config.Config
 	conf.MustLoad(*configFile, &c)
 	db, err := ormengine.NewGormEngine(c)
@@ -74,12 +70,13 @@ func main() {
 
 	// 自定义模型结体字段的标签
 	// 将特定字段名的 json 标签加上`string`属性,即 MarshalJSON 时该字段由数字类型转成字符串类型
-	jsonField := gen.FieldJSONTagWithNS(func(columnName string) (tagContent string) {
-		if strings.Contains(`deleted_at`, columnName) {
-			return "-"
-		}
-		return transform.LowerCamelCase(columnName) // 下划线转小驼峰
-	})
+	// jsonField := gen.FieldJSONTagWithNS(func(columnName string) (tagContent string) {
+	// 	if strings.Contains(`deleted_at`, columnName) {
+	// 		return "-"
+	// 	}
+	// 	return xtransform.LowerCamelCase(columnName) // 下划线转小驼峰
+	// })
+
 	// 将非默认字段名的字段定义为自动时间戳和软删除字段;
 	// 自动时间戳默认字段名为:`updated_at`、`created_at, 表字段数据类型为: INT 或 DATETIME
 	// 软删除默认字段名为:`deleted_at`, 表字段数据类型为: DATETIME
@@ -97,7 +94,7 @@ func main() {
 	})
 	softDeleteField := gen.FieldType("deleted_at", "gorm.DeletedAt")
 	// 模型自定义选项组
-	fieldOpts := []gen.ModelOpt{jsonField, autoCreateTimeField, autoUpdateTimeField, softDeleteField}
+	fieldOpts := []gen.ModelOpt{autoCreateTimeField, autoUpdateTimeField, softDeleteField}
 	// fieldOpts := []gen.ModelOpt{jsonField, softDeleteField}
 
 	// 创建模型的结构体
@@ -108,27 +105,9 @@ func main() {
 	// 创建模型的结构体,生成文件在 model 目录; 先创建的结果会被后面创建的覆盖
 	// 这里创建个别模型仅仅是为了拿到`*generate.QueryStructMeta`类型对象用于后面的模型关联操作中
 	// User := g.GenerateModel("user")
-	// 如果传递了表名的时候就单独创建单独的表
-	if *tableName != "" {
-		// allModel := g.GenerateAllTable(fieldOpts...)
-		allModel := g.GenerateModelAs(*tableName, fileName, fieldOpts...)
-		// 创建有关联关系的模型文件
-		// 可以用于指定外键
-		// Score := g.GenerateModel("score",
-		// append(
-		//    fieldOpts,
-		//    // user 一对多 address 关联, 外键`uid`在 address 表中
-		//    gen.FieldRelate(field.HasMany, "user", User, &field.RelateConfig{GORMTag: "foreignKey:UID"}),
-		// )...,
-		// )
 
-		// 创建模型的方法,生成文件在 query 目录; 先创建结果不会被后创建的覆盖
-		// g.ApplyBasic(User)
-		g.ApplyBasic(allModel)
-	} else {
-		allModel := g.GenerateAllTable(fieldOpts...)
-		g.ApplyBasic(allModel...)
-	}
+	allModel := g.GenerateAllTable(fieldOpts...)
+	g.ApplyBasic(allModel...)
 	g.ApplyInterface(func(repository.IUser) {}, user)
 	g.Execute()
 }
