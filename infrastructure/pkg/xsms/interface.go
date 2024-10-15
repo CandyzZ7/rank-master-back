@@ -4,7 +4,9 @@ import (
 	"github.com/pkg/errors"
 )
 
-const CloudServiceTencent = "tencent"
+const (
+	CloudServiceTencent = "tencent"
+)
 
 type SmsConf struct {
 	Enabled             bool
