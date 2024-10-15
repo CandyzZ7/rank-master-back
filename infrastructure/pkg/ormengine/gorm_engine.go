@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/pkg/errors"
+	"github.com/zeromicro/go-zero/core/logx"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
@@ -50,7 +51,7 @@ func NewGormEngine(mysqlConf MysqlConf) (*gorm.DB, error) {
 func MustNewGormEngine(mysqlConf MysqlConf) *gorm.DB {
 	db, err := NewGormEngine(mysqlConf)
 	if err != nil {
-		panic(err)
+		logx.Must(err)
 	}
 	return db
 }
