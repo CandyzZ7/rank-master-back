@@ -34,3 +34,13 @@ func (l *HelloLogic) Hello(req *types.HelloReq) (resp *types.HelloResp, err erro
 ```shell
 make swagger
 ```
+
+# 启动服务
+## mysql
+1. 创建rank_master数据库
+
+![img.png](img/create_db.png)
+
+2. 运行sql文件
+
+![img.png](img/run_sql.png)
