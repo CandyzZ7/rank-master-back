@@ -11,10 +11,10 @@ import (
 
 type MysqlConf struct {
 	DataSource    string
-	MaxOpenConns  int
-	MaxIdleConns  int
-	MaxLifetime   int
-	SlowThreshold int64
+	MaxOpenConns  int           `json:",default=10"`
+	MaxIdleConns  int           `json:",default=100"`
+	MaxLifetime   time.Duration `json:",default=3600"`
+	SlowThreshold time.Duration `json:",default=500ms"`
 }
 
 var (
@@ -24,23 +24,10 @@ var (
 var ErrFieldNotFound = errors.New("field not found")
 
 func NewGormEngine(mysqlConf MysqlConf) (*gorm.DB, error) {
-
-	if mysqlConf.MaxIdleConns == 0 {
-		mysqlConf.MaxIdleConns = 10
-	}
-	if mysqlConf.MaxOpenConns == 0 {
-		mysqlConf.MaxOpenConns = 100
-	}
-	if mysqlConf.MaxLifetime == 0 {
-		mysqlConf.MaxLifetime = 3600
-	}
-	if mysqlConf.SlowThreshold == 0 {
-		mysqlConf.SlowThreshold = int64(500 * time.Millisecond)
-	}
 	var err error
 	once.Do(func() {
 		gormEngine, err = gorm.Open(mysql.Open(mysqlConf.DataSource), &gorm.Config{
-			Logger: NewGormLogger(time.Millisecond * time.Duration(mysqlConf.SlowThreshold)), // 调整日志级别，根据需要修改
+			Logger: NewGormLogger(mysqlConf.SlowThreshold), // 调整日志级别，根据需要修改
 		})
 		if err != nil {
 			return
@@ -51,7 +38,7 @@ func NewGormEngine(mysqlConf MysqlConf) (*gorm.DB, error) {
 		}
 		db.SetMaxIdleConns(mysqlConf.MaxIdleConns)
 		db.SetMaxOpenConns(mysqlConf.MaxOpenConns)
-		db.SetConnMaxLifetime(time.Second * time.Duration(mysqlConf.MaxLifetime))
+		db.SetConnMaxLifetime(mysqlConf.MaxLifetime)
 		err = gormEngine.Use(NewCustomePlugin())
 		if err != nil {
 			return

@@ -17,8 +17,8 @@ Mysql:
   DataSource: root:123456@tcp(127.0.0.1:3306)/rank_master?charset=utf8mb4&parseTime=True&loc=Local
   MaxIdleConns: 10
   MaxOpenConns: 100
-  MaxLifetime: 3600
-  SlowThreshold: 200000
+  MaxLifetime: 1h
+  SlowThreshold: 200ms
 
 Log:
   ServiceName: "rank-master"
