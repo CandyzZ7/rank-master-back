@@ -6,6 +6,7 @@ import (
 
 	"github.com/pkg/errors"
 	"github.com/zeromicro/go-zero/rest/httpx"
+	"google.golang.org/grpc/status"
 
 	"rank-master-back/infrastructure/e"
 )
@@ -32,49 +33,43 @@ func Handler(w http.ResponseWriter, resp any, err error) {
 }
 
 func ErrHandlerCtx(ctx context.Context, err error) (int, any) {
-	if e.IsGrpcError(err) {
-		return e.CodeFromGrpcError(err), Body{
-			Code:    e.Code(e.CodeFromGrpcError(err)),
-			Message: err.Error(),
-		}
-	} else {
-		var codeError *e.StatusCode
-		switch {
-		// 如果错误类型为CodeError，就返回错误类型的结构体
-		case errors.As(err, &codeError):
-			return http.StatusOK, Body{
-				Code:    codeError.Code,
-				Message: codeError.Message,
-			}
-		default:
-			return http.StatusBadRequest, Body{
-				Code:    http.StatusBadRequest,
-				Message: err.Error(),
-			}
+	var codeError *e.StatusCode
+	causeErr := errors.Cause(err)
+	if gstatus, ok := status.FromError(causeErr); ok {
+		return http.StatusOK, Body{
+			Code:    e.Code(gstatus.Code()),
+			Message: gstatus.Message(),
 		}
 	}
+	switch {
+	// 如果错误类型为CodeError，就返回错误类型的结构体
+	case errors.As(causeErr, &codeError):
+		return http.StatusOK, Body{
+			Code:    codeError.Code,
+			Message: codeError.Message,
+		}
+	default:
+		return http.StatusBadRequest, Body{
+			Code:    http.StatusBadRequest,
+			Message: causeErr.Error(),
+		}
+	}
+
 }
 
 func ErrHandler(err error) (int, any) {
-	if e.IsGrpcError(err) {
-		return e.CodeFromGrpcError(err), Body{
-			Code:    e.Code(e.CodeFromGrpcError(err)),
-			Message: err.Error(),
+	var codeError *e.StatusCode
+	switch {
+	// 如果错误类型为CodeError，就返回错误类型的结构体
+	case errors.As(err, &codeError):
+		return http.StatusOK, Body{
+			Code:    codeError.Code,
+			Message: codeError.Message,
 		}
-	} else {
-		var codeError *e.StatusCode
-		switch {
-		// 如果错误类型为CodeError，就返回错误类型的结构体
-		case errors.As(err, &codeError):
-			return http.StatusOK, Body{
-				Code:    codeError.Code,
-				Message: codeError.Message,
-			}
-		default:
-			return http.StatusBadRequest, Body{
-				Code:    http.StatusBadRequest,
-				Message: err.Error(),
-			}
+	default:
+		return http.StatusBadRequest, Body{
+			Code:    http.StatusBadRequest,
+			Message: err.Error(),
 		}
 	}
 }
