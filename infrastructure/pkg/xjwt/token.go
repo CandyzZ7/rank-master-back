@@ -1,22 +1,26 @@
-package jwt
+package xjwt
 
 import (
-	"errors"
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
+	"github.com/pkg/errors"
 )
+
+var ErrGenerateTokenError = errors.New("generate token error")
 
 type (
 	TokenOptions struct {
 		AccessSecret string
 		AccessExpire int64
+		RefreshAfter int64
 		Fields       map[string]interface{}
 	}
 
 	Token struct {
 		AccessToken  string `json:"access_token"`
 		AccessExpire int64  `json:"access_expire"`
+		RefreshAfter int64  `json:"refresh_after"`
 	}
 
 	CustomClaims struct {
@@ -35,6 +39,10 @@ func BuildTokens(opt TokenOptions) (Token, error) {
 	}
 	token.AccessToken = accessToken
 	token.AccessExpire = now + opt.AccessExpire
+	token.RefreshAfter = now + opt.AccessExpire/2
+	if opt.RefreshAfter > 0 {
+		token.RefreshAfter = now + opt.RefreshAfter
+	}
 
 	return token, nil
 }

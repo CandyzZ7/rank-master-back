@@ -7,10 +7,10 @@ import (
 	"github.com/zeromicro/go-zero/core/logx"
 
 	"rank-master-back/infrastructure/e"
-	"rank-master-back/infrastructure/pkg/jwt"
 	"rank-master-back/infrastructure/pkg/snowflake"
 	"rank-master-back/infrastructure/pkg/uploadfile/local"
 	"rank-master-back/infrastructure/pkg/xcrypt"
+	"rank-master-back/infrastructure/pkg/xjwt"
 	"rank-master-back/internal/model/entity"
 	"rank-master-back/internal/svc"
 	"rank-master-back/internal/types"
@@ -76,7 +76,7 @@ func (l *RegisterLogic) Register(req *types.RegisterReq) (resp *types.RegisterRe
 	if err != nil {
 		return nil, errors.Wrap(err, "注册失败")
 	}
-	token, err := jwt.BuildTokens(jwt.TokenOptions{
+	token, err := xjwt.BuildTokens(xjwt.TokenOptions{
 		AccessSecret: l.svcCtx.Config.Auth.AccessSecret,
 		AccessExpire: l.svcCtx.Config.Auth.AccessExpire,
 		Fields: map[string]interface{}{
