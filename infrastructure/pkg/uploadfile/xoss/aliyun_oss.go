@@ -7,7 +7,6 @@ import (
 	"github.com/pkg/errors"
 
 	"rank-master-back/internal/config"
-	"rank-master-back/internal/svc"
 )
 
 func NewOssClient(c config.Config) (*oss.Client, error) {
@@ -19,8 +18,8 @@ func NewOssClient(c config.Config) (*oss.Client, error) {
 	return ossClient, nil
 }
 
-func UploadFile(svc *svc.ServiceContext, objectKey string, file io.Reader) error {
-	bucket, err := GetBucket(svc)
+func UploadFile(client *oss.Client, bucketName string, objectKey string, file io.Reader) error {
+	bucket, err := GetBucket(client, bucketName)
 	if err != nil {
 		return errors.Wrap(err, "get bucket error")
 	}
@@ -31,8 +30,8 @@ func UploadFile(svc *svc.ServiceContext, objectKey string, file io.Reader) error
 	return nil
 }
 
-func GetBucket(svc *svc.ServiceContext) (*oss.Bucket, error) {
-	bucket, err := svc.Oss.Bucket(svc.Config.UploadFile.AliYunOss.BucketName)
+func GetBucket(client *oss.Client, bucketName string) (*oss.Bucket, error) {
+	bucket, err := client.Bucket(bucketName)
 	if err != nil {
 		return nil, errors.WithMessage(err, "upload_file get bucket error")
 	}
